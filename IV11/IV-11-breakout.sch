@@ -1,4 +1,5 @@
 EESchema Schematic File Version 4
+LIBS:IV-11-breakout-cache
 EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
@@ -138,17 +139,6 @@ Text Label 7500 2700 0    50   ~ 0
 GRID
 Text Label 2900 4950 0    50   ~ 0
 LED_DIN
-$Comp
-L Connector:Conn_01x12_Male J1
-U 1 1 5B13557E
-P 6900 2400
-F 0 "J1" H 7006 3078 50  0000 C CNN
-F 1 "Conn_01x12_Male" H 7006 2987 50  0000 C CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x12_P2.54mm_Vertical" H 6900 2400 50  0001 C CNN
-F 3 "~" H 6900 2400 50  0001 C CNN
-	1    6900 2400
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	7500 1900 7100 1900
 Wire Wire Line
@@ -169,45 +159,8 @@ Wire Wire Line
 	7500 2700 7100 2700
 Wire Wire Line
 	7650 2800 7100 2800
-$Comp
-L power:VCC #PWR0103
-U 1 1 5B137766
-P 3650 4650
-F 0 "#PWR0103" H 3650 4500 50  0001 C CNN
-F 1 "VCC" H 3667 4823 50  0000 C CNN
-F 2 "" H 3650 4650 50  0001 C CNN
-F 3 "" H 3650 4650 50  0001 C CNN
-	1    3650 4650
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:VCC #PWR0104
-U 1 1 5B137791
-P 4200 2500
-F 0 "#PWR0104" H 4200 2350 50  0001 C CNN
-F 1 "VCC" H 4217 2673 50  0000 C CNN
-F 2 "" H 4200 2500 50  0001 C CNN
-F 3 "" H 4200 2500 50  0001 C CNN
-	1    4200 2500
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	7750 3000 7100 3000
-$Comp
-L power:VCC #PWR0105
-U 1 1 5B138D96
-P 7850 2900
-F 0 "#PWR0105" H 7850 2750 50  0001 C CNN
-F 1 "VCC" H 7867 3073 50  0000 C CNN
-F 2 "" H 7850 2900 50  0001 C CNN
-F 3 "" H 7850 2900 50  0001 C CNN
-	1    7850 2900
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	7100 2900 7850 2900
-Text Label 7750 3000 0    50   ~ 0
-LED_DIN
 $Comp
 L Connector_Generic:Conn_01x01 J2
 U 1 1 5B139411
@@ -223,17 +176,33 @@ Wire Wire Line
 	7350 4750 7800 4750
 Text Label 7800 4750 0    50   ~ 0
 LED_DOUT
+Wire Wire Line
+	4200 3100 4200 2800
+Text Label 4200 2800 0    50   ~ 0
+HEATER+V
+Wire Wire Line
+	3650 4650 3650 4400
+Text Label 3650 4400 0    50   ~ 0
+LED+V
+Text Label 7850 2900 0    50   ~ 0
+HEATER+V
 $Comp
-L Device:R R1
-U 1 1 5B13AF49
-P 4200 2650
-F 0 "R1" H 4270 2696 50  0000 L CNN
-F 1 "R" H 4270 2605 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal" V 4130 2650 50  0001 C CNN
-F 3 "~" H 4200 2650 50  0001 C CNN
-	1    4200 2650
+L Connector:Conn_01x13_Male J1
+U 1 1 5B190F7C
+P 6900 2500
+F 0 "J1" H 7006 3278 50  0000 C CNN
+F 1 "Conn_01x13_Male" H 7006 3187 50  0000 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x13_P2.54mm_Vertical" H 6900 2500 50  0001 C CNN
+F 3 "~" H 6900 2500 50  0001 C CNN
+	1    6900 2500
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	4200 3100 4200 2800
+	7100 3000 7750 3000
+Wire Wire Line
+	7100 3100 7750 3100
+Text Label 7750 3100 0    50   ~ 0
+LED_DIN
+Text Label 7750 3000 0    50   ~ 0
+LED+V
 $EndSCHEMATC
