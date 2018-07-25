@@ -4,11 +4,11 @@ Key points of the design:
 
 Parts count/prices kept down by using 'generic' ebay modules to provide:
 
-DS3231 Real Time Clock
-Boost converter module to provide the ~25VDC to power the VFD
-Buck converter module to provide 1.5v to heat the cathodes
-Wemos D1 Mini board to provide the brains
-5mm encapsulated addressable RGB LEDs to provide the colour effects.
+* DS3231 Real Time Clock
+* Boost converter module to provide the ~25VDC to power the VFD
+* Buck converter module to provide 1.5v to heat the cathodes
+* Wemos D1 Mini board to provide the brains
+* 5mm encapsulated addressable RGB LEDs to provide the colour effects.
 
 The design has a few other features I think are quite neat:
 
