@@ -6,11 +6,11 @@ module polyhole(h, d) {
 }
 
 $fn=80;
-total_height = 13;
+total_height = 15;
 neopixel_width = 6.25;
 tube_dia = 20;
 wall_thickness = 1;
-base_thickness = 9;
+base_thickness = 12;
 num_pins = 12;
 pin_diameter = 12;
 pin_hole_dia = 1.8;
