@@ -1,5 +1,4 @@
 EESchema Schematic File Version 4
-LIBS:VFD-cache
 EELAYER 26 0
 EELAYER END
 $Descr A3 16535 11693
@@ -232,7 +231,7 @@ Wire Wire Line
 Wire Wire Line
 	4550 1250 4750 1250
 $Comp
-L VFD-rescue:IV-11-vfd VFD1
+L vfd:IV-11 VFD1
 U 1 1 5B727BC1
 P 4200 2000
 F 0 "VFD1" H 4693 3167 60  0000 C CNN
@@ -488,7 +487,7 @@ Wire Wire Line
 Wire Wire Line
 	4550 3550 4750 3550
 $Comp
-L VFD-rescue:IV-11-vfd VFD3
+L vfd:IV-11 VFD3
 U 1 1 5B72D955
 P 4200 4300
 F 0 "VFD3" H 4693 5467 60  0000 C CNN
@@ -744,7 +743,7 @@ Wire Wire Line
 Wire Wire Line
 	4550 5900 4750 5900
 $Comp
-L VFD-rescue:IV-11-vfd VFD5
+L vfd:IV-11 VFD5
 U 1 1 5B7320B7
 P 4200 6650
 F 0 "VFD5" H 4693 7817 60  0000 C CNN
@@ -1000,7 +999,7 @@ Wire Wire Line
 Wire Wire Line
 	9500 1450 9700 1450
 $Comp
-L VFD-rescue:IV-11-vfd VFD2
+L vfd:IV-11 VFD2
 U 1 1 5B73C1FB
 P 9150 2200
 F 0 "VFD2" H 9643 3367 60  0000 C CNN
@@ -1256,7 +1255,7 @@ Wire Wire Line
 Wire Wire Line
 	9500 3750 9700 3750
 $Comp
-L VFD-rescue:IV-11-vfd VFD4
+L vfd:IV-11 VFD4
 U 1 1 5B74BC81
 P 9150 4500
 F 0 "VFD4" H 9643 5667 60  0000 C CNN
@@ -1512,7 +1511,7 @@ Wire Wire Line
 Wire Wire Line
 	9500 5950 9700 5950
 $Comp
-L VFD-rescue:IV-11-vfd VFD6
+L vfd:IV-11 VFD6
 U 1 1 5B76357F
 P 9150 6700
 F 0 "VFD6" H 9643 7867 60  0000 C CNN
@@ -1638,8 +1637,6 @@ F 3 "" H 6950 9350 60  0001 C CNN
 	1    6950 9350
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	7150 9150 7150 9350
 Text GLabel 5950 9150 0    50   Input ~ 0
 SW_1
 Text GLabel 5950 9350 0    50   Input ~ 0
@@ -1873,7 +1870,7 @@ Wire Wire Line
 Wire Wire Line
 	14350 1650 14550 1650
 $Comp
-L VFD-rescue:IV-11-vfd VFD7
+L vfd:IV-11 VFD7
 U 1 1 5B4DE300
 P 14000 2400
 F 0 "VFD7" H 14493 3567 60  0000 C CNN
@@ -2138,7 +2135,7 @@ Wire Wire Line
 Wire Wire Line
 	14350 3850 14550 3850
 $Comp
-L VFD-rescue:IV-11-vfd VFD8
+L vfd:IV-11 VFD8
 U 1 1 5B5EC07F
 P 14000 4600
 F 0 "VFD8" H 14493 5767 60  0000 C CNN
@@ -2221,7 +2218,7 @@ F 3 "" H 12050 8350 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L ChineseModules:MiniBuckBoard U18
+L GenericModules:MP2307BuckConverterModule U18
 U 1 1 5B8B2710
 P 12500 8850
 F 0 "U18" H 12550 9315 50  0000 C CNN
@@ -2251,7 +2248,7 @@ Wire Wire Line
 Wire Wire Line
 	13050 8350 13050 8650
 $Comp
-L ChineseModules:BoostBoard U19
+L GenericModules:MT3608BoostConverterModule U19
 U 1 1 5BAFC179
 P 14050 8750
 F 0 "U19" H 14075 9115 50  0000 C CNN
@@ -2382,7 +2379,7 @@ Wire Wire Line
 Wire Wire Line
 	1000 9750 1000 10750
 $Comp
-L ChineseModules:DS3231RTCModule U20
+L GenericModules:DS3231RTCModule U20
 U 1 1 5BDC61FB
 P 4150 9700
 F 0 "U20" H 4150 10215 50  0000 C CNN
@@ -2505,7 +2502,7 @@ SW_2
 Wire Wire Line
 	14000 5500 14700 5500
 $Comp
-L 5mmNeopixel:WS2812B D6
+L 5mmNeopixel:NeoPixel_THT D6
 U 1 1 5C6047BD
 P 9700 9600
 F 0 "D6" H 10041 9646 50  0000 L CNN
@@ -2516,7 +2513,7 @@ F 3 "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf" H 9800 9225 50  0001 
 	1    0    0    -1  
 $EndComp
 $Comp
-L 5mmNeopixel:WS2812B D3
+L 5mmNeopixel:NeoPixel_THT D3
 U 1 1 5C64AD7C
 P 10300 8650
 F 0 "D3" H 10641 8696 50  0000 L CNN
@@ -2527,7 +2524,7 @@ F 3 "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf" H 10400 8275 50  0001
 	1    0    0    -1  
 $EndComp
 $Comp
-L 5mmNeopixel:WS2812B D5
+L 5mmNeopixel:NeoPixel_THT D5
 U 1 1 5C64AE2E
 P 9100 9600
 F 0 "D5" H 9441 9646 50  0000 L CNN
@@ -2538,7 +2535,7 @@ F 3 "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf" H 9200 9225 50  0001 
 	1    0    0    -1  
 $EndComp
 $Comp
-L 5mmNeopixel:WS2812B D2
+L 5mmNeopixel:NeoPixel_THT D2
 U 1 1 5C64AEE3
 P 9700 8650
 F 0 "D2" H 10041 8696 50  0000 L CNN
@@ -2549,7 +2546,7 @@ F 3 "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf" H 9800 8275 50  0001 
 	1    0    0    -1  
 $EndComp
 $Comp
-L 5mmNeopixel:WS2812B D7
+L 5mmNeopixel:NeoPixel_THT D7
 U 1 1 5C64B041
 P 10300 9600
 F 0 "D7" H 10641 9646 50  0000 L CNN
@@ -2560,7 +2557,7 @@ F 3 "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf" H 10400 9225 50  0001
 	1    0    0    -1  
 $EndComp
 $Comp
-L 5mmNeopixel:WS2812B D8
+L 5mmNeopixel:NeoPixel_THT D8
 U 1 1 5C64B128
 P 10900 9600
 F 0 "D8" H 11241 9646 50  0000 L CNN
@@ -2571,7 +2568,7 @@ F 3 "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf" H 11000 9225 50  0001
 	1    0    0    -1  
 $EndComp
 $Comp
-L 5mmNeopixel:WS2812B D4
+L 5mmNeopixel:NeoPixel_THT D4
 U 1 1 5C64B206
 P 10900 8650
 F 0 "D4" H 11241 8696 50  0000 L CNN
@@ -2590,41 +2587,7 @@ Wire Wire Line
 Wire Wire Line
 	8600 9600 8800 9600
 Wire Wire Line
-	10900 9300 11650 9300
-Wire Wire Line
 	11650 9300 11650 8350
-Wire Wire Line
-	11650 8350 10900 8350
-Wire Wire Line
-	10900 8350 10300 8350
-Connection ~ 10900 8350
-Wire Wire Line
-	10300 8350 9700 8350
-Connection ~ 10300 8350
-Connection ~ 9700 8350
-Wire Wire Line
-	10900 8950 10300 8950
-Wire Wire Line
-	10300 8950 9700 8950
-Connection ~ 10300 8950
-Wire Wire Line
-	9700 8950 9400 8950
-Connection ~ 9700 8950
-Wire Wire Line
-	10900 9900 10300 9900
-Wire Wire Line
-	10300 9900 9700 9900
-Connection ~ 10300 9900
-Wire Wire Line
-	9700 9900 9350 9900
-Connection ~ 9700 9900
-Wire Wire Line
-	9700 9300 10300 9300
-Connection ~ 9700 9300
-Wire Wire Line
-	10300 9300 10900 9300
-Connection ~ 10300 9300
-Connection ~ 10900 9300
 $Comp
 L power:GND #PWR0184
 U 1 1 5CA9AC9A
@@ -2653,8 +2616,6 @@ $EndComp
 Connection ~ 9400 8950
 Wire Wire Line
 	9400 8950 9100 8950
-Wire Wire Line
-	9100 9300 9700 9300
 Text GLabel 8800 8650 0    50   Input ~ 0
 LED_DATA_IN
 Text GLabel 11200 9600 2    50   Input ~ 0
@@ -2670,10 +2631,8 @@ F 3 "" H 9400 8350 50  0001 C CNN
 	1    9400 8350
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	9400 8350 9700 8350
 $Comp
-L 5mmNeopixel:WS2812B D1
+L 5mmNeopixel:NeoPixel_THT D1
 U 1 1 5C64AC77
 P 9100 8650
 F 0 "D1" H 9441 8696 50  0000 L CNN
@@ -2717,7 +2676,6 @@ F 3 "" H 7150 10050 50  0001 C CNN
 	1    7150 10050
 	1    0    0    -1  
 $EndComp
-Connection ~ 7150 9350
 Wire Wire Line
 	5950 9350 6450 9350
 $Comp
@@ -3088,8 +3046,6 @@ Wire Wire Line
 Wire Wire Line
 	7900 8550 7900 8850
 Connection ~ 7900 8850
-Wire Wire Line
-	7150 9350 7150 9850
 $Comp
 L VFD-rescue:switch-userlibs SW3
 U 1 1 5B83B7E0
@@ -3113,11 +3069,6 @@ F 3 "" H 6950 9850 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	7150 9650 7150 9850
-Connection ~ 7150 9850
-Wire Wire Line
-	7150 9850 7150 10050
-Wire Wire Line
 	5950 9850 6700 9850
 Wire Wire Line
 	6550 8550 6550 9650
@@ -3137,4 +3088,14 @@ Wire Wire Line
 Connection ~ 6700 9850
 Wire Wire Line
 	6700 9850 6750 9850
+Wire Wire Line
+	9400 8950 10900 8950
+Wire Wire Line
+	9350 9900 10900 9900
+Wire Wire Line
+	9100 9300 11650 9300
+Wire Wire Line
+	9400 8350 11650 8350
+Wire Wire Line
+	7150 9150 7150 10050
 $EndSCHEMATC
