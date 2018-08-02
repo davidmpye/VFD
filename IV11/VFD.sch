@@ -1,4 +1,5 @@
 EESchema Schematic File Version 4
+LIBS:VFD-cache
 EELAYER 26 0
 EELAYER END
 $Descr A3 16535 11693
@@ -14,7 +15,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L VFD-rescue:UDN2981-userlibs U4
+L UDN2981-THT:UDN2981-THT U4
 U 1 1 5B727B46
 P 3150 1800
 F 0 "U4" H 3150 1063 60  0000 C CNN
@@ -270,7 +271,7 @@ Wire Wire Line
 Text GLabel 2500 2350 2    50   Input ~ 0
 TUBE_1_DATA_OUT
 $Comp
-L VFD-rescue:UDN2981-userlibs U5
+L UDN2981-THT:UDN2981-THT U5
 U 1 1 5B72D8DA
 P 3150 4100
 F 0 "U5" H 3150 3363 60  0000 C CNN
@@ -526,7 +527,7 @@ Wire Wire Line
 Text GLabel 2500 4650 2    50   Input ~ 0
 TUBE_3_DATA_OUT
 $Comp
-L VFD-rescue:UDN2981-userlibs U6
+L UDN2981-THT:UDN2981-THT U6
 U 1 1 5B73203C
 P 3150 6450
 F 0 "U6" H 3150 5713 60  0000 C CNN
@@ -782,7 +783,7 @@ Wire Wire Line
 Text GLabel 2500 7000 2    50   Input ~ 0
 TUBE_5_DATA_OUT
 $Comp
-L VFD-rescue:UDN2981-userlibs U10
+L UDN2981-THT:UDN2981-THT U10
 U 1 1 5B73C180
 P 8100 2000
 F 0 "U10" H 8100 1263 60  0000 C CNN
@@ -1038,7 +1039,7 @@ Wire Wire Line
 Text GLabel 7450 2550 2    50   Input ~ 0
 TUBE_2_DATA_OUT
 $Comp
-L VFD-rescue:UDN2981-userlibs U11
+L UDN2981-THT:UDN2981-THT U11
 U 1 1 5B74BC06
 P 8100 4300
 F 0 "U11" H 8100 3563 60  0000 C CNN
@@ -1294,7 +1295,7 @@ Wire Wire Line
 Text GLabel 7450 4850 2    50   Input ~ 0
 TUBE_4_DATA_OUT
 $Comp
-L VFD-rescue:UDN2981-userlibs U12
+L UDN2981-THT:UDN2981-THT U12
 U 1 1 5B763504
 P 8100 6500
 F 0 "U12" H 8100 5763 60  0000 C CNN
@@ -1558,7 +1559,7 @@ F 1 "VCC" H 6817 1223 50  0000 C CNN
 F 2 "" H 6800 1050 50  0001 C CNN
 F 3 "" H 6800 1050 50  0001 C CNN
 	1    6800 1050
-	1    0    0    -1  
+	1    0    0    1   
 $EndComp
 $Comp
 L power:VCC #PWR0148
@@ -1569,7 +1570,7 @@ F 1 "VCC" H 1867 1023 50  0000 C CNN
 F 2 "" H 1850 850 50  0001 C CNN
 F 3 "" H 1850 850 50  0001 C CNN
 	1    1850 850 
-	1    0    0    -1  
+	1    0    0    1   
 $EndComp
 $Comp
 L power:VCC #PWR0149
@@ -1580,7 +1581,7 @@ F 1 "VCC" H 1867 3323 50  0000 C CNN
 F 2 "" H 1850 3150 50  0001 C CNN
 F 3 "" H 1850 3150 50  0001 C CNN
 	1    1850 3150
-	1    0    0    -1  
+	1    0    0    1   
 $EndComp
 $Comp
 L power:VCC #PWR0150
@@ -1591,7 +1592,7 @@ F 1 "VCC" H 6817 3523 50  0000 C CNN
 F 2 "" H 6800 3350 50  0001 C CNN
 F 3 "" H 6800 3350 50  0001 C CNN
 	1    6800 3350
-	1    0    0    -1  
+	1    0    0    1   
 $EndComp
 $Comp
 L power:VCC #PWR0151
@@ -1602,7 +1603,7 @@ F 1 "VCC" H 6817 5723 50  0000 C CNN
 F 2 "" H 6800 5550 50  0001 C CNN
 F 3 "" H 6800 5550 50  0001 C CNN
 	1    6800 5550
-	1    0    0    -1  
+	1    0    0    1   
 $EndComp
 $Comp
 L power:VCC #PWR0152
@@ -1613,10 +1614,10 @@ F 1 "VCC" H 1867 5673 50  0000 C CNN
 F 2 "" H 1850 5500 50  0001 C CNN
 F 3 "" H 1850 5500 50  0001 C CNN
 	1    1850 5500
-	1    0    0    -1  
+	1    0    0    1   
 $EndComp
 $Comp
-L VFD-rescue:switch-userlibs SW1
+L Switch:SW_Push SW1
 U 1 1 5B4854F1
 P 6950 9150
 F 0 "SW1" H 6950 9397 60  0000 C CNN
@@ -1627,7 +1628,7 @@ F 3 "" H 6950 9150 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VFD-rescue:switch-userlibs SW2
+L Switch:SW_Push SW2
 U 1 1 5B485708
 P 6950 9350
 F 0 "SW2" H 6950 9597 60  0000 C CNN
@@ -1653,7 +1654,7 @@ F 3 "http://www.wemos.cc/Products/d1_mini.html" H 1800 10531 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VFD-rescue:UDN2981-userlibs U16
+L UDN2981-THT:UDN2981-THT U16
 U 1 1 5B4DE28E
 P 12950 2200
 F 0 "U16" H 12950 1463 60  0000 C CNN
@@ -1917,10 +1918,10 @@ F 1 "VCC" H 11667 1423 50  0000 C CNN
 F 2 "" H 11650 1250 50  0001 C CNN
 F 3 "" H 11650 1250 50  0001 C CNN
 	1    11650 1250
-	1    0    0    -1  
+	1    0    0    1   
 $EndComp
 $Comp
-L VFD-rescue:UDN2981-userlibs U17
+L UDN2981-THT:UDN2981-THT U17
 U 1 1 5B5EC00E
 P 12950 4400
 F 0 "U17" H 12950 3663 60  0000 C CNN
@@ -2182,7 +2183,7 @@ F 1 "VCC" H 11667 3623 50  0000 C CNN
 F 2 "" H 11650 3450 50  0001 C CNN
 F 3 "" H 11650 3450 50  0001 C CNN
 	1    11650 3450
-	1    0    0    -1  
+	1    0    0    1   
 $EndComp
 $Comp
 L power:GND #PWR0143
@@ -3047,7 +3048,7 @@ Wire Wire Line
 	7900 8550 7900 8850
 Connection ~ 7900 8850
 $Comp
-L VFD-rescue:switch-userlibs SW3
+L Switch:SW_Push SW3
 U 1 1 5B83B7E0
 P 6950 9650
 F 0 "SW3" H 6950 9897 60  0000 C CNN
@@ -3058,7 +3059,7 @@ F 3 "" H 6950 9650 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VFD-rescue:switch-userlibs SW4
+L Switch:SW_Push SW4
 U 1 1 5B83B7E7
 P 6950 9850
 F 0 "SW4" H 6950 10097 60  0000 C CNN
@@ -3089,13 +3090,116 @@ Connection ~ 6700 9850
 Wire Wire Line
 	6700 9850 6750 9850
 Wire Wire Line
-	9400 8950 10900 8950
+	9400 8950 10300 8950
 Wire Wire Line
-	9350 9900 10900 9900
+	9350 9900 9700 9900
 Wire Wire Line
-	9100 9300 11650 9300
+	9100 9300 9700 9300
 Wire Wire Line
-	9400 8350 11650 8350
+	9400 8350 10300 8350
 Wire Wire Line
 	7150 9150 7150 10050
+Connection ~ 10300 8950
+Wire Wire Line
+	10300 8950 10900 8950
+Connection ~ 10300 8350
+Wire Wire Line
+	10300 8350 10900 8350
+Connection ~ 10900 8350
+Wire Wire Line
+	10900 8350 11650 8350
+Connection ~ 9700 9300
+Wire Wire Line
+	9700 9300 11650 9300
+Connection ~ 9700 9900
+Wire Wire Line
+	9700 9900 10900 9900
+$Comp
+L power:+3V3 #PWR?
+U 1 1 5C6EC34C
+P 1850 850
+F 0 "#PWR?" H 1850 700 50  0001 C CNN
+F 1 "+3V3" H 1865 1023 50  0000 C CNN
+F 2 "" H 1850 850 50  0001 C CNN
+F 3 "" H 1850 850 50  0001 C CNN
+	1    1850 850 
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3V3 #PWR?
+U 1 1 5C6EC466
+P 1850 3150
+F 0 "#PWR?" H 1850 3000 50  0001 C CNN
+F 1 "+3V3" H 1865 3323 50  0000 C CNN
+F 2 "" H 1850 3150 50  0001 C CNN
+F 3 "" H 1850 3150 50  0001 C CNN
+	1    1850 3150
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3V3 #PWR?
+U 1 1 5C6EC542
+P 6800 1050
+F 0 "#PWR?" H 6800 900 50  0001 C CNN
+F 1 "+3V3" H 6815 1223 50  0000 C CNN
+F 2 "" H 6800 1050 50  0001 C CNN
+F 3 "" H 6800 1050 50  0001 C CNN
+	1    6800 1050
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3V3 #PWR?
+U 1 1 5C6EC61E
+P 6800 3350
+F 0 "#PWR?" H 6800 3200 50  0001 C CNN
+F 1 "+3V3" H 6815 3523 50  0000 C CNN
+F 2 "" H 6800 3350 50  0001 C CNN
+F 3 "" H 6800 3350 50  0001 C CNN
+	1    6800 3350
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3V3 #PWR?
+U 1 1 5C6EC6FA
+P 11650 1250
+F 0 "#PWR?" H 11650 1100 50  0001 C CNN
+F 1 "+3V3" H 11665 1423 50  0000 C CNN
+F 2 "" H 11650 1250 50  0001 C CNN
+F 3 "" H 11650 1250 50  0001 C CNN
+	1    11650 1250
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3V3 #PWR?
+U 1 1 5C6EC814
+P 11650 3450
+F 0 "#PWR?" H 11650 3300 50  0001 C CNN
+F 1 "+3V3" H 11665 3623 50  0000 C CNN
+F 2 "" H 11650 3450 50  0001 C CNN
+F 3 "" H 11650 3450 50  0001 C CNN
+	1    11650 3450
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3V3 #PWR?
+U 1 1 5C6EC8F0
+P 6800 5550
+F 0 "#PWR?" H 6800 5400 50  0001 C CNN
+F 1 "+3V3" H 6815 5723 50  0000 C CNN
+F 2 "" H 6800 5550 50  0001 C CNN
+F 3 "" H 6800 5550 50  0001 C CNN
+	1    6800 5550
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3V3 #PWR?
+U 1 1 5C6ECA0A
+P 1850 5500
+F 0 "#PWR?" H 1850 5350 50  0001 C CNN
+F 1 "+3V3" H 1865 5673 50  0000 C CNN
+F 2 "" H 1850 5500 50  0001 C CNN
+F 3 "" H 1850 5500 50  0001 C CNN
+	1    1850 5500
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
