@@ -2508,7 +2508,7 @@ U 1 1 5C6047BD
 P 9750 9600
 F 0 "D6" H 10091 9646 50  0000 L CNN
 F 1 "WS2812B" H 10091 9555 50  0000 L CNN
-F 2 "LED_THT:LED_D5.0mm-4" H 9800 9300 50  0001 L TNN
+F 2 "5mm-neopixel-wide:LED_D5.0mm-4-Wide" H 9800 9300 50  0001 L TNN
 F 3 "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf" H 9850 9225 50  0001 L TNN
 	1    9750 9600
 	1    0    0    -1  
@@ -2519,7 +2519,7 @@ U 1 1 5C64AD7C
 P 10400 8650
 F 0 "D3" H 10741 8696 50  0000 L CNN
 F 1 "WS2812B" H 10741 8605 50  0000 L CNN
-F 2 "LED_THT:LED_D5.0mm-4" H 10450 8350 50  0001 L TNN
+F 2 "5mm-neopixel-wide:LED_D5.0mm-4-Wide" H 10450 8350 50  0001 L TNN
 F 3 "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf" H 10500 8275 50  0001 L TNN
 	1    10400 8650
 	1    0    0    -1  
@@ -2530,7 +2530,7 @@ U 1 1 5C64AE2E
 P 9100 9600
 F 0 "D5" H 9441 9646 50  0000 L CNN
 F 1 "WS2812B" H 9441 9555 50  0000 L CNN
-F 2 "LED_THT:LED_D5.0mm-4" H 9150 9300 50  0001 L TNN
+F 2 "5mm-neopixel-wide:LED_D5.0mm-4-Wide" H 9150 9300 50  0001 L TNN
 F 3 "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf" H 9200 9225 50  0001 L TNN
 	1    9100 9600
 	1    0    0    -1  
@@ -2541,7 +2541,7 @@ U 1 1 5C64AEE3
 P 9750 8650
 F 0 "D2" H 10091 8696 50  0000 L CNN
 F 1 "WS2812B" H 10091 8605 50  0000 L CNN
-F 2 "LED_THT:LED_D5.0mm-4" H 9800 8350 50  0001 L TNN
+F 2 "5mm-neopixel-wide:LED_D5.0mm-4-Wide" H 9800 8350 50  0001 L TNN
 F 3 "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf" H 9850 8275 50  0001 L TNN
 	1    9750 8650
 	1    0    0    -1  
@@ -2552,7 +2552,7 @@ U 1 1 5C64B041
 P 10400 9600
 F 0 "D7" H 10741 9646 50  0000 L CNN
 F 1 "WS2812B" H 10741 9555 50  0000 L CNN
-F 2 "LED_THT:LED_D5.0mm-4" H 10450 9300 50  0001 L TNN
+F 2 "5mm-neopixel-wide:LED_D5.0mm-4-Wide" H 10450 9300 50  0001 L TNN
 F 3 "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf" H 10500 9225 50  0001 L TNN
 	1    10400 9600
 	1    0    0    -1  
@@ -2563,7 +2563,7 @@ U 1 1 5C64B128
 P 11050 9600
 F 0 "D8" H 11391 9646 50  0000 L CNN
 F 1 "WS2812B" H 11391 9555 50  0000 L CNN
-F 2 "LED_THT:LED_D5.0mm-4" H 11100 9300 50  0001 L TNN
+F 2 "5mm-neopixel-wide:LED_D5.0mm-4-Wide" H 11100 9300 50  0001 L TNN
 F 3 "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf" H 11150 9225 50  0001 L TNN
 	1    11050 9600
 	1    0    0    -1  
@@ -2574,7 +2574,7 @@ U 1 1 5C64B206
 P 11100 8650
 F 0 "D4" H 11441 8696 50  0000 L CNN
 F 1 "WS2812B" H 11441 8605 50  0000 L CNN
-F 2 "LED_THT:LED_D5.0mm-4" H 11150 8350 50  0001 L TNN
+F 2 "5mm-neopixel-wide:LED_D5.0mm-4-Wide" H 11150 8350 50  0001 L TNN
 F 3 "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf" H 11200 8275 50  0001 L TNN
 	1    11100 8650
 	1    0    0    -1  
@@ -3186,7 +3186,7 @@ U 1 1 5C64AC77
 P 9100 8650
 F 0 "D1" H 9441 8696 50  0000 L CNN
 F 1 "WS2812B" H 9441 8605 50  0000 L CNN
-F 2 "LED_THT:LED_D5.0mm-4" H 9150 8350 50  0001 L TNN
+F 2 "5mm-neopixel-wide:LED_D5.0mm-4-Wide" H 9150 8350 50  0001 L TNN
 F 3 "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf" H 9200 8275 50  0001 L TNN
 	1    9100 8650
 	1    0    0    -1  
