@@ -1240,8 +1240,6 @@ Wire Wire Line
 Wire Wire Line
 	8700 3850 8650 3850
 Wire Wire Line
-	8650 3850 8650 4000
-Wire Wire Line
 	8650 4000 8500 4000
 Wire Wire Line
 	9700 3750 9700 4450
@@ -1495,8 +1493,6 @@ Wire Wire Line
 	8700 6300 8500 6300
 Wire Wire Line
 	8700 6050 8650 6050
-Wire Wire Line
-	8650 6050 8650 6200
 Wire Wire Line
 	8650 6200 8500 6200
 Wire Wire Line
@@ -3233,4 +3229,45 @@ Wire Wire Line
 	8750 8650 8800 8650
 Wire Wire Line
 	7900 9350 7900 9950
+$Comp
+L Sensor_Temperature:DS18B20 U21
+U 1 1 5B70AEE5
+P 11250 6100
+F 0 "U21" H 11020 6146 50  0000 R CNN
+F 1 "DS18B20" H 11020 6055 50  0000 R CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 10250 5850 50  0001 C CNN
+F 3 "http://datasheets.maximintegrated.com/en/ds/DS18B20.pdf" H 11100 6350 50  0001 C CNN
+	1    11250 6100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8650 6050 8650 6200
+Wire Wire Line
+	8650 3850 8650 4000
+$Comp
+L power:GND #PWR0207
+U 1 1 5B7663A8
+P 11250 6400
+F 0 "#PWR0207" H 11250 6150 50  0001 C CNN
+F 1 "GND" H 11255 6227 50  0000 C CNN
+F 2 "" H 11250 6400 50  0001 C CNN
+F 3 "" H 11250 6400 50  0001 C CNN
+	1    11250 6400
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3V3 #PWR0208
+U 1 1 5B76650C
+P 11250 5800
+F 0 "#PWR0208" H 11250 5650 50  0001 C CNN
+F 1 "+3V3" H 11265 5973 50  0000 C CNN
+F 2 "" H 11250 5800 50  0001 C CNN
+F 3 "" H 11250 5800 50  0001 C CNN
+	1    11250 5800
+	1    0    0    -1  
+$EndComp
+Text GLabel 11550 6100 2    50   Input ~ 0
+SW_1
+Text Notes 12000 5850 2    50   ~ 0
+Optional DS18B20\ninstead of SW1
 $EndSCHEMATC
