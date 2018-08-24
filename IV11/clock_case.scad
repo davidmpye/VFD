@@ -169,15 +169,15 @@ short_side_face();
             //the four switch holes.
             //m4
           
-       translate([222.5 - 17.5 - 12.5*0 ,4, 0]) circle(d=5);
-       translate([222.5 - 17.5 - 12.5*1 ,4, 0]) circle(d=5);
-       translate([222.5 - 17.5 - 12.5*2 ,4, 0]) circle(d=5);
-       translate([222.5 - 17.5 - 12.5*3 ,4 ,0]) circle(d=5);
+       translate([222.5 - 18.5 - 12.5*0 ,4, 0]) circle(d=5);
+       translate([222.5 - 18.5 - 12.5*1 ,4, 0]) circle(d=5);
+       translate([222.5 - 18.5 - 12.5*2 ,4, 0]) circle(d=5);
+       translate([222.5 - 18.5 - 12.5*3 ,4 ,0]) circle(d=5);
 
       
       //The USB power connector.
       //14wide, 12 high.
-      translate([45,-1,0]) square([14,12]);   
+      translate([45,2,0]) square([14,12]);   
           
           
       }
