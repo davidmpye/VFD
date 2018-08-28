@@ -127,7 +127,11 @@ difference() {
         translate([225 - 5,75,0]) circle(d=4);
         translate([225/2,5,0]) circle(d=4);
         translate([225/2,75,0]) circle(d=4);
-    }    
+    
+       //LDR hole
+       translate([225/2 + 12,5,0]) circle(d=5);
+         
+       }    
 }
 
 
