@@ -13,8 +13,6 @@ class Display {
     void begin();
 
     void setTubeByte(int tube, uint8_t b) ;
-
-
     void setTubeChar(int tube, char c);
     void setTubeDP(int tube, bool p);
 
@@ -35,7 +33,6 @@ class Display {
 
   //Now with added hex...
   uint8_t _fontTable[16] = {
-
     0x3F,
     0x06,
     0x5B,
@@ -54,8 +51,6 @@ class Display {
     0x71
   };
 };
-
-
 
 #define __DISPLAY_H__
 #endif

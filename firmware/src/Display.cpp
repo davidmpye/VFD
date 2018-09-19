@@ -1,12 +1,9 @@
 #include "Display.h"
 
 Display::Display() {
-
-
 }
 
 Display::~Display() {
-
 }
 
 void Display::begin() {
@@ -75,19 +72,6 @@ void Display::refreshLEDs() {
   FastLED.show();
   //Re-enable the software PWM.
   analogWrite(OE_PIN, 1024 -  (brightness*4));
-
-
-    //Update the LEDSs
-    /* Number colour mode
-    for (int i=0; i<NUM_LEDS;++i) {
-      //Blank tube = no bottom lighting.
-      if (_displayData[7-i] == 0x00) leds[i] = CRGB::Black;
-      else leds[i] = Display::Wheel( (255/0x0F) * _displayData[7-i]);
-      Serial.print(leds[i]);
-    }
-    FastLED.show();
-    */
-
 }
 
 void Display::setTubeDP(int tube, bool enabled) {

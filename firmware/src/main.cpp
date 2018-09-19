@@ -27,13 +27,9 @@ void updateBrightness() {
    //Really bright is about 30.
    //Makerspace 'ambient light' is around 60.
    //Thumb over it is about 350
-   if (br>300) display.setBrightness(25);
-   else display.setBrightness(0xFF);
-   /*
    if (br<70) display.setBrightness(0xFF);  // daylight
    else if (br < 150)  display.setBrightness(0xFF - (br)); //it's dull ish
    else display.setBrightness(25);  //It's really quite dark
-   */
  }
 
 void setup() {
@@ -44,8 +40,8 @@ void setup() {
   pinMode(D5, INPUT);
 
   //Can't have serial debug output and use these pins as inputs for the buttons
-  //  pinMode(1, INPUT);
-  //  pinMode(3, INPUT);
+  pinMode(1, INPUT);
+  pinMode(3, INPUT);
 
   Wire.begin(D2,D1);
 
@@ -104,15 +100,15 @@ void loop() {
    DateTime t = rtc.now();
    //If the time has moved forward, we will update the display:
    if (t.second() != lastSec) {
-     lastSec = t.second();
-
+     lastSec = t.second(); 
+     /*
      //EPOCH demo mode!
      if (t.second()%10 == 0) {
         display.clear();
         if (displayMode == NORMAL_MODE) displayMode = EPOCH_MODE;
         else displayMode = NORMAL_MODE;
      }
-
+     */
      switch (displayMode) {
        case NORMAL_MODE:
         display.setTubeChar(7,t.hour()/10);
