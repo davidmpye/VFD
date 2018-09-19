@@ -9,8 +9,8 @@
 #include <ArduinoOTA.h>
 #include "Display.h"
 #include "Config.h"
-const char *ssid = "Fishface";
-const char *password = "9DF5E5DF7D";
+const char *ssid = "";
+const char *password = "";
 const char *ota_hostname="espvfd";
 const char *ota_password="";
 
