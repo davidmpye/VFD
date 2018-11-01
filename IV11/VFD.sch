@@ -3068,8 +3068,6 @@ Wire Wire Line
 Wire Wire Line
 	9450 8350 9750 8350
 Wire Wire Line
-	7150 9150 7150 10050
-Wire Wire Line
 	10400 8950 11100 8950
 $Comp
 L power:+3V3 #PWR0199
@@ -3270,4 +3268,15 @@ Text GLabel 11550 6100 2    50   Input ~ 0
 SW_1
 Text Notes 12000 5850 2    50   ~ 0
 Optional DS18B20\ninstead of SW1
+Wire Wire Line
+	7150 9150 7150 9350
+Wire Wire Line
+	7150 9350 7150 9650
+Connection ~ 7150 9350
+Wire Wire Line
+	7150 9650 7150 9850
+Connection ~ 7150 9650
+Wire Wire Line
+	7150 9850 7150 10050
+Connection ~ 7150 9850
 $EndSCHEMATC
