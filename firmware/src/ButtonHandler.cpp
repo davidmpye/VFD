@@ -64,7 +64,11 @@ tmElements_t ButtonHandler::getDate(DateTime *t ) {
 
   int last_blinked = millis();
 
+  //Button A long press got us in here, so we need to wait until it is released.
+  while (buttonA->read() );
+
   while(1) {
+
     buttonA->read();
     buttonB->read();
     buttonC->read();
@@ -81,7 +85,7 @@ tmElements_t ButtonHandler::getDate(DateTime *t ) {
       last_blinked = now;
     }
 
-    if (buttonA->wasPressed()) {
+    if (buttonB->wasPressed()) {
        int val = display->getTubeChar(tubecount);
        val ++;
        //assuming DDMMYY....//FIXME
@@ -96,7 +100,7 @@ tmElements_t ButtonHandler::getDate(DateTime *t ) {
        display->refreshDisplay();
     }
 
-    if (buttonB->wasPressed()) {
+    if (buttonA->wasPressed()) {
       //skip over the 'empty' tubes here.
       tubecount--;
       switch (tubecount) {
@@ -112,7 +116,7 @@ tmElements_t ButtonHandler::getDate(DateTime *t ) {
       }
     }
 
-    if (buttonC->wasPressed()) {
+    if (buttonA->pressedFor(1000)) {
       //Build the time we have made and return it
       tmElements_t e;
       e.Day = display->getTubeChar(7)*10  + display->getTubeChar(6);
@@ -133,10 +137,15 @@ tmElements_t ButtonHandler::getTime(DateTime *t) {
   display->setTubeChar(1,0);
 
   int last_blinked = millis();
+
+  //Button A long press got us in here, so we need to wait until it is released.
+  while (buttonA->read() );
+
   while(1) {
     buttonA->read();
     buttonB->read();
     buttonC->read();
+
 
     int now = millis();
 
@@ -151,7 +160,7 @@ tmElements_t ButtonHandler::getTime(DateTime *t) {
     }
 
     //Button A increments the digit
-    if (buttonA->wasPressed()) {
+    if (buttonB->wasPressed()) {
       int val = display->getTubeChar(tubecount);
       val ++;
       //24 hour clock mode.
@@ -170,7 +179,7 @@ tmElements_t ButtonHandler::getTime(DateTime *t) {
     };
 
     //Button B changes digit
-    if (buttonB->wasPressed()) {
+    if (buttonA->wasPressed()) {
       //skip over the 'empty' tubes here.
       tubecount--;
       switch (tubecount) {
@@ -183,7 +192,7 @@ tmElements_t ButtonHandler::getTime(DateTime *t) {
       }
     }
 
-    if (buttonC->wasPressed()) {
+    if (buttonA->pressedFor(1000)) {
       //Build the time we have made and return it
       tmElements_t e;
       e.Hour = display->getTubeChar(7)*10  + display->getTubeChar(6);

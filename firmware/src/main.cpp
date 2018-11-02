@@ -70,8 +70,8 @@ void setupOTA() {
 
 void setRTC() {
   DateTime t = rtc.now(); //This will get the default time from above.
-  tmElements_t y = buttonHandler.getDate(&t);
   tmElements_t x  = buttonHandler.getTime(&t);
+  tmElements_t y = buttonHandler.getDate(&t);
   //Set the time
   rtc.adjust(DateTime(y.Year + 1970, y.Month, y.Day, x.Hour, x.Minute, x.Second));
 }
