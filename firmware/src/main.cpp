@@ -1,14 +1,19 @@
 #include <Arduino.h>
-#include <Time.h>
-#include <Timezone.h>
-#include <RTClib.h>
 #include <Wire.h>
 #include <ESP8266WiFi.h>
 #include <ESP8266mDNS.h>
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
+#include <ButtonHandler.h>
+#include <Time.h>
+#include <Timezone.h>
+#include <RTClib.h>
 #include "Display.h"
 #include "Config.h"
+
+TIME_MODE time_mode = TWENTYFOURHR_MODE;
+DATE_MODE date_mode = DDMMYY_MODE;
+
 const char *ssid = "";
 const char *password = "";
 const char *ota_hostname="espvfd";
@@ -21,6 +26,8 @@ IPAddress subnet(255, 255, 255, 0);
 Display display;
 RTC_DS3231 rtc;
 
+ButtonHandler buttonHandler;
+
 void updateBrightness() {
   int br = analogRead(A0);
   Serial.println(br);
@@ -32,31 +39,12 @@ void updateBrightness() {
    else display.setBrightness(25);  //It's really quite dark
  }
 
-void setup() {
-  Serial.begin(57600);
-  display.begin();
-
-  pinMode(D0, INPUT);
-  pinMode(D5, INPUT);
-
-  //Can't have serial debug output and use these pins as inputs for the buttons
-  pinMode(1, INPUT);
-  pinMode(3, INPUT);
-
-  Wire.begin(D2,D1);
-
-  if (! rtc.begin()) {
-    Serial.println("Couldn't find RTC");
-  }
-  //Set time here.
-  //rtc.adjust(DateTime(2018,9, 19, 18, 5, 0));
-
+void setupOTA() {
+  //These are the OTA callbacks.
   ArduinoOTA.onStart([]() {
     display.clear();
-    Serial.println("Begin");
   });
   ArduinoOTA.onEnd([]() {
-    Serial.println("\nEnd");
     ESP.restart();
   });
   ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
@@ -64,7 +52,6 @@ void setup() {
       display.setTubeChar(1, percent/ 10);
       display.setTubeChar(0, percent %10);
       display.refreshDisplay();
-      Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
   });
   ArduinoOTA.onError([](ota_error_t error) {
     Serial.printf("Error[%u]: ", error);
@@ -75,64 +62,98 @@ void setup() {
     else if (error == OTA_END_ERROR) Serial.println("End Failed");
   });
 
-  WiFi.mode(WIFI_STA);
-  WiFi.config(ip, gateway, subnet);
-  WiFi.begin(ssid, password);
   ArduinoOTA.setPort(8266);
   ArduinoOTA.setHostname(ota_hostname);
   ArduinoOTA.begin();
-
-  display.setBrightness(0xFF);
 }
 
-int lastSec = -1;
 
-enum TIME_MODE {
-  NORMAL_MODE,
-  EPOCH_MODE,
-};
+void setRTC() {
+  DateTime t = rtc.now(); //This will get the default time from above.
+  tmElements_t y = buttonHandler.getDate(&t);
+  tmElements_t x  = buttonHandler.getTime(&t);
+  //Set the time
+  rtc.adjust(DateTime(y.Year + 1970, y.Month, y.Day, x.Hour, x.Minute, x.Second));
+}
 
-TIME_MODE displayMode = NORMAL_MODE;
+void setup() {
+  //Button 1
+  pinMode(D0, INPUT);
+  //Button 2
+  pinMode(D5, INPUT);
+  //Button 3
+  pinMode(3, INPUT);
+  //Button 4
+  pinMode(1, INPUT);
+
+  display.begin();
+  Wire.begin(D2,D1);
+
+  WiFi.mode(WIFI_STA);
+  WiFi.config(ip, gateway, subnet);
+  WiFi.begin(ssid, password);
+
+  setupOTA();
+
+  buttonHandler.begin(D0, D5, 3, 1, &display);
+  display.setBrightness(0xFF);
+
+  if (! rtc.begin()) {
+    //Display error code 0xFF if RTC not available.
+    display.clear();
+    display.setTubeChar(1, 'F');
+    display.setTubeChar(0, 'F');
+    display.refreshDisplay();
+    while(1);
+  }
+
+  //Check to see if the RTC has lost time - if so, go straight into time set.
+  if (rtc.lostPower()) {
+    rtc.adjust(DateTime(2001, 1, 1, 12, 0, 0));
+    setRTC();
+  }
+}
+
+void handleButtonEvent(BUTTON_EVENT e) {
+  switch(e) {
+    case BUTTON_A_SHORTPRESS:
+      display.displayDate(rtc.now(), date_mode);
+      delay(2000);
+      break;
+    case BUTTON_A_LONGPRESS:
+      setRTC();
+      break;
+    case BUTTON_B_SHORTPRESS:
+      switch (time_mode) {
+        case TWENTYFOURHR_MODE:
+          time_mode = AMPM_MODE;
+          break;
+        case AMPM_MODE:
+          time_mode = EPOCH_MODE;
+          break;
+        case EPOCH_MODE:
+          time_mode = TWENTYFOURHR_MODE;
+          break;
+      }
+    default:
+      break;
+  }
+}
 
 void loop() {
-  //OTA update handler
-  ArduinoOTA.handle();
-   DateTime t = rtc.now();
+  static int lastSec = -1;
+  DateTime t = rtc.now();
    //If the time has moved forward, we will update the display:
    if (t.second() != lastSec) {
-     lastSec = t.second(); 
-     /*
-     //EPOCH demo mode!
-     if (t.second()%10 == 0) {
-        display.clear();
-        if (displayMode == NORMAL_MODE) displayMode = EPOCH_MODE;
-        else displayMode = NORMAL_MODE;
-     }
-     */
-     switch (displayMode) {
-       case NORMAL_MODE:
-        display.setTubeChar(7,t.hour()/10);
-        display.setTubeChar(6,t.hour()%10);
-        display.setTubeChar(4, t.minute()/10);
-        display.setTubeChar(7,t.hour()/10);
-        display.setTubeChar(6,t.hour()%10);
-        display.setTubeChar(4, t.minute()/10);
-        display.setTubeChar(3, t.minute()%10);
-        display.setTubeChar(1, t.second()/10);
-        display.setTubeChar(0, t.second()%10);
-        break;
-       case EPOCH_MODE:
-        time_t epochtime = t.unixtime(); //!
-        for (int i=0; i<8; i++) {
-          display.setTubeChar(i, (epochtime>>(4*i)) & 0x0F);
-        }
-       break;
-     }
-     display.refreshDisplay();
+     lastSec = t.second();
+     display.displayTime(t, time_mode);
      updateBrightness();
    }
-   //process any outstanding wifi events etc.
+   //Advance the LED effects.
    display.refreshLEDs();
-
+   //Handle any button presses.
+   handleButtonEvent(buttonHandler.poll());
+   //process any outstanding OTA events
+   ArduinoOTA.handle();
    delay(100);
 }

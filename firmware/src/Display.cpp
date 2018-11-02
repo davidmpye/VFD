@@ -48,6 +48,14 @@ uint8_t Display::getTubeByte(int tube) {
   return _displayData[tube];
 }
 
+char Display::getTubeChar(int tube) {
+  uint8_t b = getTubeByte(tube) & ~0x80;
+  for (int i=0; i<=16 ; ++i) {
+    if (b == _fontTable[i]) return i;
+  }
+  return 0x00;
+}
+
 
 void Display::refreshDisplay() {
   //Update the VFD displays
@@ -56,7 +64,6 @@ void Display::refreshDisplay() {
     shiftOut(DATA_PIN, CLOCK_PIN, MSBFIRST, _displayData[i]);
   }
   digitalWrite(LATCH_PIN, HIGH);
-
 }
 
 void Display::refreshLEDs() {
@@ -83,4 +90,60 @@ void Display::clear() {
   //Set all tubes to OFF.
   memset(_displayData, 0x00, NUM_TUBES);
   refreshDisplay();
+}
+
+void Display::displayDate(DateTime t, DATE_MODE mode) {
+  clear();
+  switch (mode) {
+    case DDMMYY_MODE:
+      setTubeChar(7, t.day()/10);
+      setTubeChar(6, t.day()%10);
+      setTubeChar(4, t.month()/10);
+      setTubeChar(3, t.month()%10);
+      break;
+    case MMDDYY_MODE:
+      setTubeChar(4, t.day()/10);
+      setTubeChar(3, t.day()%10);
+      setTubeChar(7, t.month()/10);
+      setTubeChar(6, t.month()%10);
+    break;
+  }
+  setTubeByte(5, 0x40);
+  setTubeByte(2, 0x40);
+  setTubeChar(1, (t.year()-2000)/10);
+  setTubeChar(0, (t.year()-2000)%10);
+  refreshDisplay();
+}
+
+void Display::displayTime(DateTime t, TIME_MODE mode) {
+  clear();
+  if (mode == EPOCH_MODE) {
+       time_t epochtime = t.unixtime(); //!
+       for (int i=0; i<8; i++) {
+         setTubeChar(i, (epochtime>>(4*i)) & 0x0F);
+       }
+     }
+     else {
+       //Normal modes...
+       if (mode == AMPM_MODE) {
+         if (t.hour() > 12) {
+           //If it's PM, dont display a 0 as first digit.
+           if ((t.hour() - 12 )/10 == 0) setTubeByte(7,0x00);
+           else setTubeChar(7,1);
+           setTubeDP(7, true);
+           setTubeChar(6, (t.hour()-12)%10);
+         }
+       }
+       else if (mode == TWENTYFOURHR_MODE) {
+         setTubeChar(7,t.hour()/10);
+         setTubeChar(6,t.hour()%10);
+
+       }
+       //These are the same for either ampm/24 hr mode
+       setTubeChar(4, t.minute()/10);
+       setTubeChar(3, t.minute()%10);
+       setTubeChar(1, t.second()/10);
+       setTubeChar(0, t.second()%10);
+     }
+     refreshDisplay();
 }

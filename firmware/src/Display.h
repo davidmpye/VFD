@@ -1,8 +1,21 @@
 #ifndef __DISPLAY_H__
 
 #include <FastLED.h>
+#include <Time.h>
+#include <Timezone.h>
+#include <RTClib.h>
 #include "Config.h"
 
+enum TIME_MODE {
+  TWENTYFOURHR_MODE,
+  AMPM_MODE,
+  EPOCH_MODE,
+};
+
+enum DATE_MODE {
+  DDMMYY_MODE,
+  MMDDYY_MODE,
+};
 
 class Display {
   public:
@@ -12,17 +25,24 @@ class Display {
 
     void begin();
 
-    void setTubeByte(int tube, uint8_t b) ;
-    void setTubeChar(int tube, char c);
-    void setTubeDP(int tube, bool p);
+    //Higher level functions
+    void displayTime(DateTime t, TIME_MODE);
+    void displayDate(DateTime d, DATE_MODE);
 
-    uint8_t getTubeByte(int tube);
+    void clear();
 
     void refreshDisplay();
     void refreshLEDs();
     void setBrightness(uint8_t);
 
-    void clear();
+    //Lower level manipulations.
+    void setTubeByte(int tube, uint8_t b) ;
+    void setTubeChar(int tube, char c);
+    void setTubeDP(int tube, bool p);
+
+    uint8_t getTubeByte(int tube);
+    char getTubeChar(int tube);
+
 
   private:
   uint8_t brightness;
