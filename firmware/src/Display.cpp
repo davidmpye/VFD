@@ -133,6 +133,10 @@ void Display::displayTime(DateTime t, TIME_MODE mode) {
            setTubeDP(7, true);
            setTubeChar(6, (t.hour()-12)%10);
          }
+         else {
+           setTubeChar(7,t.hour()/10);
+           setTubeChar(6,t.hour()%10);
+         }
        }
        else if (mode == TWENTYFOURHR_MODE) {
          setTubeChar(7,t.hour()/10);
