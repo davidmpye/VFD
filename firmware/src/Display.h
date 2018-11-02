@@ -17,6 +17,11 @@ enum DATE_MODE {
   MMDDYY_MODE,
 };
 
+enum LED_MODE {
+  RAINBOW_MODE,
+  COL_PER_NUM_MODE,
+};
+
 class Display {
   public:
 
@@ -26,14 +31,22 @@ class Display {
     void begin();
 
     //Higher level functions
-    void displayTime(DateTime t, TIME_MODE);
-    void displayDate(DateTime d, DATE_MODE);
+    void displayTime(DateTime t);
+    void displayDate(DateTime d);
 
     void clear();
 
     void refreshDisplay();
     void refreshLEDs();
     void setBrightness(uint8_t);
+
+    void setTimeMode(TIME_MODE m);
+    void setDateMode(DATE_MODE m);
+    void setLEDMode(LED_MODE m);
+
+    TIME_MODE getTimeMode();
+    DATE_MODE getDateMode();
+    LED_MODE getLEDMode();
 
     //Lower level manipulations.
     void setTubeByte(int tube, uint8_t b) ;
@@ -70,6 +83,10 @@ class Display {
     0x79,
     0x71
   };
+
+  DATE_MODE _dateMode = DDMMYY_MODE;
+  TIME_MODE _timeMode = TWENTYFOURHR_MODE;
+  LED_MODE _ledMode = RAINBOW_MODE;
 };
 
 #define __DISPLAY_H__

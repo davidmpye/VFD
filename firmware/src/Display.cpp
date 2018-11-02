@@ -56,7 +56,6 @@ char Display::getTubeChar(int tube) {
   return 0x00;
 }
 
-
 void Display::refreshDisplay() {
   //Update the VFD displays
   digitalWrite(LATCH_PIN, LOW);
@@ -67,18 +66,54 @@ void Display::refreshDisplay() {
 }
 
 void Display::refreshLEDs() {
-  rainbow_counter++;
+  switch (_ledMode) {
+    case RAINBOW_MODE:
+      rainbow_counter++;
+      fill_rainbow(leds, NUM_LEDS, rainbow_counter, 255/NUM_LEDS);
+      break;
+      
+    case COL_PER_NUM_MODE:
+      for (int i = 0; i < NUM_TUBES; ++i) {
+        leds[i].setHue(25 * getTubeChar(7-i)); //255 / 10 digits - sorry, no extra colors for hex...
+      }
+      break;
 
-  fill_rainbow(leds, NUM_LEDS, rainbow_counter, 255/NUM_LEDS);
+    default:
+      break;
+      //not implemented.
+  }
 
   //Disable the Woftware PWM on OE pin as it interrupts fastled.
   analogWrite(OE_PIN, 0x00);
-
   pinMode(OE_PIN, OUTPUT);
   digitalWrite(OE_PIN, HIGH);
   FastLED.show();
   //Re-enable the software PWM.
   analogWrite(OE_PIN, 1024 -  (brightness*4));
+}
+
+void Display::setLEDMode(LED_MODE m) {
+  _ledMode = m;
+}
+
+void Display::setTimeMode(TIME_MODE m) {
+  _timeMode = m;
+}
+
+void Display::setDateMode(DATE_MODE m) {
+  _dateMode = m;
+}
+
+DATE_MODE Display::getDateMode() {
+  return _dateMode;
+}
+
+TIME_MODE Display::getTimeMode() {
+  return _timeMode;
+}
+
+LED_MODE Display::getLEDMode() {
+  return _ledMode;
 }
 
 void Display::setTubeDP(int tube, bool enabled) {
@@ -92,9 +127,9 @@ void Display::clear() {
   refreshDisplay();
 }
 
-void Display::displayDate(DateTime t, DATE_MODE mode) {
+void Display::displayDate(DateTime t) {
   clear();
-  switch (mode) {
+  switch (_dateMode) {
     case DDMMYY_MODE:
       setTubeChar(7, t.day()/10);
       setTubeChar(6, t.day()%10);
@@ -115,9 +150,9 @@ void Display::displayDate(DateTime t, DATE_MODE mode) {
   refreshDisplay();
 }
 
-void Display::displayTime(DateTime t, TIME_MODE mode) {
+void Display::displayTime(DateTime t) {
   clear();
-  if (mode == EPOCH_MODE) {
+  if (_timeMode == EPOCH_MODE) {
        time_t epochtime = t.unixtime(); //!
        for (int i=0; i<8; i++) {
          setTubeChar(i, (epochtime>>(4*i)) & 0x0F);
@@ -125,7 +160,7 @@ void Display::displayTime(DateTime t, TIME_MODE mode) {
      }
      else {
        //Normal modes...
-       if (mode == AMPM_MODE) {
+       if (_timeMode == AMPM_MODE) {
          if (t.hour() > 12) {
            //If it's PM, dont display a 0 as first digit.
            if ((t.hour() - 12 )/10 == 0) setTubeByte(7,0x00);
@@ -134,11 +169,12 @@ void Display::displayTime(DateTime t, TIME_MODE mode) {
            setTubeChar(6, (t.hour()-12)%10);
          }
          else {
+           //24 HR clock mode.
            setTubeChar(7,t.hour()/10);
            setTubeChar(6,t.hour()%10);
          }
        }
-       else if (mode == TWENTYFOURHR_MODE) {
+       else if (_timeMode == TWENTYFOURHR_MODE) {
          setTubeChar(7,t.hour()/10);
          setTubeChar(6,t.hour()%10);
 

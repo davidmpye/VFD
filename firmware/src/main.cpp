@@ -11,9 +11,6 @@
 #include "Display.h"
 #include "Config.h"
 
-TIME_MODE time_mode = TWENTYFOURHR_MODE;
-DATE_MODE date_mode = DDMMYY_MODE;
-
 const char *ssid = "";
 const char *password = "";
 const char *ota_hostname="espvfd";
@@ -116,28 +113,45 @@ void setup() {
 
 void handleButtonEvent(BUTTON_EVENT e) {
   switch(e) {
+
     case BUTTON_A_SHORTPRESS:
-      display.displayDate(rtc.now(), date_mode);
+      display.displayDate(rtc.now());
       delay(2000);
       break;
+
     case BUTTON_A_LONGPRESS:
       setRTC();
       break;
+
     case BUTTON_B_SHORTPRESS:
-      switch (time_mode) {
+      switch (display.getTimeMode()) {
         case TWENTYFOURHR_MODE:
-          time_mode = AMPM_MODE;
+          display.setTimeMode(AMPM_MODE);
           break;
         case AMPM_MODE:
-          time_mode = EPOCH_MODE;
+          display.setTimeMode(EPOCH_MODE);
           break;
         case EPOCH_MODE:
-          time_mode = TWENTYFOURHR_MODE;
+          display.setTimeMode(TWENTYFOURHR_MODE);
           break;
-      }
-    default:
-      break;
-  }
+        }
+        break;
+
+      case BUTTON_C_SHORTPRESS:
+        switch(display.getLEDMode()) {
+          case RAINBOW_MODE:
+            display.setLEDMode(COL_PER_NUM_MODE);
+            break;
+          case COL_PER_NUM_MODE:
+            display.setLEDMode(RAINBOW_MODE);
+            break;
+          }
+          break;
+
+        default:
+          break;
+
+    }
 }
 
 void loop() {
@@ -146,7 +160,7 @@ void loop() {
    //If the time has moved forward, we will update the display:
    if (t.second() != lastSec) {
      lastSec = t.second();
-     display.displayTime(t, time_mode);
+     display.displayTime(t);
      updateBrightness();
    }
    //Advance the LED effects.

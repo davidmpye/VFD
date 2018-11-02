@@ -59,7 +59,8 @@ BUTTON_EVENT ButtonHandler::poll() {
 }
 
 tmElements_t ButtonHandler::getDate(DateTime *t ) {
-  display->displayDate(*t, DDMMYY_MODE); //FIXME
+  display->setDateMode(DDMMYY_MODE);
+  display->displayDate(*t);
   int tubecount = 7;
 
   int last_blinked = millis();
@@ -117,6 +118,7 @@ tmElements_t ButtonHandler::getDate(DateTime *t ) {
     }
 
     if (buttonA->pressedFor(1000)) {
+      while (buttonA->read() );
       //Build the time we have made and return it
       tmElements_t e;
       e.Day = display->getTubeChar(7)*10  + display->getTubeChar(6);
@@ -129,7 +131,8 @@ tmElements_t ButtonHandler::getDate(DateTime *t ) {
 }
 
 tmElements_t ButtonHandler::getTime(DateTime *t) {
-  display->displayTime(*t, TWENTYFOURHR_MODE); //FIXME
+  display->setTimeMode(TWENTYFOURHR_MODE);
+  display->displayTime(*t); //FIXME
   //Start with hour.
   int tubecount = 7;
   //Set the seconds to zero.
@@ -146,9 +149,7 @@ tmElements_t ButtonHandler::getTime(DateTime *t) {
     buttonB->read();
     buttonC->read();
 
-
     int now = millis();
-
     if (now > last_blinked+1000) {
       char b = display->getTubeChar(tubecount);
       display->setTubeByte(tubecount, 0x00);
@@ -193,6 +194,7 @@ tmElements_t ButtonHandler::getTime(DateTime *t) {
     }
 
     if (buttonA->pressedFor(1000)) {
+      while (buttonA->read() );
       //Build the time we have made and return it
       tmElements_t e;
       e.Hour = display->getTubeChar(7)*10  + display->getTubeChar(6);
