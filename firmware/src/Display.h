@@ -31,31 +31,34 @@ class Display {
     void begin();
 
     //Higher level functions
+    //Displays the current time on the tubes, using TIME_MODE format
     void displayTime(DateTime t);
+    //Displays the current date on the tubes, using the DATE_MODE format
     void displayDate(DateTime d);
 
-    void clear();
+    void clear(); //clears display and data
+    void blank(); //clears the display, but doesnt clear data, so calling refreshDisplay will unblank it.
 
-    void refreshDisplay();
-    void refreshLEDs();
-    void setBrightness(uint8_t);
+    void refreshDisplay(); //Updates the contents of the display with the results of the settubebyte/char/dp functions.
+    void refreshLEDs(); //Updates the LED colours as per  LED_MODE
+
+    void setBrightness(uint8_t); //Sets the brightness of the tubes (and LEDs) - for the tubes, it uses PWM, for the LEDs it uses Fastled.
 
     void setTimeMode(TIME_MODE m);
     void setDateMode(DATE_MODE m);
     void setLEDMode(LED_MODE m);
 
-    TIME_MODE getTimeMode();
-    DATE_MODE getDateMode();
-    LED_MODE getLEDMode();
+    const TIME_MODE getTimeMode();
+    const DATE_MODE getDateMode();
+    const LED_MODE getLEDMode();
 
     //Lower level manipulations.
     void setTubeByte(int tube, uint8_t b) ;
     void setTubeChar(int tube, char c);
     void setTubeDP(int tube, bool p);
 
-    uint8_t getTubeByte(int tube);
-    char getTubeChar(int tube);
-
+    const uint8_t getTubeByte(int tube);
+    const char getTubeChar(int tube);
 
   private:
   uint8_t brightness;
@@ -64,7 +67,7 @@ class Display {
 
   CRGB leds[NUM_LEDS];
 
-  //Now with added hex...
+  //Now with added hex... This contains the font data for 0-9, A-F
   uint8_t _fontTable[16] = {
     0x3F,
     0x06,
