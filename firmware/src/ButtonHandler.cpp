@@ -30,25 +30,25 @@ BUTTON_EVENT ButtonHandler::poll() {
   buttonC->read();
   buttonD->read();
 
-  if (buttonA->pressedFor(1000)) {
+  if (buttonA->pressedFor(LONG_BUTTON_PRESS_TIME)) {
     return  BUTTON_A_LONGPRESS;
   }
   if (buttonA->wasPressed()) {
     return BUTTON_A_SHORTPRESS;
   }
-  if (buttonB->pressedFor(1000)) {
+  if (buttonB->pressedFor(LONG_BUTTON_PRESS_TIME)) {
     return  BUTTON_B_LONGPRESS;
   }
   if (buttonB->wasPressed()) {
     return BUTTON_B_SHORTPRESS;
   }
-  if (buttonC->pressedFor(1000)) {
+  if (buttonC->pressedFor(LONG_BUTTON_PRESS_TIME)) {
     return  BUTTON_C_LONGPRESS;
   }
   if (buttonC->wasPressed()) {
     return BUTTON_C_SHORTPRESS;
   }
-  if (buttonD->pressedFor(1000)) {
+  if (buttonD->pressedFor(LONG_BUTTON_PRESS_TIME)) {
     return  BUTTON_D_LONGPRESS;
   }
   if (buttonD->wasPressed()) {
@@ -61,12 +61,9 @@ BUTTON_EVENT ButtonHandler::poll() {
 tmElements_t ButtonHandler::getDate(DateTime *t ) {
   display->setDateMode(DDMMYY_MODE);
   display->displayDate(*t);
+
   int tubecount = 7;
-
   int last_blinked = millis();
-
-  //Button A long press got us in here, so we need to wait until it is released.
-  while (buttonA->read() );
 
   while(1) {
 
@@ -117,8 +114,10 @@ tmElements_t ButtonHandler::getDate(DateTime *t ) {
       }
     }
 
-    if (buttonA->pressedFor(1000)) {
-      while (buttonA->read() );
+    if (buttonA->pressedFor(LONG_BUTTON_PRESS_TIME)) {
+      display->blank();
+      while (buttonA->read()) ;
+
       //Build the time we have made and return it
       tmElements_t e;
       e.Day = display->getTubeChar(7)*10  + display->getTubeChar(6);
@@ -140,9 +139,6 @@ tmElements_t ButtonHandler::getTime(DateTime *t) {
   display->setTubeChar(1,0);
 
   int last_blinked = millis();
-
-  //Button A long press got us in here, so we need to wait until it is released.
-  while (buttonA->read() );
 
   while(1) {
     buttonA->read();
@@ -193,8 +189,11 @@ tmElements_t ButtonHandler::getTime(DateTime *t) {
       }
     }
 
-    if (buttonA->pressedFor(1000)) {
-      while (buttonA->read() );
+    if (buttonA->pressedFor(LONG_BUTTON_PRESS_TIME)) {
+      display->blank();
+      //Wait until the button is released
+      while (buttonA->read()) ;
+
       //Build the time we have made and return it
       tmElements_t e;
       e.Hour = display->getTubeChar(7)*10  + display->getTubeChar(6);

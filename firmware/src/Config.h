@@ -9,6 +9,7 @@
 #define DATA_PIN D4
 #define CLOCK_PIN D3
 
-
+//For the button ButtonHandler
+#define LONG_BUTTON_PRESS_TIME 1000 //how many ms needed to register as a long press
 
 #endif
