@@ -65,6 +65,9 @@ tmElements_t ButtonHandler::getDate(DateTime *t ) {
   int tubecount = 7;
   int last_blinked = millis();
 
+  //Wait until Button A is released.
+  while (buttonA->read()) ;
+
   while(1) {
 
     buttonA->read();
@@ -139,6 +142,9 @@ tmElements_t ButtonHandler::getTime(DateTime *t) {
   display->setTubeChar(1,0);
 
   int last_blinked = millis();
+
+    //Wait until Button A is released.
+    while (buttonA->read()) ;
 
   while(1) {
     buttonA->read();
