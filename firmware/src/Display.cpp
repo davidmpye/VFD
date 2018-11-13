@@ -170,6 +170,12 @@ const LED_MODE Display::getLEDMode() {
   return _ledMode;
 }
 
+void Display::test() {
+  //Set all tubes to display 8 to test all segments
+  memset(_displayData, _fontTable[8], NUM_TUBES);
+  refreshDisplay();
+}
+
 void Display::setTubeByte(int tube, uint8_t b) {
     _displayData[tube] = b;
 }

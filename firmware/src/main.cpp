@@ -148,6 +148,11 @@ void handleButtonEvent(BUTTON_EVENT e) {
           }
           break;
 
+      case BUTTON_D_LONGPRESS:
+        display.test();
+        delay(1000);
+        break;
+
         default:
           break;
 

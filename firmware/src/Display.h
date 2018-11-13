@@ -52,6 +52,9 @@ class Display {
     const DATE_MODE getDateMode();
     const LED_MODE getLEDMode();
 
+    void test();
+    
+
     //Lower level manipulations.
     void setTubeByte(int tube, uint8_t b) ;
     void setTubeChar(int tube, char c);
