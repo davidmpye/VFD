@@ -100,14 +100,14 @@ void setup() {
     display.clear();
     display.setTubeChar(1, 'F');
     display.setTubeChar(0, 'F');
-    display.refreshDisplay();
-    while(1);
-  }
+    while(1) {
+      display.refreshDisplay();
+      delay(100);
+    }
 
-  //Check to see if the RTC has lost time - if so, go straight into time set.
+  //Check to see if the RTC has lost time - if so, set the time to midday jan 2001
   if (rtc.lostPower()) {
     rtc.adjust(DateTime(2001, 1, 1, 12, 0, 0));
-    setRTC();
   }
 }
 
