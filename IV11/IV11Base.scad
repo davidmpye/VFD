@@ -28,7 +28,7 @@ difference() {
   //chop it in half.
  translate([0,-25,0]) cube([50,50,50]);
 
-# translate([-3,-10,0]) cube([5,20,5]);
+# translate([-3,-10,0]) cube([5,20,5.4]);
 }
 
 //Half without lugs!
