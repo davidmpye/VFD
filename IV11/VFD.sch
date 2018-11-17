@@ -232,7 +232,7 @@ Wire Wire Line
 Wire Wire Line
 	4550 1250 4750 1250
 $Comp
-L vfd:IV-11 VFD1
+L VFD-rescue:IV-11-vfd VFD1
 U 1 1 5B727BC1
 P 4200 2000
 F 0 "VFD1" H 4693 3167 60  0000 C CNN
@@ -488,7 +488,7 @@ Wire Wire Line
 Wire Wire Line
 	4550 3550 4750 3550
 $Comp
-L vfd:IV-11 VFD3
+L VFD-rescue:IV-11-vfd VFD3
 U 1 1 5B72D955
 P 4200 4300
 F 0 "VFD3" H 4693 5467 60  0000 C CNN
@@ -744,7 +744,7 @@ Wire Wire Line
 Wire Wire Line
 	4550 5900 4750 5900
 $Comp
-L vfd:IV-11 VFD5
+L VFD-rescue:IV-11-vfd VFD5
 U 1 1 5B7320B7
 P 4200 6650
 F 0 "VFD5" H 4693 7817 60  0000 C CNN
@@ -1000,7 +1000,7 @@ Wire Wire Line
 Wire Wire Line
 	9500 1450 9700 1450
 $Comp
-L vfd:IV-11 VFD2
+L VFD-rescue:IV-11-vfd VFD2
 U 1 1 5B73C1FB
 P 9150 2200
 F 0 "VFD2" H 9643 3367 60  0000 C CNN
@@ -1254,7 +1254,7 @@ Wire Wire Line
 Wire Wire Line
 	9500 3750 9700 3750
 $Comp
-L vfd:IV-11 VFD4
+L VFD-rescue:IV-11-vfd VFD4
 U 1 1 5B74BC81
 P 9150 4500
 F 0 "VFD4" H 9643 5667 60  0000 C CNN
@@ -1508,7 +1508,7 @@ Wire Wire Line
 Wire Wire Line
 	9500 5950 9700 5950
 $Comp
-L vfd:IV-11 VFD6
+L VFD-rescue:IV-11-vfd VFD6
 U 1 1 5B76357F
 P 9150 6700
 F 0 "VFD6" H 9643 7867 60  0000 C CNN
@@ -1867,7 +1867,7 @@ Wire Wire Line
 Wire Wire Line
 	14350 1650 14550 1650
 $Comp
-L vfd:IV-11 VFD7
+L VFD-rescue:IV-11-vfd VFD7
 U 1 1 5B4DE300
 P 14000 2400
 F 0 "VFD7" H 14493 3567 60  0000 C CNN
@@ -2132,7 +2132,7 @@ Wire Wire Line
 Wire Wire Line
 	14350 3850 14550 3850
 $Comp
-L vfd:IV-11 VFD8
+L VFD-rescue:IV-11-vfd VFD8
 U 1 1 5B5EC07F
 P 14000 4600
 F 0 "VFD8" H 14493 5767 60  0000 C CNN
@@ -2215,7 +2215,7 @@ F 3 "" H 12050 8350 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GenericModules:MP2307BuckConverterModule U18
+L VFD-rescue:MP2307BuckConverterModule-GenericModules U18
 U 1 1 5B8B2710
 P 12500 8850
 F 0 "U18" H 12550 9315 50  0000 C CNN
@@ -2245,7 +2245,7 @@ Wire Wire Line
 Wire Wire Line
 	13050 8350 13050 8650
 $Comp
-L GenericModules:MT3608BoostConverterModule U19
+L VFD-rescue:MT3608BoostConverterModule-GenericModules U19
 U 1 1 5BAFC179
 P 14050 8750
 F 0 "U19" H 14075 9115 50  0000 C CNN
@@ -2376,7 +2376,7 @@ Wire Wire Line
 Wire Wire Line
 	1000 9750 1000 10750
 $Comp
-L GenericModules:DS3231RTCModule U20
+L VFD-rescue:DS3231RTCModule-GenericModules U20
 U 1 1 5BDC61FB
 P 4150 9700
 F 0 "U20" H 4150 10215 50  0000 C CNN
@@ -3227,47 +3227,10 @@ Wire Wire Line
 	8750 8650 8800 8650
 Wire Wire Line
 	7900 9350 7900 9950
-$Comp
-L Sensor_Temperature:DS18B20 U21
-U 1 1 5B70AEE5
-P 11250 6100
-F 0 "U21" H 11020 6146 50  0000 R CNN
-F 1 "DS18B20" H 11020 6055 50  0000 R CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 10250 5850 50  0001 C CNN
-F 3 "http://datasheets.maximintegrated.com/en/ds/DS18B20.pdf" H 11100 6350 50  0001 C CNN
-	1    11250 6100
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	8650 6050 8650 6200
 Wire Wire Line
 	8650 3850 8650 4000
-$Comp
-L power:GND #PWR0207
-U 1 1 5B7663A8
-P 11250 6400
-F 0 "#PWR0207" H 11250 6150 50  0001 C CNN
-F 1 "GND" H 11255 6227 50  0000 C CNN
-F 2 "" H 11250 6400 50  0001 C CNN
-F 3 "" H 11250 6400 50  0001 C CNN
-	1    11250 6400
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:+3V3 #PWR0208
-U 1 1 5B76650C
-P 11250 5800
-F 0 "#PWR0208" H 11250 5650 50  0001 C CNN
-F 1 "+3V3" H 11265 5973 50  0000 C CNN
-F 2 "" H 11250 5800 50  0001 C CNN
-F 3 "" H 11250 5800 50  0001 C CNN
-	1    11250 5800
-	1    0    0    -1  
-$EndComp
-Text GLabel 11550 6100 2    50   Input ~ 0
-SW_1
-Text Notes 12000 5850 2    50   ~ 0
-Optional DS18B20\ninstead of SW1
 Wire Wire Line
 	7150 9150 7150 9350
 Wire Wire Line
@@ -3279,4 +3242,51 @@ Connection ~ 7150 9650
 Wire Wire Line
 	7150 9850 7150 10050
 Connection ~ 7150 9850
+$Comp
+L Connector_Generic:Conn_01x04 J2
+U 1 1 5BFB814D
+P 11450 6150
+F 0 "J2" H 11530 6142 50  0000 L CNN
+F 1 "I2C_CONN" H 11530 6051 50  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Horizontal" H 11450 6150 50  0001 C CNN
+F 3 "~" H 11450 6150 50  0001 C CNN
+	1    11450 6150
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	11250 6050 11000 6050
+Wire Wire Line
+	11250 6150 11000 6150
+Wire Wire Line
+	11250 6350 11000 6350
+$Comp
+L power:+3V3 #PWR0207
+U 1 1 5C175A14
+P 11000 6050
+F 0 "#PWR0207" H 11000 5900 50  0001 C CNN
+F 1 "+3V3" H 11015 6223 50  0000 C CNN
+F 2 "" H 11000 6050 50  0001 C CNN
+F 3 "" H 11000 6050 50  0001 C CNN
+	1    11000 6050
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	10800 6250 10800 6450
+Wire Wire Line
+	10800 6250 11250 6250
+$Comp
+L power:GND #PWR0208
+U 1 1 5C1D00BB
+P 10800 6450
+F 0 "#PWR0208" H 10800 6200 50  0001 C CNN
+F 1 "GND" H 10805 6277 50  0000 C CNN
+F 2 "" H 10800 6450 50  0001 C CNN
+F 3 "" H 10800 6450 50  0001 C CNN
+	1    10800 6450
+	1    0    0    -1  
+$EndComp
+Text GLabel 11000 6150 0    50   Input ~ 0
+SDA
+Text GLabel 11000 6350 0    50   Input ~ 0
+SCL
 $EndSCHEMATC
