@@ -104,12 +104,13 @@ void setup() {
       display.refreshDisplay();
       delay(100);
     }
-
+  }
   //Check to see if the RTC has lost time - if so, set the time to midday jan 2001
   if (rtc.lostPower()) {
     rtc.adjust(DateTime(2001, 1, 1, 12, 0, 0));
   }
 }
+
 
 void handleButtonEvent(BUTTON_EVENT e) {
   switch(e) {
