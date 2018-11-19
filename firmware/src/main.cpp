@@ -26,15 +26,23 @@ RTC_DS3231 rtc;
 ButtonHandler buttonHandler;
 
 void updateBrightness() {
-  int br = analogRead(A0);
-  Serial.println(br);
-   //Really bright is about 30.
-   //Makerspace 'ambient light' is around 60.
-   //Thumb over it is about 350
-   if (br<70) display.setBrightness(0xFF);  // daylight
-   else if (br < 150)  display.setBrightness(0xFF - (br)); //it's dull ish
-   else display.setBrightness(25);  //It's really quite dark
- }
+  //Brightness updates are done based on an average of the pevious 5 seconds worth of brightness data
+  static int brightness_vals[5];
+  static int brightness_count = 0;
+
+  brightness_vals[brightness_count] = analogRead(A0);
+  int sum;
+  for (int i=0; i<5; ++i) sum += brightness_vals[i];
+  sum /= 5;
+    //With 22K resistor in series with LDR:
+  uint8_t brightness_val = 255 - (sum / 4);
+  if (brightness_val < 30) brightness_val = 5;
+  if (brightness_val > 150) brightness_val = 254;
+  display.setBrightness(brightness_val);
+
+  brightness_count++;
+  if (brightness_count == 5) brightness_count = 0;
+}
 
 void setupOTA() {
   //These are the OTA callbacks.
@@ -113,6 +121,8 @@ void setup() {
 
 
 void handleButtonEvent(BUTTON_EVENT e) {
+  int br = analogRead(A0);
+
   switch(e) {
 
     case BUTTON_A_SHORTPRESS:
@@ -148,6 +158,15 @@ void handleButtonEvent(BUTTON_EVENT e) {
             break;
           }
           break;
+
+      case BUTTON_C_LONGPRESS:
+        display.clear();
+        for (int i=0; i<4; ++i) {
+          display.setTubeChar(i, br>>(4*i) & 0x0F);
+        }
+        display.refreshDisplay();
+        delay(1000);
+        break;
 
       case BUTTON_D_LONGPRESS:
         display.test();
