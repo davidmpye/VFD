@@ -19,7 +19,7 @@ void Display::begin() {
   memset(_displayData, 0x00, NUM_TUBES);
   refreshDisplay();
   //Set up the LEDs
-  LEDS.addLeds<WS2812B,LED_PIN,RGB>(leds,NUM_LEDS).setCorrection(TypicalLEDStrip);;
+  LEDS.addLeds<APA106,LED_PIN,RGB>(leds,NUM_LEDS).setCorrection(TypicalLEDStrip);;
 
   //All LEDs off.
   FastLED.clear();
@@ -88,6 +88,20 @@ void Display::displayDate(DateTime t) {
   setTubeByte(2, 0x40);
   setTubeChar(1, (t.year()-2000)/10);
   setTubeChar(0, (t.year()-2000)%10);
+  refreshDisplay();
+}
+
+void Display::displayInt(int x) {
+  displayInt(x, 10);
+}
+
+void Display::displayInt(int x, int base) {
+  clear();
+  for (int i=NUM_TUBES-1; i>=0; ++i) {
+      setTubeChar(i, x%base);
+      x /= base;
+      if (x == 0) return;
+  }
   refreshDisplay();
 }
 

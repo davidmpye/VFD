@@ -35,6 +35,9 @@ class Display {
     void displayTime(DateTime t);
     //Displays the current date on the tubes, using the DATE_MODE format
     void displayDate(DateTime d);
+    void displayInt(int val, int base);
+    //defaults to base 10
+    void displayInt(int val);
 
     void clear(); //clears display and data
     void blank(); //clears the display, but doesnt clear data, so calling refreshDisplay will unblank it.
@@ -53,7 +56,7 @@ class Display {
     const LED_MODE getLEDMode();
 
     void test();
-    
+
 
     //Lower level manipulations.
     void setTubeByte(int tube, uint8_t b) ;

@@ -26,22 +26,22 @@ RTC_DS3231 rtc;
 ButtonHandler buttonHandler;
 
 void updateBrightness() {
-  //Brightness updates are done based on an average of the pevious 5 seconds worth of brightness data
-  static int brightness_vals[5];
-  static int brightness_count = 0;
+  static int lastBrightness = analogRead(A0);
+  int currentBrightness = analogRead(A0);
 
-  brightness_vals[brightness_count] = analogRead(A0);
-  int sum;
-  for (int i=0; i<5; ++i) sum += brightness_vals[i];
-  sum /= 5;
-    //With 22K resistor in series with LDR:
-  uint8_t brightness_val = 255 - (sum / 4);
-  if (brightness_val < 30) brightness_val = 5;
-  if (brightness_val > 150) brightness_val = 254;
-  display.setBrightness(brightness_val);
-
-  brightness_count++;
-  if (brightness_count == 5) brightness_count = 0;
+  //If the brightness we want is a long way from the desired brightness, make a small step brighter or dimmer
+  //until we're on target.
+  if (currentBrightness > lastBrightness + 20) {
+    lastBrightness += 20;
+  }
+  else if (currentBrightness < lastBrightness - 20) {
+    lastBrightness -= 20;
+  }
+  else {
+    //we're only a tiny bit out - don't bother making any changes.
+    return;
+  }
+  display.setBrightness(lastBrightness);
 }
 
 void setupOTA() {
@@ -121,8 +121,6 @@ void setup() {
 
 
 void handleButtonEvent(BUTTON_EVENT e) {
-  int br = analogRead(A0);
-
   switch(e) {
 
     case BUTTON_A_SHORTPRESS:
@@ -160,11 +158,7 @@ void handleButtonEvent(BUTTON_EVENT e) {
           break;
 
       case BUTTON_C_LONGPRESS:
-        display.clear();
-        for (int i=0; i<4; ++i) {
-          display.setTubeChar(i, br>>(4*i) & 0x0F);
-        }
-        display.refreshDisplay();
+        display.displayInt(analogRead(A0));
         delay(1000);
         break;
 
@@ -186,13 +180,13 @@ void loop() {
    if (t.second() != lastSec) {
      lastSec = t.second();
      display.displayTime(t);
-     updateBrightness();
    }
+   updateBrightness();
    //Advance the LED effects.
    display.refreshLEDs();
    //Handle any button presses.
    handleButtonEvent(buttonHandler.poll());
    //process any outstanding OTA events
    ArduinoOTA.handle();
-   delay(100);
+   delay(50);
 }
