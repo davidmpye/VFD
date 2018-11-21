@@ -160,6 +160,11 @@ void Display::refreshLEDs() {
 }
 
 void Display::setBrightness (uint8_t desiredBrightness) {
+  //If this would be only a minor adjustment, don't do it, or the display will have an annoying flicker
+  if (desiredBrightness > brightness - 20 && desiredBrightness < brightness + 20) {
+    return;
+  }
+
   if (desiredBrightness>200) desiredBrightness = 254; //full brightness
   if (desiredBrightness<15)  desiredBrightness = 2; //uber dim.
 
