@@ -213,7 +213,7 @@ const LED_MODE Display::getLEDMode() {
 
 void Display::test() {
   //Set all tubes to display 8 to test all segments
-  memset(_displayData, _fontTable[8], NUM_TUBES);
+  memset(_displayData, 0xFF, NUM_TUBES);
   refreshDisplay();
 }
 
