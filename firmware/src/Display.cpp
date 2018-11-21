@@ -21,13 +21,15 @@ void Display::begin() {
   //Set up the LEDs
   LEDS.addLeds<APA106,LED_PIN,RGB>(leds,NUM_LEDS).setCorrection(TypicalLEDStrip);;
 
+  //Full brightness.
+  brightness = 255;
+
   //All LEDs off.
   FastLED.clear();
-  LEDS.setBrightness(255);
+  FastLED.setDither( 0 );
+  LEDS.setBrightness(100);
   FastLED.show();
-  //Full brightness.
-  brightness = 1024;
-  analogWrite(OE_PIN, brightness);
+  analogWrite(OE_PIN, 512);
 }
 
 void Display::displayTime(DateTime t) {
@@ -57,7 +59,6 @@ void Display::displayTime(DateTime t) {
        else if (_timeMode == TWENTYFOURHR_MODE) {
          setTubeChar(7,t.hour()/10);
          setTubeChar(6,t.hour()%10);
-
        }
        //These are the same for either ampm/24 hr mode
        setTubeChar(4, t.minute()/10);
@@ -97,10 +98,10 @@ void Display::displayInt(int x) {
 
 void Display::displayInt(int x, int base) {
   clear();
-  for (int i=NUM_TUBES-1; i>=0; ++i) {
+  for (int i=0; i<NUM_TUBES; ++i) {
       setTubeChar(i, x%base);
       x /= base;
-      if (x == 0) return;
+      if (x == 0) break;;
   }
   refreshDisplay();
 }
@@ -133,7 +134,6 @@ void Display::refreshLEDs() {
       rainbow_counter++;
       fill_rainbow(leds, NUM_LEDS, rainbow_counter, 255/NUM_LEDS);
       break;
-
     case COL_PER_NUM_MODE:
       for (int i = 0; i < NUM_TUBES; ++i) {
         leds[i].setHue(25 * getTubeChar(7-i)); //255 / 10 digits - sorry, no extra colors for hex...
@@ -145,7 +145,12 @@ void Display::refreshLEDs() {
       //not implemented.
   }
 
-  //Disable the Woftware PWM on OE pin as it interrupts fastled.
+
+  /* Timing is critical when writing out the FastLED updates.  If we are interrupted while writing, the LEDs will glitch/flash.
+   * Unfortunately the software PWM we use to 'dim' the VFDs by PWM modulating the OE_PIN is driven by a non-maskable interrupt.
+   * So, we can't use software PWM on OE_PIN while writing the LEDs out or they will glitch.  So we have to disable the software PWM,
+   * take control of the pin, and pull it high (to turn the display off), while we write the LED data out, then re-enable software PWM
+   * which reenables the interrupt */
   analogWrite(OE_PIN, 0x00);
   pinMode(OE_PIN, OUTPUT);
   digitalWrite(OE_PIN, HIGH);
@@ -154,9 +159,25 @@ void Display::refreshLEDs() {
   analogWrite(OE_PIN, 1024 -  (brightness*4));
 }
 
-void Display::setBrightness (uint8_t b) {
-  brightness = b;
-  LEDS.setBrightness(brightness);
+void Display::setBrightness (uint8_t desiredBrightness) {
+  if (desiredBrightness>200) desiredBrightness = 254; //full brightness
+  if (desiredBrightness<15)  desiredBrightness = 2; //uber dim.
+
+  //If the brightness we want is a long way from the desired brightness, make a small step brighter or dimmer
+  //until we're on target.
+  if (desiredBrightness > brightness + 5) {
+    brightness += 5;
+  }
+  else if (desiredBrightness < brightness - 5) {
+    brightness -= 5;
+  }
+  else {
+    brightness = desiredBrightness;
+  }
+
+  if (brightness > LEDS_OFF_BRIGHTNESS_CUTOFF) LEDS.setBrightness(brightness);
+  else LEDS.setBrightness(0);
+
   analogWrite(OE_PIN, 1024 -  (brightness*4));
 }
 

@@ -26,22 +26,7 @@ RTC_DS3231 rtc;
 ButtonHandler buttonHandler;
 
 void updateBrightness() {
-  static int lastBrightness = analogRead(A0);
-  int currentBrightness = analogRead(A0);
-
-  //If the brightness we want is a long way from the desired brightness, make a small step brighter or dimmer
-  //until we're on target.
-  if (currentBrightness > lastBrightness + 20) {
-    lastBrightness += 20;
-  }
-  else if (currentBrightness < lastBrightness - 20) {
-    lastBrightness -= 20;
-  }
-  else {
-    //we're only a tiny bit out - don't bother making any changes.
-    return;
-  }
-  display.setBrightness(lastBrightness);
+  display.setBrightness(255 - analogRead(A0)/4);
 }
 
 void setupOTA() {
@@ -71,7 +56,6 @@ void setupOTA() {
   ArduinoOTA.setHostname(ota_hostname);
   ArduinoOTA.begin();
 }
-
 
 void setRTC() {
   DateTime t = rtc.now(); //This will get the default time from above.
@@ -175,18 +159,24 @@ void handleButtonEvent(BUTTON_EVENT e) {
 
 void loop() {
   static int lastSec = -1;
+
   DateTime t = rtc.now();
-   //If the time has moved forward, we will update the display:
-   if (t.second() != lastSec) {
+  //If the time has moved forward, we will update the display:
+  if (t.second() != lastSec) {
      lastSec = t.second();
      display.displayTime(t);
-   }
+  }
+
+    //See whether enough time has passed to update the LEDs
+    //Advance the LED effects.
+    display.refreshLEDs();
+
    updateBrightness();
-   //Advance the LED effects.
-   display.refreshLEDs();
+   display.refreshDisplay();
+
    //Handle any button presses.
    handleButtonEvent(buttonHandler.poll());
    //process any outstanding OTA events
    ArduinoOTA.handle();
-   delay(50);
+   delay(100);
 }

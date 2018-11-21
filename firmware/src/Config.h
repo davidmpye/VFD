@@ -12,4 +12,7 @@
 //For the button ButtonHandler
 #define LONG_BUTTON_PRESS_TIME 1000 //how many ms needed to register as a long press
 
+//If brightness is set below this cutoff, the LEDS will go off.
+#define LEDS_OFF_BRIGHTNESS_CUTOFF 15
+
 #endif
