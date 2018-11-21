@@ -51,7 +51,6 @@ void setupOTA() {
     else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
     else if (error == OTA_END_ERROR) Serial.println("End Failed");
   });
-
   ArduinoOTA.setPort(8266);
   ArduinoOTA.setHostname(ota_hostname);
   ArduinoOTA.begin();
@@ -106,7 +105,6 @@ void setup() {
 
 void handleButtonEvent(BUTTON_EVENT e) {
   switch(e) {
-
     case BUTTON_A_SHORTPRESS:
       display.displayDate(rtc.now());
       delay(2000);
@@ -153,7 +151,6 @@ void handleButtonEvent(BUTTON_EVENT e) {
 
         default:
           break;
-
     }
 }
 
@@ -166,14 +163,11 @@ void loop() {
      lastSec = t.second();
      display.displayTime(t);
   }
-
-    //See whether enough time has passed to update the LEDs
-    //Advance the LED effects.
-    display.refreshLEDs();
-
+   //See whether enough time has passed to update the LEDs
+   //Advance the LED effects.
+   display.refreshLEDs();
    updateBrightness();
    display.refreshDisplay();
-
    //Handle any button presses.
    handleButtonEvent(buttonHandler.poll());
    //process any outstanding OTA events
