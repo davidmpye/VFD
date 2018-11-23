@@ -108,9 +108,7 @@ module short_side_face() {
 	}
 }
 
-
-
-vfd_tube_dia = 24;
+vfd_tube_dia = 24+2;
 
 difference() {
 	top_face();
@@ -128,8 +126,8 @@ difference() {
         translate([225/2,5,0]) circle(d=4);
         translate([225/2,75,0]) circle(d=4);
     
-       //LDR hole
-       translate([225/2 + 12,5,0]) circle(d=5);
+       //LDR hole if wanted top mounted one
+     //  translate([225/2 + 12,5,0]) circle(d=5);
          
        }    
 }
@@ -153,18 +151,16 @@ translate([0,outer_y + 5,0]) difference() {
 
 
 translate([material_thickness,outer_y*2 + 5 + material_thickness*2 + 3,0]) rotate(0,0,0) difference() {
-        
-    long_side_face();
-    //translate([2*material_thickness + 1 + 8, 2*material_thickness + 16.5, -1]) {
-//square([15,8]);
-  //      }
-        
+    long_side_face();        
 }
 
 translate([material_thickness + outer_y,outer_y*2 + 5 + material_thickness*2 + 3,0]) rotate(0,0,0) long_side_face();
 
-translate([material_thickness, outer_y*2 + outer_z + 10 + material_thickness*2 + 3 ,0]) short_side_face() ;
-
+translate([material_thickness, outer_y*2 + outer_z + 10 + material_thickness*2 + 3 ,0]) difference() {
+    short_side_face() ;
+    //This takes a small nick out of the front face to make it easier to mount the LDR forward facing into room.
+    translate([outer_x/2, outer_z - material_thickness - 3, 0]) circle(r=3);
+}
     
 
 translate([material_thickness, outer_y*2 + outer_z *2 + 15 + material_thickness*2 + 3 ,0]) difference() {
