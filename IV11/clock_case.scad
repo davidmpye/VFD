@@ -159,7 +159,7 @@ translate([material_thickness + outer_y,outer_y*2 + 5 + material_thickness*2 + 3
 translate([material_thickness, outer_y*2 + outer_z + 10 + material_thickness*2 + 3 ,0]) difference() {
     short_side_face() ;
     //This takes a small nick out of the front face to make it easier to mount the LDR forward facing into room.
-    translate([outer_x/2, outer_z - material_thickness - 3, 0]) circle(r=3);
+    translate([outer_x/2 - material_thickness, outer_z - material_thickness - 3, 0]) circle(r=2);
 }
     
 
