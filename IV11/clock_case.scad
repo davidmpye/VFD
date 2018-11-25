@@ -112,10 +112,10 @@ vfd_tube_dia = 24+2;
 
 difference() {
 	top_face();
-    translate([2*material_thickness, 2*material_thickness, 0]) {
+    translate([2*material_thickness + 1, 2*material_thickness + 1, 0]) {
         for (a=[0:7]) {
             //VFD holes
-            translate([1 + 14.0625 + (28.125 * a), 40,0]) circle(d=vfd_tube_dia);     
+            translate([14.0625 + (28.125 * a), 40,0]) circle(d=vfd_tube_dia);     
         }
         //the 6 M4 mounting holes.
         //the 6 M4 mounting holes.
