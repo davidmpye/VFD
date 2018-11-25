@@ -1,6 +1,6 @@
-/* 
-    VFD clock firmware (c) 2018 David Pye <davidmpye@gmail.com> 
-    
+/*
+    VFD clock firmware (c) 2018 David Pye <davidmpye@gmail.com>
+
     http://www.davidmpye.com/VFD
 
     This program is free software: you can redistribute it and/or modify
@@ -45,9 +45,9 @@ void Display::begin() {
 
   //All LEDs off.
   FastLED.clear();
-  FastLED.setDither( 0 );
   LEDS.setBrightness(100);
   FastLED.show();
+  analogWriteFreq(2000); //2kHz
   analogWrite(OE_PIN, 512);
 }
 
@@ -171,21 +171,28 @@ void Display::refreshLEDs() {
    * take control of the pin, and pull it high (to turn the display off), while we write the LED data out, then re-enable software PWM
    * which reenables the interrupt */
   analogWrite(OE_PIN, 0x00);
+  noInterrupts();
   pinMode(OE_PIN, OUTPUT);
   digitalWrite(OE_PIN, HIGH);
   FastLED.show();
   //Re-enable the software PWM.
+  interrupts();
   analogWrite(OE_PIN, 1024 -  (brightness*4));
 }
 
 void Display::setBrightness (uint8_t desiredBrightness) {
+  static int lastBrightness = -20;
+
   if (desiredBrightness>200) desiredBrightness = 254; //full brightness
-  if (desiredBrightness<15)  desiredBrightness = 2; //uber dim.
+  if (desiredBrightness<40)  desiredBrightness = 2; //uber dim.
 
-
-  //If this would be only a minor adjustment, don't do it, or the display will have an annoying flicker
-  if (desiredBrightness > brightness - 20 && desiredBrightness < brightness + 20) {
-    return;
+  if (desiredBrightness > lastBrightness + 20 || desiredBrightness < lastBrightness - 20) {
+    //Significant change.
+    lastBrightness = desiredBrightness;
+  }
+  else {
+    //Insignificant change, continue to target the last brightness level
+    desiredBrightness = lastBrightness;
   }
 
   //If the brightness we want is a long way from the desired brightness, make a small step brighter or dimmer

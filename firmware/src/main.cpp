@@ -1,6 +1,6 @@
-/* 
-    VFD clock firmware (c) 2018 David Pye <davidmpye@gmail.com> 
-    
+/*
+    VFD clock firmware (c) 2018 David Pye <davidmpye@gmail.com>
+
     http://www.davidmpye.com/VFD
 
     This program is free software: you can redistribute it and/or modify
@@ -45,7 +45,7 @@ RTC_DS3231 rtc;
 ButtonHandler buttonHandler;
 
 void updateBrightness() {
-  display.setBrightness(255 - analogRead(A0)/4);
+  display.setBrightness( 255 - analogRead(A0)/4);
 }
 
 void setupOTA() {
