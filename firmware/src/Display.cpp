@@ -45,7 +45,8 @@ void Display::begin() {
   FastLED.clear();
   LEDS.setBrightness(brightness);
   FastLED.show();
-
+	
+  analogWriteFreq(400);
   analogWrite(OE_PIN, 512);
 }
 
@@ -168,14 +169,12 @@ void Display::refreshLEDs() {
    * So, we can't use software PWM on OE_PIN while writing the LEDs out or they will glitch.  So we have to disable the software PWM,
    * take control of the pin, and pull it high (to turn the display off), while we write the LED data out, then re-enable software PWM
    * which reenables the interrupt */
-  noInterrupts();
   analogWrite(OE_PIN, 0x00);
   pinMode(OE_PIN, OUTPUT);
   digitalWrite(OE_PIN, HIGH);
   FastLED.show();
   //Re-enable the software PWM.
   analogWrite(OE_PIN, 1024 -  (brightness*4));
-  interrupts();
 }
 
 void Display::setBrightness (uint8_t desiredBrightness) {
