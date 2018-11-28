@@ -45,9 +45,10 @@ void Display::begin() {
   FastLED.clear();
   LEDS.setBrightness(brightness);
   FastLED.show();
-	
-  analogWriteFreq(400);
-  analogWrite(OE_PIN, 512);
+
+  analogWriteRange(256);
+  analogWriteFreq(200);
+  analogWrite(OE_PIN, 0x01);
 }
 
 void Display::displayTime(DateTime t) {
@@ -174,13 +175,13 @@ void Display::refreshLEDs() {
   digitalWrite(OE_PIN, HIGH);
   FastLED.show();
   //Re-enable the software PWM.
-  analogWrite(OE_PIN, 1024 -  (brightness*4));
+  analogWrite(OE_PIN, 255 - brightness);
 }
 
 void Display::setBrightness (uint8_t desiredBrightness) {
   static int lastBrightness = -20;
 
-  if (desiredBrightness>200) desiredBrightness = 254; //full brightness
+  if (desiredBrightness>200) desiredBrightness = 255; //full brightness
   if (desiredBrightness<40)  desiredBrightness = 6; //uber dim.
 
   if (desiredBrightness > lastBrightness + 20 || desiredBrightness < lastBrightness - 20) {
@@ -207,7 +208,7 @@ void Display::setBrightness (uint8_t desiredBrightness) {
   if (brightness > LEDS_OFF_BRIGHTNESS_CUTOFF) LEDS.setBrightness(brightness);
   else LEDS.setBrightness(0);
 
-  analogWrite(OE_PIN, 1024 -  (brightness*4));
+  analogWrite(OE_PIN, 255 - brightness);
 }
 
 void Display::setTimeMode(TIME_MODE m) {
