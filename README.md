@@ -10,6 +10,9 @@ Parts count/prices kept down by using 'generic' ebay modules to provide:
 * Wemos D1 Mini board to provide the brains
 * 5mm encapsulated addressable RGB LEDs to provide the colour effects.
 
+![Finished clock](https://raw.githubusercontent.com/wiki/davidmpye/VFD/images/finished_clock.jpg)
+
+
 Please see the project wiki for more details.
 
 https://github.com/davidmpye/VFD/wiki
