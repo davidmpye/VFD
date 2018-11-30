@@ -32,23 +32,17 @@ void Display::begin() {
   pinMode(OE_PIN, OUTPUT);
   pinMode(LED_PIN, OUTPUT);
 
+  analogWriteFreq(50);
+  analogWriteRange(256);
+
   //Set all tubes to OFF.
   memset(_displayData, 0x00, NUM_TUBES);
-  refreshDisplay();
   //Set up the LEDs
   LEDS.addLeds<APA106,LED_PIN,RGB>(leds,NUM_LEDS).setCorrection(TypicalLEDStrip);;
 
   //Full brightness.
   brightness = 255;
-
-  //All LEDs off.
-  FastLED.clear();
-  LEDS.setBrightness(brightness);
-  FastLED.show();
-
-  analogWriteRange(256);
-  analogWriteFreq(200);
-  analogWrite(OE_PIN, 0x01);
+  update();
 }
 
 void Display::displayTime(DateTime t) {
@@ -85,7 +79,7 @@ void Display::displayTime(DateTime t) {
        setTubeChar(1, t.second()/10);
        setTubeChar(0, t.second()%10);
      }
-     refreshDisplay();
+     update();
 }
 
 void Display::displayDate(DateTime t) {
@@ -108,7 +102,7 @@ void Display::displayDate(DateTime t) {
   setTubeByte(2, 0x40);
   setTubeChar(1, (t.year()-2000)/10);
   setTubeChar(0, (t.year()-2000)%10);
-  refreshDisplay();
+  update();
 }
 
 void Display::displayInt(int x) {
@@ -122,12 +116,12 @@ void Display::displayInt(int x, int base) {
       x /= base;
       if (x == 0) break;;
   }
-  refreshDisplay();
+  update();
 }
 
 void Display::clear() {
     memset(_displayData, 0x00, NUM_TUBES);
-    refreshDisplay();
+    update();
 }
 
 void Display::blank() {
@@ -138,44 +132,38 @@ void Display::blank() {
   digitalWrite(LATCH_PIN, HIGH);
 }
 
-void Display::refreshDisplay() {
-  //Update the VFD displays
+void Display::update() {
+  // Calculate the new data for the LEDs.
+  static long lastLEDUpdate = millis();
+  bool ledRefreshNeeded = false;
+  //If we're due an LED update, update the animation.
+  if (millis() > lastLEDUpdate + LED_ANIMATION_STEPTIME) {
+    lastLEDUpdate = millis();
+    ledRefreshNeeded = true;
+    switch (_ledMode) {
+      case RAINBOW_MODE:
+        rainbow_counter++;
+        fill_rainbow(leds, NUM_LEDS, rainbow_counter, 255/NUM_LEDS);
+        break;
+    case COL_PER_NUM_MODE:
+        for (int i = 0; i < NUM_TUBES; ++i) {
+          leds[i].setHue(25 * getTubeChar(7-i)); //255 / 10 digits - sorry, no extra colors for hex...
+        }
+        break;
+    default:
+      break;
+      //not implemented.
+    }
+  }
+
+  //Push out the new digit data to the shift registers
   digitalWrite(LATCH_PIN, LOW);
   for (int i=0; i<NUM_TUBES; ++i) {
     shiftOut(DATA_PIN, CLOCK_PIN, MSBFIRST, _displayData[i]);
   }
   digitalWrite(LATCH_PIN, HIGH);
-}
 
-void Display::refreshLEDs() {
-  switch (_ledMode) {
-    case RAINBOW_MODE:
-      rainbow_counter++;
-      fill_rainbow(leds, NUM_LEDS, rainbow_counter, 255/NUM_LEDS);
-      break;
-    case COL_PER_NUM_MODE:
-      for (int i = 0; i < NUM_TUBES; ++i) {
-        leds[i].setHue(25 * getTubeChar(7-i)); //255 / 10 digits - sorry, no extra colors for hex...
-      }
-      break;
-
-    default:
-      break;
-      //not implemented.
-  }
-
-
-  /* Timing is critical when writing out the FastLED updates.  If we are interrupted while writing, the LEDs will glitch/flash.
-   * Unfortunately the software PWM we use to 'dim' the VFDs by PWM modulating the OE_PIN is driven by a non-maskable interrupt.
-   * So, we can't use software PWM on OE_PIN while writing the LEDs out or they will glitch.  So we have to disable the software PWM,
-   * take control of the pin, and pull it high (to turn the display off), while we write the LED data out, then re-enable software PWM
-   * which reenables the interrupt */
-  analogWrite(OE_PIN, 0x00);
-  pinMode(OE_PIN, OUTPUT);
-  digitalWrite(OE_PIN, HIGH);
-  FastLED.show();
-  //Re-enable the software PWM.
-  analogWrite(OE_PIN, 255 - brightness);
+  if (ledRefreshNeeded) FastLED.show();
 }
 
 void Display::setBrightness (uint8_t desiredBrightness) {
@@ -238,7 +226,7 @@ const LED_MODE Display::getLEDMode() {
 void Display::test() {
   //Set all tubes to display 8 to test all segments
   memset(_displayData, 0xFF, NUM_TUBES);
-  refreshDisplay();
+  update();
 }
 
 void Display::setTubeByte(int tube, uint8_t b) {

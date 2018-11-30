@@ -60,7 +60,7 @@ void setupOTA() {
     int percent = progress / (total / 100);
       display.setTubeChar(1, percent/ 10);
       display.setTubeChar(0, percent %10);
-      display.refreshDisplay();
+      display.update();
   });
   ArduinoOTA.onError([](ota_error_t error) {
     Serial.printf("Error[%u]: ", error);
@@ -111,7 +111,7 @@ void setup() {
     display.setTubeChar(1, 'F');
     display.setTubeChar(0, 'F');
     while(1) {
-      display.refreshDisplay();
+      display.update();
       delay(100);
     }
   }
@@ -120,7 +120,6 @@ void setup() {
     rtc.adjust(DateTime(2001, 1, 1, 12, 0, 0));
   }
 }
-
 
 void handleButtonEvent(BUTTON_EVENT e) {
   switch(e) {
@@ -175,6 +174,7 @@ void handleButtonEvent(BUTTON_EVENT e) {
 
 void loop() {
   static int lastSec = -1;
+  static long lastLEDUpdateMs = -1;
 
   DateTime t = rtc.now();
   //If the time has moved forward, we will update the display:
@@ -184,9 +184,8 @@ void loop() {
   }
    //See whether enough time has passed to update the LEDs
    //Advance the LED effects.
-   display.refreshLEDs();
+   display.update();
    updateBrightness();
-   display.refreshDisplay();
    //Handle any button presses.
    handleButtonEvent(buttonHandler.poll());
    //process any outstanding OTA events

@@ -1,6 +1,6 @@
-/* 
-    VFD clock firmware (c) 2018 David Pye <davidmpye@gmail.com> 
-    
+/*
+    VFD clock firmware (c) 2018 David Pye <davidmpye@gmail.com>
+
     http://www.davidmpye.com/VFD
 
     This program is free software: you can redistribute it and/or modify
@@ -62,10 +62,9 @@ class Display {
     void clear(); //clears display and data
     void blank(); //clears the display, but doesnt clear data, so calling refreshDisplay will unblank it.
 
-    void refreshDisplay(); //Updates the contents of the display with the results of the settubebyte/char/dp functions.
-    void refreshLEDs(); //Updates the LED colours as per  LED_MODE
+    void setBrightness(uint8_t); //Sets the brightness of the tubes (and LEDs) - for the tubes, it uses PWM, for the LEDs it uses Fastled's setBrightness.
 
-    void setBrightness(uint8_t); //Sets the brightness of the tubes (and LEDs) - for the tubes, it uses PWM, for the LEDs it uses Fastled.
+    void update(); //Updates the tubes and LEDs.
 
     void setTimeMode(TIME_MODE m);
     void setDateMode(DATE_MODE m);
@@ -75,8 +74,7 @@ class Display {
     const DATE_MODE getDateMode();
     const LED_MODE getLEDMode();
 
-    void test();
-
+    void test(); //Lights all segments on all tubes
 
     //Lower level manipulations.
     void setTubeByte(int tube, uint8_t b) ;

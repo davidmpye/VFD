@@ -1,6 +1,6 @@
-/* 
-    VFD clock firmware (c) 2018 David Pye <davidmpye@gmail.com> 
-    
+/*
+    VFD clock firmware (c) 2018 David Pye <davidmpye@gmail.com>
+
     http://www.davidmpye.com/VFD
 
     This program is free software: you can redistribute it and/or modify
@@ -98,10 +98,10 @@ tmElements_t ButtonHandler::getDate(DateTime *t ) {
     if (now > last_blinked+1000) {
       char b = display->getTubeChar(tubecount);
       display->setTubeByte(tubecount, 0x00);
-      display->refreshDisplay();
+      display->update();
       delay(200);
       display->setTubeChar(tubecount, b);
-      display->refreshDisplay();
+      display->update();
       last_blinked = now;
     }
 
@@ -117,7 +117,7 @@ tmElements_t ButtonHandler::getDate(DateTime *t ) {
        else if (val>9) val = 0;
 
        display->setTubeChar(tubecount, val);
-       display->refreshDisplay();
+       display->update();
     }
 
     if (buttonA->wasPressed()) {
@@ -174,10 +174,10 @@ tmElements_t ButtonHandler::getTime(DateTime *t) {
     if (now > last_blinked+1000) {
       char b = display->getTubeChar(tubecount);
       display->setTubeByte(tubecount, 0x00);
-      display->refreshDisplay();
+      display->update();
       delay(200);
       display->setTubeChar(tubecount, b);
-      display->refreshDisplay();
+      display->update();
       last_blinked = now;
     }
 
@@ -197,7 +197,7 @@ tmElements_t ButtonHandler::getTime(DateTime *t) {
       //everything can go up to 9.
       else if (val>9) val = 0;
       display->setTubeChar(tubecount, val);
-      display->refreshDisplay();
+      display->update();
     };
 
     //Button B changes digit

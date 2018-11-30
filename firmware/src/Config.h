@@ -1,6 +1,6 @@
-/* 
-    VFD clock firmware (c) 2018 David Pye <davidmpye@gmail.com> 
-    
+/*
+    VFD clock firmware (c) 2018 David Pye <davidmpye@gmail.com>
+
     http://www.davidmpye.com/VFD
 
     This program is free software: you can redistribute it and/or modify
@@ -34,5 +34,6 @@
 
 //If brightness is set below this cutoff, the LEDS will go off.
 #define LEDS_OFF_BRIGHTNESS_CUTOFF 15
+#define LED_ANIMATION_STEPTIME 100 //mS
 
 #endif
