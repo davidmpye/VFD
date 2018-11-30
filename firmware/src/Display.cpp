@@ -81,7 +81,6 @@ void Display::displayTime(DateTime t) {
        setTubeChar(1, t.second()/10);
        setTubeChar(0, t.second()%10);
      }
-     update();
 }
 
 void Display::displayDate(DateTime t) {
@@ -104,7 +103,6 @@ void Display::displayDate(DateTime t) {
   setTubeByte(2, 0x40);
   setTubeChar(1, (t.year()-2000)/10);
   setTubeChar(0, (t.year()-2000)%10);
-  update();
 }
 
 void Display::displayInt(int x) {
@@ -118,12 +116,10 @@ void Display::displayInt(int x, int base) {
       x /= base;
       if (x == 0) break;;
   }
-  update();
 }
 
 void Display::clear() {
     memset(_displayData, 0x00, NUM_TUBES);
-    update();
 }
 
 void Display::blank() {
@@ -137,19 +133,22 @@ void Display::blank() {
 void Display::update() {
   // Calculate the new data for the LEDs.
   static long lastLEDUpdate = millis();
+
   bool ledRefreshNeeded = false;
   //If we're due an LED update, update the animation.
   if (millis() > lastLEDUpdate + LED_ANIMATION_STEPTIME) {
+
     lastLEDUpdate = millis();
     ledRefreshNeeded = true;
+
     switch (_ledMode) {
       case RAINBOW_MODE:
         rainbow_counter++;
         fill_rainbow(leds, NUM_LEDS, rainbow_counter, 255/NUM_LEDS);
         break;
-    case COL_PER_NUM_MODE:
+      case COL_PER_NUM_MODE:
         for (int i = 0; i < NUM_TUBES; ++i) {
-          leds[i].setHue(25 * getTubeChar(7-i)); //255 / 10 digits - sorry, no extra colors for hex...
+          leds[i].setHue(25 * getTubeChar((NUM_TUBES -1) - i)); //255 / 10 digits - sorry, no extra colors for hex...
         }
         break;
     default:
@@ -228,7 +227,7 @@ const LED_MODE Display::getLEDMode() {
 void Display::test() {
   //Set all tubes to display 8 to test all segments
   memset(_displayData, 0xFF, NUM_TUBES);
-  update();
+  brightness = 255;
 }
 
 void Display::setTubeByte(int tube, uint8_t b) {

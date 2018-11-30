@@ -125,6 +125,7 @@ void handleButtonEvent(BUTTON_EVENT e) {
   switch(e) {
     case BUTTON_A_SHORTPRESS:
       display.displayDate(rtc.now());
+      display.update();
       delay(2000);
       break;
 
@@ -159,11 +160,13 @@ void handleButtonEvent(BUTTON_EVENT e) {
 
       case BUTTON_C_LONGPRESS:
         display.displayInt(analogRead(A0));
+        display.update();
         delay(1000);
         break;
 
       case BUTTON_D_LONGPRESS:
         display.test();
+        display.update();
         delay(1000);
         break;
 
@@ -182,13 +185,12 @@ void loop() {
      lastSec = t.second();
      display.displayTime(t);
   }
-   //See whether enough time has passed to update the LEDs
-   //Advance the LED effects.
-   display.update();
-   updateBrightness();
-   //Handle any button presses.
-   handleButtonEvent(buttonHandler.poll());
-   //process any outstanding OTA events
-   ArduinoOTA.handle();
-   delay(100);
+
+  updateBrightness();
+  display.update();
+  //Handle any button presses.
+  handleButtonEvent(buttonHandler.poll());
+  //process any outstanding OTA events
+  ArduinoOTA.handle();
+  delay(100);
 }

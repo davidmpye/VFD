@@ -80,6 +80,7 @@ BUTTON_EVENT ButtonHandler::poll() {
 tmElements_t ButtonHandler::getDate(DateTime *t ) {
   display->setDateMode(DDMMYY_MODE);
   display->displayDate(*t);
+  display->update();
 
   int tubecount = 7;
   int last_blinked = millis();
@@ -153,7 +154,8 @@ tmElements_t ButtonHandler::getDate(DateTime *t ) {
 
 tmElements_t ButtonHandler::getTime(DateTime *t) {
   display->setTimeMode(TWENTYFOURHR_MODE);
-  display->displayTime(*t); //FIXME
+  display->displayTime(*t);
+  display->update();
   //Start with hour.
   int tubecount = 7;
   //Set the seconds to zero.
