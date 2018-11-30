@@ -32,7 +32,9 @@ void Display::begin() {
   pinMode(OE_PIN, OUTPUT);
   pinMode(LED_PIN, OUTPUT);
 
+  //Setting the PWM frequency to ~50Hz makes the inductor in the boost converter hum far less.
   analogWriteFreq(50);
+  //PWM range 0-255.
   analogWriteRange(256);
 
   //Set all tubes to OFF.

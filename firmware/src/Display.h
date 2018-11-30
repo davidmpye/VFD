@@ -20,6 +20,10 @@
 #ifndef __DISPLAY_H__
 #define __DISPLAY_H__
 
+#define FASTLED_ALLOW_INTERRUPTS 0
+
+
+
 #include <FastLED.h>
 #include <Time.h>
 #include <Timezone.h>
