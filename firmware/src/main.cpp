@@ -45,7 +45,9 @@ RTC_DS3231 rtc;
 ButtonHandler buttonHandler;
 
 void updateBrightness() {
-  display.setBrightness( 255 - analogRead(A0)/4);
+  int b = analogRead(A0) / 4;
+  if (b > 255) b = 255;  //In case b is 1024...
+  display.setBrightness(255 - b);
 }
 
 void setupOTA() {

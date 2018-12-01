@@ -168,7 +168,7 @@ void Display::update() {
 }
 
 void Display::setBrightness (uint8_t desiredBrightness) {
-  static int lastBrightness = -20;
+  static uint8_t lastBrightness = 0;
 
   if (desiredBrightness>200) desiredBrightness = 255; //full brightness
   if (desiredBrightness<40)  desiredBrightness = 6; //uber dim.
