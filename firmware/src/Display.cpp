@@ -167,31 +167,30 @@ void Display::update() {
   if (ledRefreshNeeded) FastLED.show();
 }
 
-void Display::setBrightness (uint8_t desiredBrightness) {
+void Display::setBrightness (uint8_t requestedBrightness) {
   static uint8_t lastBrightness = 0;
 
-  if (desiredBrightness>200) desiredBrightness = 255; //full brightness
-  if (desiredBrightness<40)  desiredBrightness = 6; //uber dim.
+  if (requestedBrightness>200) requestedBrightness = 255; //full brightness
+  if (requestedBrightness<40)  requestedBrightness = 6; //uber dim.
 
-  if (desiredBrightness > lastBrightness + 20 || desiredBrightness < lastBrightness - 20) {
+  if (requestedBrightness > lastBrightness + 20 || requestedBrightness < lastBrightness - 20) {
     //Significant change.
-    lastBrightness = desiredBrightness;
+    lastBrightness = requestedBrightness;
   }
   else {
     //Insignificant change, continue to target the last brightness level
-    desiredBrightness = lastBrightness;
+    requestedBrightness = lastBrightness;
   }
 
-  //If the brightness we want is a long way from the desired brightness, make a small step brighter or dimmer
-  //until we're on target.
-  if (desiredBrightness > brightness + 5) {
+  //If we've requested a large change in brightness, start making small steps towards it
+  if (requestedBrightness >= brightness + 5) {
     brightness += 5;
   }
-  else if (desiredBrightness < brightness - 5) {
+  else if (requestedBrightness <= brightness - 5) {
     brightness -= 5;
   }
   else {
-    brightness = desiredBrightness;
+    brightness = requestedBrightness;
   }
 
   if (brightness > LEDS_OFF_BRIGHTNESS_CUTOFF) LEDS.setBrightness(brightness);
