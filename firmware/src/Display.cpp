@@ -81,7 +81,7 @@ void Display::displayTime(DateTime t) {
      setTubeChar(1, t.second()/10);
      setTubeChar(0, t.second()%10);
    }
-   if (_dashes) {
+   if (_dashes && ( _timeMode == TWENTYFOURHR_MODE || _timeMode == AMPM_MODE )) {
      if (t.second() %2 == 0) {
        setTubeByte(5, 0x40);
        setTubeByte(2, 0x40);
