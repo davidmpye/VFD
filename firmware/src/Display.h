@@ -74,6 +74,8 @@ class Display {
     void setDateMode(DATE_MODE m);
     void setLEDMode(LED_MODE m);
 
+    void enableDashes(bool);
+
     const TIME_MODE getTimeMode();
     const DATE_MODE getDateMode();
     const LED_MODE getLEDMode();
@@ -114,6 +116,8 @@ class Display {
     0x79,
     0x71
   };
+
+  bool _dashes = false;
 
   DATE_MODE _dateMode = DDMMYY_MODE;
   TIME_MODE _timeMode = TWENTYFOURHR_MODE;

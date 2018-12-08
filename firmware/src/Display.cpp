@@ -54,33 +54,42 @@ void Display::displayTime(DateTime t) {
        for (int i=0; i<8; i++) {
          setTubeChar(i, (epochtime>>(4*i)) & 0x0F);
        }
-     }
-     else {
-       //Normal modes...
-       if (_timeMode == AMPM_MODE) {
-         if (t.hour() > 12) {
-           //If it's PM, dont display a 0 as first digit.
-           if ((t.hour() - 12 )/10 == 0) setTubeByte(7,0x00);
-           else setTubeChar(7,1);
-           setTubeDP(7, true);
-           setTubeChar(6, (t.hour()-12)%10);
-         }
-         else {
-           //24 HR clock mode.
-           setTubeChar(7,t.hour()/10);
-           setTubeChar(6,t.hour()%10);
-         }
+  }
+  else {
+     //Normal modes...
+     if (_timeMode == AMPM_MODE) {
+       if (t.hour() > 12) {
+         //If it's PM, dont display a 0 as first digit.
+         if ((t.hour() - 12 )/10 == 0) setTubeByte(7,0x00);
+         else setTubeChar(7,1);
+         setTubeDP(7, true);
+         setTubeChar(6, (t.hour()-12)%10);
        }
-       else if (_timeMode == TWENTYFOURHR_MODE) {
+       else {
+         //24 HR clock mode.
          setTubeChar(7,t.hour()/10);
          setTubeChar(6,t.hour()%10);
        }
-       //These are the same for either ampm/24 hr mode
-       setTubeChar(4, t.minute()/10);
-       setTubeChar(3, t.minute()%10);
-       setTubeChar(1, t.second()/10);
-       setTubeChar(0, t.second()%10);
      }
+     else if (_timeMode == TWENTYFOURHR_MODE) {
+       setTubeChar(7,t.hour()/10);
+       setTubeChar(6,t.hour()%10);
+     }
+     //These are the same for either ampm/24 hr mode
+     setTubeChar(4, t.minute()/10);
+     setTubeChar(3, t.minute()%10);
+     setTubeChar(1, t.second()/10);
+     setTubeChar(0, t.second()%10);
+   }
+   if (_dashes) {
+     if (t.second() %2 == 0) {
+       setTubeByte(5, 0x40);
+       setTubeByte(2, 0x40);
+     }
+     else {
+     //clear() will set these to blank anyway.
+     }
+   }
 }
 
 void Display::displayDate(DateTime t) {
@@ -240,6 +249,10 @@ void Display::setTubeChar(int tube, char c) {
 void Display::setTubeDP(int tube, bool enabled) {
   if (enabled ) _displayData[tube] |= 0x80;
   else _displayData[tube] &= ~0x80;
+}
+
+void Display::enableDashes(bool b) {
+  _dashes = b;
 }
 
 const uint8_t Display::getTubeByte(int tube) {

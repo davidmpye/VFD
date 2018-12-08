@@ -177,9 +177,10 @@ void handleButtonEvent(BUTTON_EVENT e) {
     }
 }
 
+byte dash = false;
 void loop() {
   static int lastSec = -1;
-  static long lastLEDUpdateMs = -1;
+
 
   DateTime t = rtc.now();
   //If the time has moved forward, we will update the display:
