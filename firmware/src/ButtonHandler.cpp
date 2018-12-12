@@ -113,7 +113,7 @@ tmElements_t ButtonHandler::getDate(DateTime *t ) {
 
        if (tubecount == 7 && val>3) val = 0;
        else if (tubecount==6 && val > 1 && display->getTubeChar(7) ==3) val = 0; //Can't go above 31.
-       else if (tubecount == 4 && val>1) val = 1;
+       else if (tubecount == 4 && val>1) val = 0;
        else if (tubecount == 3 && val >2 && display->getTubeChar(4) == 1) val = 0; //Can't go above 12.
        else if (val>9) val = 0;
 
