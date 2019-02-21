@@ -193,12 +193,15 @@ void Display::update() {
         }
         break;
       case STEALTH_MODE:
-        LEDS.setBrightness(0); //All LEDs off
         if (FastLED.getBrightness() > 0) {
+          LEDS.setBrightness(0); //All LEDs off
           FastLED.show();
         }
         ledRefreshNeeded = false;
         break;
+      default:
+        break;
+
       //not implemented.
     }
   }
