@@ -145,10 +145,6 @@ void Display::update() {
 
   bool ledRefreshNeeded = false;
 
-  uint8 hh = 0;
-  uint8 mm = 0;
-  uint8 ss = 0;
-
   //If we're due an LED update, update the animation.
   if (millis() > lastLEDUpdate + LED_ANIMATION_STEPTIME) {
 
@@ -168,28 +164,30 @@ void Display::update() {
         break;
       case COL_BY_TIME_MODE:
         if (NUM_TUBES == 6) {
-          hh = getTubeChar(5) * 10 + getTubeChar(4);
-          leds[0].setHue(10 * hh); // 24hr based colour regardless of time display mode
-          leds[1].setHue(10 * hh); // 24hr based colour regardless of time display mode
-          mm = getTubeChar(3) * 10 + getTubeChar(2);
-          leds[2].setHue(4 * mm);
-          leds[3].setHue(4 * mm);
-          ss = getTubeChar(1) * 10 + getTubeChar(0);
-          leds[4].setHue(4 * ss);
-          leds[5].setHue(4 * ss);
+          uint8_t hue;
+          // 24hr based colour regardless of time display mode
+	  hue  = (getTubeChar(5) * 10 + getTubeChar(4)) * 10;
+          leds[0].setHue(hue);
+          leds[1].setHue(hue);
+          hue = (getTubeChar(3) * 10 + getTubeChar(2)) * 4;
+          leds[2].setHue(hue);
+          leds[3].setHue(hue);
+          hue = (getTubeChar(1) * 10 + getTubeChar(0)) * 4;
+          leds[4].setHue(hue);
+          leds[5].setHue(hue);
         }
-        if (NUM_TUBES == 8) {
-          hh = getTubeChar(7) * 10 + getTubeChar(6);
-          leds[0].setHue(10 * hh); // 24hr based colour regardless of time display mode
-          leds[1].setHue(10 * hh); // 24hr based colour regardless of time display mode
+	else if (NUM_TUBES == 8) {
+	  hue  = (getTubeChar(7) * 10 + getTubeChar(6)) * 10;
+          leds[0].setHue(hue);
+          leds[1].setHue(hue);
           leds[2] = CRGB::Black;
-          mm = getTubeChar(4) * 10 + getTubeChar(3);
-          leds[3].setHue(4 * mm);
-          leds[4].setHue(4 * mm);
+          hue = (getTubeChar(4) * 10 + getTubeChar(3)) * 4;
+          leds[3].setHue(hue);
+          leds[4].setHue(hue);
           leds[5] = CRGB::Black;
-          ss = getTubeChar(1) * 10 + getTubeChar(0);
-          leds[6].setHue(4 * ss);
-          leds[7].setHue(4 * ss);
+          hue = (getTubeChar(1) * 10 + getTubeChar(0)) * 4;
+          leds[6].setHue(hue);
+          leds[7].setHue(hue);
         }
         break;
       case STEALTH_MODE:
