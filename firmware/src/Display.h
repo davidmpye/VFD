@@ -44,6 +44,8 @@ enum DATE_MODE {
 enum LED_MODE {
   RAINBOW_MODE,
   COL_PER_NUM_MODE,
+  COL_BY_TIME_MODE,
+  STEALTH_MODE,
 };
 
 class Display {

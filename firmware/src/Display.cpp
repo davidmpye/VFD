@@ -144,11 +144,13 @@ void Display::update() {
   static long lastLEDUpdate = millis();
 
   bool ledRefreshNeeded = false;
+
   //If we're due an LED update, update the animation.
   if (millis() > lastLEDUpdate + LED_ANIMATION_STEPTIME) {
 
     lastLEDUpdate = millis();
     ledRefreshNeeded = true;
+
 
     switch (_ledMode) {
       case RAINBOW_MODE:
@@ -160,8 +162,44 @@ void Display::update() {
           leds[i].setHue(25 * getTubeChar((NUM_TUBES -1) - i)); //255 / 10 digits - sorry, no extra colors for hex...
         }
         break;
-    default:
-      break;
+      case COL_BY_TIME_MODE:
+        if (NUM_TUBES == 6) {
+          uint8_t hue;
+          // 24hr based colour regardless of time display mode
+	  hue  = (getTubeChar(5) * 10 + getTubeChar(4)) * 10;
+          leds[0].setHue(hue);
+          leds[1].setHue(hue);
+          hue = (getTubeChar(3) * 10 + getTubeChar(2)) * 4;
+          leds[2].setHue(hue);
+          leds[3].setHue(hue);
+          hue = (getTubeChar(1) * 10 + getTubeChar(0)) * 4;
+          leds[4].setHue(hue);
+          leds[5].setHue(hue);
+        }
+	else if (NUM_TUBES == 8) {
+	  hue  = (getTubeChar(7) * 10 + getTubeChar(6)) * 10;
+          leds[0].setHue(hue);
+          leds[1].setHue(hue);
+          leds[2] = CRGB::Black;
+          hue = (getTubeChar(4) * 10 + getTubeChar(3)) * 4;
+          leds[3].setHue(hue);
+          leds[4].setHue(hue);
+          leds[5] = CRGB::Black;
+          hue = (getTubeChar(1) * 10 + getTubeChar(0)) * 4;
+          leds[6].setHue(hue);
+          leds[7].setHue(hue);
+        }
+        break;
+      case STEALTH_MODE:
+        if (FastLED.getBrightness() > 0) {
+          LEDS.setBrightness(0); //All LEDs off
+          FastLED.show();
+        }
+        ledRefreshNeeded = false;
+        break;
+      default:
+        break;
+
       //not implemented.
     }
   }

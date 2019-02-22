@@ -155,6 +155,12 @@ void handleButtonEvent(BUTTON_EVENT e) {
             display.setLEDMode(COL_PER_NUM_MODE);
             break;
           case COL_PER_NUM_MODE:
+            display.setLEDMode(COL_BY_TIME_MODE);
+            break;
+          case COL_BY_TIME_MODE:
+            display.setLEDMode(STEALTH_MODE);
+            break;
+          case STEALTH_MODE:
             display.setLEDMode(RAINBOW_MODE);
             break;
           }
