@@ -177,6 +177,7 @@ void Display::update() {
           leds[5].setHue(hue);
         }
 	else if (NUM_TUBES == 8) {
+          uint8_t hue;
 	  hue  = (getTubeChar(7) * 10 + getTubeChar(6)) * 10;
           leds[0].setHue(hue);
           leds[1].setHue(hue);
