@@ -47,13 +47,6 @@ void Display::begin() {
   update();
 }
 
-void Display::hello() {
-  clear();
-  for (int i=0; i<5; i++) {
-    setTubeByte((NUM_TUBES-1)-i, _helloFontTable[i]);
-  }
-}
-
 void Display::displayTime(DateTime t) {
   clear();
   if (_timeMode == EPOCH_MODE) {
@@ -131,6 +124,21 @@ void Display::displayInt(int x, int base) {
       setTubeChar(i, x%base);
       x /= base;
       if (x == 0) break;;
+  }
+}
+
+void Display::hello() {
+  clear();
+  for (int i=0; i<NUM_TUBES+sizeof(_helloFontTable); i++) {
+    for (int t=0; t<NUM_TUBES; t++)
+    if (i-t<0 or i-t>=sizeof(_helloFontTable)) {
+      setTubeByte(t, 0x00);
+    }
+    else {
+      setTubeByte(t, _helloFontTable[i-t]);
+    }
+    update();
+    delay(250);
   }
 }
 

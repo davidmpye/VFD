@@ -124,7 +124,7 @@ void setup() {
 
   display.hello();
   display.update();
-  delay(2000);
+  delay(1000);
 
 }
 
