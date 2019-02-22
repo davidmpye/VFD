@@ -47,6 +47,13 @@ void Display::begin() {
   update();
 }
 
+void Display::hello() {
+  clear();
+  for (int i=0; i<5; i++) {
+    setTubeByte((NUM_TUBES-1)-i, _helloFontTable[i]);
+  }
+}
+
 void Display::displayTime(DateTime t) {
   clear();
   if (_timeMode == EPOCH_MODE) {

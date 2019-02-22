@@ -65,6 +65,8 @@ class Display {
     //defaults to base 10
     void displayInt(int val);
 
+    void hello(); //displays the word hello.
+
     void clear(); //clears display and data
     void blank(); //clears the display, but doesnt clear data, so calling refreshDisplay will unblank it.
 
@@ -117,6 +119,25 @@ class Display {
     0x5E,
     0x79,
     0x71
+  };
+
+  uint8_t _testFontTable[8] = {
+    0x01,
+    0x02,
+    0x04,
+    0x08,
+    0x10,
+    0x20,
+    0x40,
+    0x80
+  };
+
+  uint8_t _helloFontTable[5] = {
+    0x76,
+    0x79,
+    0x38,
+    0x38,
+    0x3F,
   };
 
   bool _dashes = false;
