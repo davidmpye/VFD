@@ -127,6 +127,21 @@ void Display::displayInt(int x, int base) {
   }
 }
 
+void Display::hello() {
+  clear();
+  for (int i=0; i<NUM_TUBES+sizeof(_helloFontTable); i++) {
+    for (int t=0; t<NUM_TUBES; t++)
+    if (i-t<0 or i-t>=sizeof(_helloFontTable)) {
+      setTubeByte(t, 0x00);
+    }
+    else {
+      setTubeByte(t, _helloFontTable[i-t]);
+    }
+    update();
+    delay(250);
+  }
+}
+
 void Display::clear() {
     memset(_displayData, 0x00, NUM_TUBES);
 }

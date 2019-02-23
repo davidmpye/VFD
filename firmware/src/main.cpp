@@ -121,6 +121,11 @@ void setup() {
   if (rtc.lostPower()) {
     rtc.adjust(DateTime(2001, 1, 1, 12, 0, 0));
   }
+
+  display.hello();
+  display.update();
+  delay(1000);
+
 }
 
 void handleButtonEvent(BUTTON_EVENT e) {
