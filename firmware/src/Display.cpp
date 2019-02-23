@@ -75,13 +75,23 @@ void Display::displayTime(DateTime t) {
        setTubeChar(0,t.hour()/10);
        setTubeChar(1,t.hour()%10);
      }
+
+     if (NUM_TUBES == 6) {
+       //These are the same for either ampm/24 hr mode
+        setTubeChar(2, t.minute()/10);
+        setTubeChar(3, t.minute()%10);
+        setTubeChar(4, t.second()/10);
+        setTubeChar(5, t.second()%10);
+     }
+     else if (NUM_TUBES == 8) {
      //These are the same for either ampm/24 hr mode
-     setTubeChar(3, t.minute()/10);
-     setTubeChar(4, t.minute()%10);
-     setTubeChar(6, t.second()/10);
-     setTubeChar(7, t.second()%10);
+      setTubeChar(3, t.minute()/10);
+      setTubeChar(4, t.minute()%10);
+      setTubeChar(6, t.second()/10);
+      setTubeChar(7, t.second()%10);
+    }
    }
-   if (_dashes && ( _timeMode == TWENTYFOURHR_MODE || _timeMode == AMPM_MODE )) {
+   if (_dashes && NUM_TUBES == 8 && ( _timeMode == TWENTYFOURHR_MODE || _timeMode == AMPM_MODE )) {
      if (t.second() %2 == 0) {
        setTubeByte(2, 0x40);
        setTubeByte(5, 0x40);
@@ -94,24 +104,42 @@ void Display::displayTime(DateTime t) {
 
 void Display::displayDate(DateTime t) {
   clear();
-  switch (_dateMode) {
-    case DDMMYY_MODE:
-      setTubeChar(0, t.day()/10);
-      setTubeChar(1, t.day()%10);
-      setTubeChar(3, t.month()/10);
-      setTubeChar(4, t.month()%10);
+  if (NUM_TUBES == 6) {
+    switch (_dateMode) {
+      case DDMMYY_MODE:
+        setTubeChar(0, t.day()/10);
+        setTubeChar(1, t.day()%10);
+        setTubeChar(2, t.month()/10);
+        setTubeChar(3, t.month()%10);
+        break;
+      case MMDDYY_MODE:
+        setTubeChar(2, t.day()/10);
+        setTubeChar(3, t.day()%10);
+        setTubeChar(0, t.month()/10);
+        setTubeChar(1, t.month()%10);
       break;
-    case MMDDYY_MODE:
-      setTubeChar(3, t.day()/10);
-      setTubeChar(4, t.day()%10);
-      setTubeChar(0, t.month()/10);
-      setTubeChar(1, t.month()%10);
-    break;
+    }
+    setTubeChar(4, (t.year()-2000)/10);
+    setTubeChar(5, (t.year()-2000)%10);
   }
-  setTubeByte(2, 0x40);
-  setTubeByte(5, 0x40);
-  setTubeChar(6, (t.year()-2000)/10);
-  setTubeChar(7, (t.year()-2000)%10);
+  else if (NUM_TUBES ==8) {
+    switch (_dateMode) {
+      case DDMMYY_MODE:
+        setTubeChar(0, t.day()/10);
+        setTubeChar(1, t.day()%10);
+        setTubeChar(2, t.month()/10);
+        setTubeChar(3, t.month()%10);
+        break;
+      case MMDDYY_MODE:
+        setTubeChar(2, t.day()/10);
+        setTubeChar(3, t.day()%10);
+        setTubeChar(0, t.month()/10);
+        setTubeChar(1, t.month()%10);
+      break;
+    }
+    setTubeChar(6, (t.year()-2000)/10);
+    setTubeChar(7, (t.year()-2000)%10);
+  }
 }
 
 void Display::displayInt(int x) {
@@ -181,7 +209,7 @@ void Display::update() {
         if (NUM_TUBES == 6) {
           uint8_t hue;
           // 24hr based colour regardless of time display mode
-	  hue  = (getTubeChar(0) * 10 + getTubeChar(1)) * 10;
+	        hue  = (getTubeChar(0) * 10 + getTubeChar(1)) * 10;
           leds[0].setHue(hue);
           leds[1].setHue(hue);
           hue = (getTubeChar(2) * 10 + getTubeChar(3)) * 4;
@@ -193,7 +221,7 @@ void Display::update() {
         }
 	else if (NUM_TUBES == 8) {
           uint8_t hue;
-	  hue  = (getTubeChar(0) * 10 + getTubeChar(1)) * 10;
+	        hue  = (getTubeChar(0) * 10 + getTubeChar(1)) * 10;
           leds[0].setHue(hue);
           leds[1].setHue(hue);
           leds[2] = CRGB::Black;

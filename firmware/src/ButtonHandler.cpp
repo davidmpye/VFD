@@ -82,7 +82,7 @@ tmElements_t ButtonHandler::getDate(DateTime *t ) {
   display->displayDate(*t);
   display->update();
 
-  int tubecount = 7;
+  int tubecount = 0;
   int last_blinked = millis();
 
   //Wait until Button A is released.
@@ -92,7 +92,6 @@ tmElements_t ButtonHandler::getDate(DateTime *t ) {
 
     buttonA->read();
     buttonB->read();
-    buttonC->read();
 
     int now = millis();
 
@@ -110,30 +109,31 @@ tmElements_t ButtonHandler::getDate(DateTime *t ) {
        int val = display->getTubeChar(tubecount);
        val ++;
        //assuming DDMMYY....//FIXME
-
-       if (tubecount == 7 && val>3) val = 0;
-       else if (tubecount==6 && val > 1 && display->getTubeChar(7) ==3) val = 0; //Can't go above 31.
-       else if (tubecount == 4 && val>1) val = 0;
-       else if (tubecount == 3 && val >2 && display->getTubeChar(4) == 1) val = 0; //Can't go above 12.
-       else if (val>9) val = 0;
-
+       if (NUM_TUBES == 6) {
+         if (tubecount == 0 && val>3) val = 0;
+         else if (tubecount == 1 && val > 1 && display->getTubeChar(0) ==3) val = 0; //Can't go above 31.
+         else if (tubecount == 2 && val>1) val = 0;
+         else if (tubecount == 3 && val >2 && display->getTubeChar(2) == 1) val = 0; //Can't go above 12.
+         else if (val>9) val = 0;
+       }
+       else if (NUM_TUBES == 8) {
+         if (tubecount == 0 && val>3) val = 0;
+         else if (tubecount==1 && val > 1 && display->getTubeChar(0) ==3) val = 0; //Can't go above 31.
+         else if (tubecount == 3 && val>1) val = 0;
+         else if (tubecount == 4 && val >2 && display->getTubeChar(3) == 1) val = 0; //Can't go above 12.
+         else if (val>9) val = 0;
+       }
        display->setTubeChar(tubecount, val);
        display->update();
     }
 
     if (buttonA->wasPressed()) {
-      //skip over the 'empty' tubes here.
-      tubecount--;
-      switch (tubecount) {
-        case 5:
-          tubecount = 4;
-          break;
-        case 2:
-          tubecount = 1;
-          break;
-        case -1:
-          tubecount = 7;
-          break;
+      tubecount++;
+      if (tubecount == NUM_TUBES) tubecount = 0;
+      else if (NUM_TUBES == 8) {
+        //Skip over the empty tubes
+        if (tubecount == 2) tubecount = 3;
+        else if (tubecount == 5) tubecount = 6;
       }
     }
 
@@ -143,9 +143,16 @@ tmElements_t ButtonHandler::getDate(DateTime *t ) {
 
       //Build the time we have made and return it
       tmElements_t e;
-      e.Day = display->getTubeChar(7)*10  + display->getTubeChar(6);
-      e.Month = display->getTubeChar(4)*10 + display->getTubeChar(3);
-      e.Year = 30 +  display->getTubeChar(1)*10 + display->getTubeChar(0); //30 is because we are starting at year 2000, not 1970
+      if (NUM_TUBES == 6) {
+        e.Day = display->getTubeChar(0)*10  + display->getTubeChar(1);
+        e.Month = display->getTubeChar(2)*10 + display->getTubeChar(3);
+        e.Year = 30 +  display->getTubeChar(4)*10 + display->getTubeChar(5); //30 is because we are starting at year 2000, not 1970
+      }
+      else if (NUM_TUBES == 8) {
+        e.Day = display->getTubeChar(0)*10  + display->getTubeChar(1);
+        e.Month = display->getTubeChar(3)*10 + display->getTubeChar(4);
+        e.Year = 30 +  display->getTubeChar(6)*10 + display->getTubeChar(7); //30 is because we are starting at year 2000, not 1970
+      }
       return e;
     }
     delay(10);
@@ -157,11 +164,16 @@ tmElements_t ButtonHandler::getTime(DateTime *t) {
   display->displayTime(*t);
   display->update();
   //Start with hour.
-  int tubecount = 7;
+  int tubecount = 0;
   //Set the seconds to zero.
-  display->setTubeChar(0,0);
-  display->setTubeChar(1,0);
-
+  if (NUM_TUBES == 6) {
+  display->setTubeChar(4,0);
+  display->setTubeChar(5,0);
+  }
+  else if(NUM_TUBES == 8) {
+    display->setTubeChar(6,0);
+    display->setTubeChar(7,0);
+  }
   int last_blinked = millis();
 
     //Wait until Button A is released.
@@ -170,7 +182,6 @@ tmElements_t ButtonHandler::getTime(DateTime *t) {
   while(1) {
     buttonA->read();
     buttonB->read();
-    buttonC->read();
 
     int now = millis();
     if (now > last_blinked+1000) {
@@ -188,31 +199,44 @@ tmElements_t ButtonHandler::getTime(DateTime *t) {
       int val = display->getTubeChar(tubecount);
       val ++;
       //24 hour clock mode.
-      //Hour can be 0, 1, 2 only.
-      if (tubecount == 7 && val == 3) val = 0;
-      //If someone chaages the hour 'ten' digit to 2, make sure this wouldn't create a hour > 23
-      else if (tubecount == 7 && val == 2 && display->getTubeChar(6) >3) display->setTubeChar(6, 0);
-      //Don't allow hours > 23
-      else if (tubecount == 6 && display->getTubeChar(7) == 2 && val == 4) val = 0;
-      //Don't allow mins/secs 'tens' to be greater than 5.
-      else if ((tubecount == 4 ) && val == 6) val = 0;
-      //everything can go up to 9.
-      else if (val>9) val = 0;
+      if (NUM_TUBES ==6) {
+        //Hour can be 0, 1, 2 only.
+         if (tubecount == 0 && val == 3) val = 0;
+         //If someone chaages the hour 'ten' digit to 2, make sure this wouldn't create a hour > 23
+         else if (tubecount == 0 && val == 2 && display->getTubeChar(1) >3) display->setTubeChar(1, 0);
+         //Don't allow hours > 23
+         else if (tubecount == 1 && display->getTubeChar(0) == 2 && val == 4) val = 0;
+         //Don't allow mins/secs 'tens' to be greater than 5.
+         else if ((tubecount == 2 ) && val == 6) val = 0;
+         //everything can go up to 9.
+         else if (val>9) val = 0;
+      }
+      else if (NUM_TUBES == 8) {
+       //Hour can be 0, 1, 2 only.
+        if (tubecount == 0 && val == 3) val = 0;
+        //If someone chaages the hour 'ten' digit to 2, make sure this wouldn't create a hour > 23
+        else if (tubecount == 0 && val == 2 && display->getTubeChar(1) >3) display->setTubeChar(1, 0);
+        //Don't allow hours > 23
+        else if (tubecount == 1 && display->getTubeChar(0) == 2 && val == 4) val = 0;
+        //Don't allow mins/secs 'tens' to be greater than 5.
+        else if ((tubecount == 3 ) && val == 6) val = 0;
+        //everything can go up to 9.
+        else if (val>9) val = 0;
+      }
       display->setTubeChar(tubecount, val);
       display->update();
     };
 
     //Button B changes digit
     if (buttonA->wasPressed()) {
-      //skip over the 'empty' tubes here.
-      tubecount--;
-      switch (tubecount) {
-        case 5:
-          tubecount = 4;
-          break;
-        case 2:
-          tubecount = 7;
-          break;
+      tubecount++;
+      //Cant edit seconds.
+      if (NUM_TUBES == 6 && tubecount == 4) tubecount = 0;
+      else if (NUM_TUBES == 8) {
+        //Skip over the empty tubes
+        if (tubecount == 2) tubecount = 3;
+        //Cant edit seconds.
+        else if (tubecount == 5) tubecount = 0;
       }
     }
 
@@ -223,9 +247,16 @@ tmElements_t ButtonHandler::getTime(DateTime *t) {
 
       //Build the time we have made and return it
       tmElements_t e;
-      e.Hour = display->getTubeChar(7)*10  + display->getTubeChar(6);
-      e.Minute = display->getTubeChar(4)*10 + display->getTubeChar(3);
-      e.Second = 0;
+      if (NUM_TUBES == 6) {
+        e.Hour = display->getTubeChar(0)*10  + display->getTubeChar(1);
+        e.Minute = display->getTubeChar(2)*10 + display->getTubeChar(3);
+        e.Second = 0;
+      }
+      else if (NUM_TUBES == 8) {
+        e.Hour = display->getTubeChar(0)*10  + display->getTubeChar(1);
+        e.Minute = display->getTubeChar(3)*10 + display->getTubeChar(4);
+        e.Second = 0;
+      }
       return e;
     }
     delay(10);
