@@ -110,8 +110,8 @@ void Display::displayDate(DateTime t) {
   }
   setTubeByte(2, 0x40);
   setTubeByte(5, 0x40);
-  setTubeChar(7, (t.year()-2000)/10);
-  setTubeChar(6, (t.year()-2000)%10);
+  setTubeChar(6, (t.year()-2000)/10);
+  setTubeChar(7, (t.year()-2000)%10);
 }
 
 void Display::displayInt(int x) {
