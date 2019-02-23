@@ -135,7 +135,7 @@ void Display::hello() {
       setTubeByte(t, 0x00);
     }
     else {
-      setTubeByte(t, _helloFontTable[i-t]);
+      setTubeByte(t, _helloFontTable[t]);
     }
     update();
     delay(250);
