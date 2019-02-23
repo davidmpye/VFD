@@ -52,7 +52,7 @@ void Display::displayTime(DateTime t) {
   if (_timeMode == EPOCH_MODE) {
        time_t epochtime = t.unixtime(); //!
        for (int i=0; i<8; i++) {
-         setTubeChar(i, (epochtime>>(4*i)) & 0x0F);
+         setTubeChar(NUM_TUBES - 1 - i, (epochtime>>(4*i)) & 0x0F);
        }
   }
   else {
@@ -62,29 +62,29 @@ void Display::displayTime(DateTime t) {
          //If it's PM, dont display a 0 as first digit.
          if ((t.hour() - 12 )/10 == 0) setTubeByte(7,0x00);
          else setTubeChar(7,1);
-         setTubeDP(7, true);
-         setTubeChar(6, (t.hour()-12)%10);
+         setTubeDP(0, true);
+         setTubeChar(1, (t.hour()-12)%10);
        }
        else {
          //24 HR clock mode.
-         setTubeChar(7,t.hour()/10);
-         setTubeChar(6,t.hour()%10);
+         setTubeChar(0,t.hour()/10);
+         setTubeChar(1,t.hour()%10);
        }
      }
      else if (_timeMode == TWENTYFOURHR_MODE) {
-       setTubeChar(7,t.hour()/10);
-       setTubeChar(6,t.hour()%10);
+       setTubeChar(0,t.hour()/10);
+       setTubeChar(1,t.hour()%10);
      }
      //These are the same for either ampm/24 hr mode
-     setTubeChar(4, t.minute()/10);
-     setTubeChar(3, t.minute()%10);
-     setTubeChar(1, t.second()/10);
-     setTubeChar(0, t.second()%10);
+     setTubeChar(3, t.minute()/10);
+     setTubeChar(4, t.minute()%10);
+     setTubeChar(6, t.second()/10);
+     setTubeChar(7, t.second()%10);
    }
    if (_dashes && ( _timeMode == TWENTYFOURHR_MODE || _timeMode == AMPM_MODE )) {
      if (t.second() %2 == 0) {
-       setTubeByte(5, 0x40);
        setTubeByte(2, 0x40);
+       setTubeByte(5, 0x40);
      }
      else {
      //clear() will set these to blank anyway.
@@ -96,22 +96,22 @@ void Display::displayDate(DateTime t) {
   clear();
   switch (_dateMode) {
     case DDMMYY_MODE:
-      setTubeChar(7, t.day()/10);
-      setTubeChar(6, t.day()%10);
-      setTubeChar(4, t.month()/10);
-      setTubeChar(3, t.month()%10);
+      setTubeChar(0, t.day()/10);
+      setTubeChar(1, t.day()%10);
+      setTubeChar(3, t.month()/10);
+      setTubeChar(4, t.month()%10);
       break;
     case MMDDYY_MODE:
-      setTubeChar(4, t.day()/10);
-      setTubeChar(3, t.day()%10);
-      setTubeChar(7, t.month()/10);
-      setTubeChar(6, t.month()%10);
+      setTubeChar(3, t.day()/10);
+      setTubeChar(4, t.day()%10);
+      setTubeChar(0, t.month()/10);
+      setTubeChar(1, t.month()%10);
     break;
   }
-  setTubeByte(5, 0x40);
   setTubeByte(2, 0x40);
-  setTubeChar(1, (t.year()-2000)/10);
-  setTubeChar(0, (t.year()-2000)%10);
+  setTubeByte(5, 0x40);
+  setTubeChar(7, (t.year()-2000)/10);
+  setTubeChar(6, (t.year()-2000)%10);
 }
 
 void Display::displayInt(int x) {
@@ -121,7 +121,7 @@ void Display::displayInt(int x) {
 void Display::displayInt(int x, int base) {
   clear();
   for (int i=0; i<NUM_TUBES; ++i) {
-      setTubeChar(i, x%base);
+      setTubeChar(NUM_TUBES - 1 -i, x%base);
       x /= base;
       if (x == 0) break;;
   }
@@ -166,27 +166,27 @@ void Display::update() {
         if (NUM_TUBES == 6) {
           uint8_t hue;
           // 24hr based colour regardless of time display mode
-	  hue  = (getTubeChar(5) * 10 + getTubeChar(4)) * 10;
+	  hue  = (getTubeChar(0) * 10 + getTubeChar(1)) * 10;
           leds[0].setHue(hue);
           leds[1].setHue(hue);
-          hue = (getTubeChar(3) * 10 + getTubeChar(2)) * 4;
+          hue = (getTubeChar(2) * 10 + getTubeChar(3)) * 4;
           leds[2].setHue(hue);
           leds[3].setHue(hue);
-          hue = (getTubeChar(1) * 10 + getTubeChar(0)) * 4;
+          hue = (getTubeChar(4) * 10 + getTubeChar(5)) * 4;
           leds[4].setHue(hue);
           leds[5].setHue(hue);
         }
 	else if (NUM_TUBES == 8) {
           uint8_t hue;
-	  hue  = (getTubeChar(7) * 10 + getTubeChar(6)) * 10;
+	  hue  = (getTubeChar(0) * 10 + getTubeChar(1)) * 10;
           leds[0].setHue(hue);
           leds[1].setHue(hue);
           leds[2] = CRGB::Black;
-          hue = (getTubeChar(4) * 10 + getTubeChar(3)) * 4;
+          hue = (getTubeChar(3) * 10 + getTubeChar(4)) * 4;
           leds[3].setHue(hue);
           leds[4].setHue(hue);
           leds[5] = CRGB::Black;
-          hue = (getTubeChar(1) * 10 + getTubeChar(0)) * 4;
+          hue = (getTubeChar(6) * 10 + getTubeChar(7)) * 4;
           leds[6].setHue(hue);
           leds[7].setHue(hue);
         }
@@ -208,7 +208,7 @@ void Display::update() {
   //Push out the new digit data to the shift registers
   digitalWrite(LATCH_PIN, LOW);
   for (int i=0; i<NUM_TUBES; ++i) {
-    shiftOut(DATA_PIN, CLOCK_PIN, MSBFIRST, _displayData[i]);
+    shiftOut(DATA_PIN, CLOCK_PIN, MSBFIRST, _displayData[NUM_TUBES - 1 - i]);
   }
   digitalWrite(LATCH_PIN, HIGH);
 
