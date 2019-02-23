@@ -174,7 +174,7 @@ void Display::update() {
         break;
       case COL_PER_NUM_MODE:
         for (int i = 0; i < NUM_TUBES; ++i) {
-          leds[i].setHue(25 * getTubeChar((NUM_TUBES -1) - i)); //255 / 10 digits - sorry, no extra colors for hex...
+          leds[i].setHue(25 * getTubeChar(i)); //255 / 10 digits - sorry, no extra colors for hex...
         }
         break;
       case COL_BY_TIME_MODE:
