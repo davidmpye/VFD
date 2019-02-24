@@ -139,7 +139,7 @@ void handleButtonEvent(BUTTON_EVENT e) {
       setRTC();
       break;
 
-    case BUTTON_B_SHORTPRESS:
+    case BUTTON_C_SHORTPRESS:
       switch (display.getTimeMode()) {
         case TWENTYFOURHR_MODE:
           display.setTimeMode(AMPM_MODE);
@@ -153,7 +153,7 @@ void handleButtonEvent(BUTTON_EVENT e) {
         }
         break;
 
-      case BUTTON_C_SHORTPRESS:
+      case BUTTON_B_SHORTPRESS:
         switch(display.getLEDMode()) {
           case RAINBOW_MODE:
             display.setLEDMode(COL_PER_NUM_MODE);
