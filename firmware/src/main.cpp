@@ -29,15 +29,20 @@
 #include <RTClib.h>
 #include "Display.h"
 #include "Config.h"
+#include <NtpClientLib.h>
 
-const char *ssid = "";
-const char *password = "";
+const int NETWORKS = 3;
+const char *SSID[NETWORKS] = {"Slate3","58Glanton","Maker Space"};
+const char *PASSWORD[NETWORKS] = {"moonBeam9","superBeam0","donotbeonfire"};
 const char *ota_hostname="espvfd";
 const char *ota_password="";
 
-IPAddress ip(192, 168, 1, 20);
-IPAddress gateway(192, 168, 1, 1);
-IPAddress subnet(255, 255, 255, 0);
+//#define IP_STATIC
+#ifdef IP_STATIC
+  IPAddress ip(192, 168, 1, 20);
+  IPAddress gateway(192, 168, 1, 1);
+  IPAddress subnet(255, 255, 255, 0);
+#endif
 
 Display display;
 RTC_DS3231 rtc;
@@ -99,8 +104,30 @@ void setup() {
   Wire.begin(D2,D1);
 
   WiFi.mode(WIFI_STA);
-  WiFi.config(ip, gateway, subnet);
-  WiFi.begin(ssid, password);
+  #ifdef IP_STATIC
+    WiFi.config(ip, gateway, subnet);
+  #endif
+  int ssids=WiFi.scanNetworks();
+  for(int i=0; i<ssids; i++){
+    for(int j=0; j<NETWORKS; j++){
+      if(!strcmp(WiFi.SSID(i).c_str(),SSID[j])){
+        while(WiFi.status()!=WL_CONNECTED){
+          WiFi.begin(SSID[j], PASSWORD[j]);delay(3333);
+        }
+      }
+    }
+  }
+
+  IPAddress localIP=WiFi.localIP();
+  for(int i=0; i<4; i++){
+    int digitTO=666, digitGapTO=111, groupGapTO=444;
+    display.setTubeChar(0, localIP[i]/100);display.update();delay(digitTO);
+    display.clear();display.update();delay(digitGapTO);
+    display.setTubeChar(0, (localIP[i]%100)/10);display.update();delay(digitTO);
+    display.clear();display.update();delay(digitGapTO);
+    display.setTubeChar(0, (localIP[i]%100)%10);display.update();delay(digitTO);
+    display.clear();display.update();delay(groupGapTO);
+  }
 
   setupOTA();
 
@@ -119,7 +146,12 @@ void setup() {
   }
   //Check to see if the RTC has lost time - if so, set the time to midday jan 2001
   if (rtc.lostPower()) {
-    rtc.adjust(DateTime(2001, 1, 1, 12, 0, 0));
+    time_t timeT=0;
+    while(!NTP.begin("pool.ntp.org", 0, true, 0))delay(999);
+    NTP.setInterval(63);
+    while(!(timeT=NTP.getTime()))delay(999);
+    rtc.adjust(DateTime(year(timeT), month(timeT), day(timeT),
+      hour(timeT), minute(timeT), second(timeT)));
   }
 
   display.hello();
