@@ -31,9 +31,9 @@
 #include "Config.h"
 #include <NtpClientLib.h>
 
-const int NETWORKS = 3;
-const char *SSID[NETWORKS] = {"Slate3","58Glanton","Maker Space"};
-const char *PASSWORD[NETWORKS] = {"moonBeam9","superBeam0","donotbeonfire"};
+const int NETWORKS = 2;
+const char *SSID[NETWORKS] = {"AP1","","AP2"}; // Add multiple APs
+const char *PASSWORD[NETWORKS] = {"key1","key2"}; // Add multiple keys
 const char *ota_hostname="espvfd";
 const char *ota_password="";
 
@@ -107,26 +107,42 @@ void setup() {
   #ifdef IP_STATIC
     WiFi.config(ip, gateway, subnet);
   #endif
+  // Connect to WiFi AP
   int ssids=WiFi.scanNetworks();
   for(int i=0; i<ssids; i++){
     for(int j=0; j<NETWORKS; j++){
+      // Loop through SSIDs, attempt connection.
+      display.setTubeChar(0, 0xA);
+      display.setTubeChar(1, i);
+      display.update();
       if(!strcmp(WiFi.SSID(i).c_str(),SSID[j])){
-        while(WiFi.status()!=WL_CONNECTED){
-          WiFi.begin(SSID[j], PASSWORD[j]);delay(3333);
+        int retryCount=3;
+        for(int k=0; k<retryCount; k++){
+          WiFi.begin(SSID[j], PASSWORD[j]);
+          delay(3333);
+          // Successful connection, end loops.
+          if(WiFi.status()==WL_CONNECTED){
+            i=ssids;
+            j=NETWORKS;
+            k=retryCount;
+          }
         }
       }
     }
   }
-
-  IPAddress localIP=WiFi.localIP();
-  for(int i=0; i<4; i++){
-    int digitTO=666, digitGapTO=111, groupGapTO=444;
-    display.setTubeChar(0, localIP[i]/100);display.update();delay(digitTO);
-    display.clear();display.update();delay(digitGapTO);
-    display.setTubeChar(0, (localIP[i]%100)/10);display.update();delay(digitTO);
-    display.clear();display.update();delay(digitGapTO);
-    display.setTubeChar(0, (localIP[i]%100)%10);display.update();delay(digitTO);
-    display.clear();display.update();delay(groupGapTO);
+  // Display IP
+  if(WiFi.status()==WL_CONNECTED){
+    IPAddress localIP=WiFi.localIP();
+    for(int i=0; i<4; i++){
+      int digitTO=666, digitGapTO=111, groupGapTO=444;
+      display.clear();display.update();
+      display.setTubeChar(0, localIP[i]/100);display.update();delay(digitTO);
+      display.clear();display.update();delay(digitGapTO);
+      display.setTubeChar(0, (localIP[i]%100)/10);display.update();delay(digitTO);
+      display.clear();display.update();delay(digitGapTO);
+      display.setTubeChar(0, (localIP[i]%100)%10);display.update();delay(digitTO);
+      display.clear();display.update();delay(groupGapTO);
+    }
   }
 
   setupOTA();
@@ -137,21 +153,35 @@ void setup() {
   if (! rtc.begin()) {
     //Display error code 0xFF if RTC not available.
     display.clear();
-    display.setTubeChar(1, 'F');
-    display.setTubeChar(0, 'F');
+    display.setTubeChar(1, 0xF);
+    display.setTubeChar(0, 0xF);
     while(1) {
       display.update();
       delay(100);
     }
   }
-  //Check to see if the RTC has lost time - if so, set the time to midday jan 2001
+  //Check to see if the RTC has lost time - if so, set the time
   if (rtc.lostPower()) {
     time_t timeT=0;
-    while(!NTP.begin("pool.ntp.org", 0, true, 0))delay(999);
+    int retryCount=3;
+    // Connect to NTP server
+    for(int i=0; i<retryCount; i++){
+      if(NTP.begin("pool.ntp.org", 0, true, 0)) i=retryCount;
+      delay(999);
+    }
     NTP.setInterval(63);
-    while(!(timeT=NTP.getTime()))delay(999);
-    rtc.adjust(DateTime(year(timeT), month(timeT), day(timeT),
-      hour(timeT), minute(timeT), second(timeT)));
+    for(int i=0; i<retryCount; i++){
+      timeT=NTP.getTime();
+      delay(999);
+      // Set time by NTP
+      if(timeT){
+        rtc.adjust(DateTime(year(timeT), month(timeT), day(timeT),
+          hour(timeT), minute(timeT), second(timeT)));
+        i=retryCount;
+      }
+    }
+    // Set the time to midday jan 2001
+    if(!timeT) rtc.adjust(DateTime(2001, 1, 1, 12, 0, 0));
   }
 
   display.hello();
