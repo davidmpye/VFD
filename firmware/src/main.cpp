@@ -31,7 +31,11 @@
 #include "Config.h"
 #include <NtpClientLib.h>
 
+<<<<<<< HEAD
 const int NETWORKS = 2;
+=======
+const int NETWORKS = 4;
+>>>>>>> 80f80b7c8eed0dd3bb62fa43dd8a22fcc3de8745
 const char *SSID[NETWORKS] = {"AP1","","AP2"}; // Add multiple APs
 const char *PASSWORD[NETWORKS] = {"key1","key2"}; // Add multiple keys
 const char *ota_hostname="espvfd";
