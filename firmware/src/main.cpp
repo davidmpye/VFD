@@ -30,10 +30,13 @@
 #include "Display.h"
 #include "Config.h"
 #include <NtpClientLib.h>
+#include <DNSServer.h>            //Local DNS Server used for redirecting all requests to the configuration portal
+#include <ESP8266WebServer.h>     //Local WebServer used to serve the configuration portal
+#include <WiFiManager.h>          //https://github.com/tzapu/WiFiManager WiFi Configuration Magic
 
-const int NETWORKS = 4;
-const char *SSID[NETWORKS] = {"AP1","","AP2"}; // Add multiple APs
-const char *PASSWORD[NETWORKS] = {"key1","key2"}; // Add multiple keys
+const int NETWORKS = 3;
+const char *SSID[NETWORKS] = {"AP1","Slate3","AP3"}; // Add multiple APs
+const char *PASSWORD[NETWORKS] = {"key1","moonBeam9","key3"}; // Add multiple keys
 const char *ota_hostname="espvfd";
 const char *ota_password="";
 
@@ -113,7 +116,7 @@ void setup() {
     for(int j=0; j<NETWORKS; j++){
       // Loop through SSIDs, attempt connection.
       display.setTubeChar(0, 0xA);
-      display.setTubeChar(1, i);
+      display.setTubeChar(1, j);
       display.update();
       if(!strcmp(WiFi.SSID(i).c_str(),SSID[j])){
         int retryCount=3;
