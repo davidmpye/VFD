@@ -30,22 +30,12 @@
 #include "Display.h"
 #include "Config.h"
 #include <NtpClientLib.h>
-#include <DNSServer.h>            //Local DNS Server used for redirecting all requests to the configuration portal
-#include <ESP8266WebServer.h>     //Local WebServer used to serve the configuration portal
-#include <WiFiManager.h>          //https://github.com/tzapu/WiFiManager WiFi Configuration Magic
+#include <DNSServer.h> // Local DNS Server used for redirecting all requests to the configuration portal
+#include <ESP8266WebServer.h> // Local WebServer used to serve the configuration portal
+#include <WiFiManager.h> // https://github.com/tzapu/WiFiManager WiFi Configuration Magic
 
-const int NETWORKS = 3;
-const char *SSID[NETWORKS] = {"AP1","Slate3","AP3"}; // Add multiple APs
-const char *PASSWORD[NETWORKS] = {"key1","moonBeam9","key3"}; // Add multiple keys
 const char *ota_hostname="espvfd";
 const char *ota_password="";
-
-//#define IP_STATIC
-#ifdef IP_STATIC
-  IPAddress ip(192, 168, 1, 20);
-  IPAddress gateway(192, 168, 1, 1);
-  IPAddress subnet(255, 255, 255, 0);
-#endif
 
 Display display;
 RTC_DS3231 rtc;
@@ -94,6 +84,10 @@ void setRTC() {
 }
 
 void setup() {
+  WiFiManager wifiManager;
+  wifiManager.setConfigPortalTimeout(180);
+  wifiManager.autoConnect("VFD-Clock"); // Name of temporary access point
+
   //Button 1
   pinMode(D0, INPUT);
   //Button 2
@@ -106,33 +100,6 @@ void setup() {
   display.begin();
   Wire.begin(D2,D1);
 
-  WiFi.mode(WIFI_STA);
-  #ifdef IP_STATIC
-    WiFi.config(ip, gateway, subnet);
-  #endif
-  // Connect to WiFi AP
-  int ssids=WiFi.scanNetworks();
-  for(int i=0; i<ssids; i++){
-    for(int j=0; j<NETWORKS; j++){
-      // Loop through SSIDs, attempt connection.
-      display.setTubeChar(0, 0xA);
-      display.setTubeChar(1, j);
-      display.update();
-      if(!strcmp(WiFi.SSID(i).c_str(),SSID[j])){
-        int retryCount=3;
-        for(int k=0; k<retryCount; k++){
-          WiFi.begin(SSID[j], PASSWORD[j]);
-          delay(3333);
-          // Successful connection, end loops.
-          if(WiFi.status()==WL_CONNECTED){
-            i=ssids;
-            j=NETWORKS;
-            k=retryCount;
-          }
-        }
-      }
-    }
-  }
   // Display IP
   if(WiFi.status()==WL_CONNECTED){
     IPAddress localIP=WiFi.localIP();
