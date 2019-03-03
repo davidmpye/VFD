@@ -284,7 +284,7 @@ void Display::setBrightness (uint8_t requestedBrightness) {
     brightness = requestedBrightness;
   }
 
-  if (COL_BY_TIME_MODE != STEALTH_MODE) {
+  if (_ledMode != STEALTH_MODE) {
     if (brightness > LEDS_OFF_BRIGHTNESS_CUTOFF) LEDS.setBrightness(brightness);
     else LEDS.setBrightness(0);
   }
