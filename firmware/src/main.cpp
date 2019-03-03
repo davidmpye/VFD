@@ -147,55 +147,12 @@ void setup() {
 
   uint8_t hello[] = {'H', 'E', 'L', 'L', 'O', '.', '.', '.'};
   display.scrollMessage(hello, sizeof(hello), 4);
-<<<<<<< HEAD
-  uint8_t hello[] = {'H', 'E', 'L', 'L', 'O', '.', '.', '.'};
-  display.scrollMessage(hello, sizeof(hello), 4);
 
-  WiFi.mode(WIFI_STA);
-  #ifdef IP_STATIC
-    WiFi.config(ip, gateway, subnet);
-  #endif
-  int ssids=WiFi.scanNetworks();
-  for(int i=0; i<ssids; i++){
-    for(int j=0; j<NETWORKS; j++){
-      if(!strcmp(WiFi.SSID(i).c_str(),SSID[j])){
-        while(WiFi.status()!=WL_CONNECTED){
-          WiFi.begin(SSID[j], PASSWORD[j]);delay(3333);
-        }
-      }
-    }
-  }
-
-  IPAddress localIP=WiFi.localIP();
-  if (localIP[0] + localIP[1] + localIP[2] + localIP[3] > 0) {
-    uint8_t IPChars[19] = {'I', 'P', '-'};
-    for(int i=0; i<4; i++){
-      IPChars[i*4+3]=localIP[i]/100+'0';
-      IPChars[i*4+4]=localIP[i]%100/10+'0';
-      IPChars[i*4+5]=(localIP[i]%100)%10+'0';
-      IPChars[i*4+6]='.';
-    }
-    display.scrollMessage(IPChars, 16, 2);
-  }
-/*
-  for(int i=0; i<4; i++){
-    int digitTO=666, digitGapTO=111, groupGapTO=444;
-    display.setTubeChar(0, localIP[i]/100);display.update();delay(digitTO);
-    display.clear();display.update();delay(digitGapTO);
-    display.setTubeChar(0, (localIP[i]%100)/10);display.update();delay(digitTO);
-    display.clear();display.update();delay(digitGapTO);
-    display.setTubeChar(0, (localIP[i]%100)%10);display.update();delay(digitTO);
-    display.clear();display.update();delay(groupGapTO);
-  }
-*/
-  setupOTA();
-=======
   //If we have some defined networks, try to connect to them.
   if (NETWORKS>0) {
     setupWifi();
     setupOTA();
   }
->>>>>>> upstream/master
 
   buttonHandler.begin(D0, D5, 3, 1, &display);
   display.setBrightness(0xFF);
@@ -237,7 +194,6 @@ void setup() {
     // Set the time to midday jan 2001
     if(!timeT) rtc.adjust(DateTime(2001, 1, 1, 12, 0, 0));
   }
-****/
 
   display.update();
   delay(1000);
