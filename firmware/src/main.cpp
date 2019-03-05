@@ -34,6 +34,12 @@
 #include <ESP8266WebServer.h> // Local WebServer used to serve the configuration portal
 #include <WiFiManager.h> // https://github.com/tzapu/WiFiManager WiFi Configuration Magic
 
+<<<<<<< HEAD
+=======
+const int NETWORKS = 0; //Set this to the number of wifi networks you define below.
+const char *SSID[NETWORKS] = {}; // e.g. {"AP1","Slate3","AP3"}; // Add multiple APs
+const char *PASSWORD[NETWORKS] = {}; //e.g. {"key1","moonBeam9","key3"}; // Add multiple keys
+>>>>>>> upstream/master
 const char *ota_hostname="espvfd";
 const char *ota_password="";
 
@@ -83,6 +89,7 @@ void setRTC() {
   rtc.adjust(DateTime(y.Year + 1970, y.Month, y.Day, x.Hour, x.Minute, x.Second));
 }
 
+<<<<<<< HEAD
 void setup() {
   WiFiManager wifiManager;
   wifiManager.setConfigPortalTimeout(180);
@@ -100,6 +107,33 @@ void setup() {
   display.begin();
   Wire.begin(D2,D1);
 
+=======
+void setupWifi() {
+  WiFi.mode(WIFI_STA);
+  #ifdef IP_STATIC
+    WiFi.config(ip, gateway, subnet);
+  #endif
+  // Connect to WiFi AP
+  int ssids = WiFi.scanNetworks();
+  for(int j=0; j<NETWORKS; j++){
+    for(int i=0; i<ssids; i++){
+      // Loop through SSIDs, attempt connection.
+      display.setTubeChar(0, 0xA);
+      display.setTubeChar(1, j);
+      display.update();
+      if(!strcmp(WiFi.SSID(i).c_str(),SSID[j])){
+        int retryCount=3;
+        for(int k=0; k<retryCount; k++){
+          WiFi.begin(SSID[j], PASSWORD[j]);
+          // Successful connection, end loops.
+          if(WiFi.status()==WL_CONNECTED)
+            return;
+          delay(3333);
+        }
+      }
+    }
+  }
+>>>>>>> upstream/master
   // Display IP
   if(WiFi.status()==WL_CONNECTED){
     IPAddress localIP=WiFi.localIP();
@@ -114,8 +148,26 @@ void setup() {
       display.clear();display.update();delay(groupGapTO);
     }
   }
+}
 
-  setupOTA();
+void setup() {
+  //Button 1
+  pinMode(D0, INPUT);
+  //Button 2
+  pinMode(D5, INPUT);
+  //Button 3
+  pinMode(3, INPUT);
+  //Button 4
+  pinMode(1, INPUT);
+
+  display.begin();
+  Wire.begin(D2,D1);
+
+  //If we have some defined networks, try to connect to them.
+  if (NETWORKS>0) {
+    setupWifi();
+    setupOTA();
+  }
 
   buttonHandler.begin(D0, D5, 3, 1, &display);
   display.setBrightness(0xFF);
@@ -125,29 +177,33 @@ void setup() {
     display.clear();
     display.setTubeChar(1, 0xF);
     display.setTubeChar(0, 0xF);
+    display.update();
     while(1) {
-      display.update();
-      delay(100);
+      //loop forever
+      delay(1000);
     }
   }
   //Check to see if the RTC has lost time - if so, set the time
   if (rtc.lostPower()) {
     time_t timeT=0;
-    int retryCount=3;
-    // Connect to NTP server
-    for(int i=0; i<retryCount; i++){
-      if(NTP.begin("pool.ntp.org", 0, true, 0)) i=retryCount;
-      delay(999);
-    }
-    NTP.setInterval(63);
-    for(int i=0; i<retryCount; i++){
-      timeT=NTP.getTime();
-      delay(999);
-      // Set time by NTP
-      if(timeT){
-        rtc.adjust(DateTime(year(timeT), month(timeT), day(timeT),
-          hour(timeT), minute(timeT), second(timeT)));
-        i=retryCount;
+    //If Wifi is connected, try to get time via NTP
+    if (WiFi.status() == WL_CONNECTED) {
+      int retryCount=3;
+      // Connect to NTP server
+      for(int i=0; i<retryCount; i++){
+        if(NTP.begin("pool.ntp.org", 0, true, 0)) break;
+        delay(999);
+      }
+      NTP.setInterval(63);
+      for(int i=0; i<retryCount; i++){
+        timeT=NTP.getTime();
+        // Set time by NTP
+        if(timeT){
+          rtc.adjust(DateTime(year(timeT), month(timeT), day(timeT),
+            hour(timeT), minute(timeT), second(timeT)));
+          break;
+        }
+        delay(999);
       }
     }
     // Set the time to midday jan 2001

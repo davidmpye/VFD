@@ -122,16 +122,16 @@ class Display {
   };
 
   uint8_t _testFontTable[10] = {
-    0x00,
-    0x01,
-    0x02,
-    0x04,
-    0x08,
-    0x10,
-    0x20,
-    0x40,
-    0x80,
-    0xFF
+    0x00, // All Segments OFF
+    0x01, // Top
+    0x02, // Top Right
+    0x04, // Bottom Right
+    0x08, // Bottom
+    0x10, // Bottom Left
+    0x20, // Top Left
+    0x40, // Middle
+    0x80, // Decimal Point
+    0xFF  // All segments ON
   };
 
   uint8_t _helloFontTable[8] = {
