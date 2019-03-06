@@ -127,12 +127,12 @@ void Display::displayDate(DateTime t) {
       case DDMMYY_MODE:
         setTubeNumber(0, t.day()/10);
         setTubeNumber(1, t.day()%10);
-        setTubeNumber(2, t.month()/10);
-        setTubeNumber(3, t.month()%10);
+        setTubeNumber(3, t.month()/10);
+        setTubeNumber(4, t.month()%10);
         break;
       case MMDDYY_MODE:
-        setTubeNumber(2, t.day()/10);
-        setTubeNumber(3, t.day()%10);
+        setTubeNumber(3, t.day()/10);
+        setTubeNumber(4, t.day()%10);
         setTubeNumber(0, t.month()/10);
         setTubeNumber(1, t.month()%10);
       break;
