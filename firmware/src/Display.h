@@ -66,6 +66,7 @@ class Display {
     void displayInt(int val);
 
     void hello(); //displays the word hello as a welcome message.
+    void scrollMessage(uint8_t *message, int length, int speed);
 
     void clear(); //clears display and data
     void blank(); //clears the display, but doesnt clear data, so calling refreshDisplay will unblank it.
@@ -88,9 +89,11 @@ class Display {
 
     //Lower level manipulations.
     void setTubeByte(int tube, uint8_t b) ;
+    void setTubeNumber(int tube, uint8_t n ) ;
     void setTubeChar(int tube, char c);
     void setTubeDP(int tube, bool p);
 
+    const uint8_t getTubeNumber(int tube);
     const uint8_t getTubeByte(int tube);
     const char getTubeChar(int tube);
 
@@ -101,48 +104,101 @@ class Display {
 
   CRGB leds[NUM_LEDS];
 
-  //Now with added hex... This contains the font data for 0-9, A-F
-  uint8_t _fontTable[16] = {
-    0x3F,
-    0x06,
-    0x5B,
-    0x4F,
-    0x66,
-    0x6D,
-    0x7D,
-    0x07,
-    0x7F,
-    0x6F,
-    0x77,
-    0x7C,
-    0x39,
-    0x5E,
-    0x79,
-    0x71
-  };
-
-  uint8_t _testFontTable[10] = {
-    0x00,
-    0x01,
-    0x02,
-    0x04,
-    0x08,
-    0x10,
-    0x20,
-    0x40,
-    0x80,
-    0xFF
-  };
-
-  uint8_t _helloFontTable[8] = {
-    0x76, // H
-    0x79, // E
-    0x38, // L
-    0x38, // L
-    0x3F, // O
-    0x80, // .
-    0x80, // .
-    0x80  // .
+  uint8_t _fontTable[95] = {
+    0x00,  // space
+    0x82,  // !
+    0x22,  // "
+    0x00,  // #
+    0x00,  // $
+    0x00,  // %
+    0x00,  // &
+    0x02,  // '
+    0x39,  // (
+    0x0F,  // )
+    0x00,  // *
+    0x00,  // +
+    0x04,  // ,
+    0x40,  // -
+    0x80,  // .
+    0x00,  // /
+    0x3F,  // 0
+    0x06,  // 1
+    0x5B,  // 2
+    0x4F,  // 3
+    0x66,  // 4
+    0x6D,  // 5
+    0x7D,  // 6
+    0x07,  // 7
+    0x7F,  // 8
+    0x6F,  // 9
+    0x00,  // :
+    0x00,  // ;
+    0x00,  // <
+    0x48,  // =
+    0x00,  // >
+    0x53,  // ?
+    0x00,  // @
+    0x77,  // A
+    0x7C,  // B
+    0x39,  // C
+    0x5E,  // D
+    0x79,  // E
+    0x71,  // F
+    0x3D,  // G
+    0x76,  // H
+    0x06,  // I
+    0x1E,  // J
+    0x00,  // K
+    0x38,  // L
+    0x00,  // M
+    0x37,  // N
+    0x3F,  // O
+    0x73,  // P
+    0x67,  // Q
+    0x50,  // R
+    0x6D,  // S
+    0x78,  // T
+    0x3E,  // U
+    0x00,  // V
+    0x00,  // W
+    0x00,  // X
+    0x6E,  // Y
+    0x00,  // Z
+    0x39,  // [
+    0x01,  //
+    0x0F,  // ]
+    0x00,  // ^
+    0x08,  // _
+    0x02,  // `
+    0x5F,  // a
+    0x7C,  // b
+    0x58,  // c
+    0x5E,  // d
+    0x7B,  // e
+    0x71,  // f
+    0x6F,  // g
+    0x74,  // h
+    0x04,  // i
+    0x1E,  // j
+    0x00,  // k
+    0x38,  // l
+    0x00,  // m
+    0x54,  // n
+    0x5C,  // o
+    0x73,  // p
+    0x67,  // q
+    0x50,  // r
+    0x6D,  // s
+    0x78,  // t
+    0x1C,  // u
+    0x00,  // v
+    0x00,  // w
+    0x00,  // x
+    0x6E,  // y
+    0x00,  // z
+    0x39,  // {
+    0x30,  // |
+    0x0F,  // }
   };
 
   bool _dashes = false;

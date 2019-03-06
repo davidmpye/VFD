@@ -64,8 +64,8 @@ void setupOTA() {
   });
   ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
     int percent = progress / (total / 100);
-      display.setTubeChar(1, percent/ 10);
-      display.setTubeChar(0, percent %10);
+      display.setTubeNumber(1, percent/ 10);
+      display.setTubeNumber(0, percent %10);
       display.update();
   });
   ArduinoOTA.onError([](ota_error_t error) {
@@ -96,34 +96,32 @@ void setupWifi() {
   // Display IP
   if(WiFi.status()==WL_CONNECTED){
     IPAddress localIP=WiFi.localIP();
+    uint8_t IPChars[19] = {'I', 'P', '-'};
     for(int i=0; i<4; i++){
-      int digitTO=666, digitGapTO=111, groupGapTO=444;
-      display.clear();display.update();
-      display.setTubeChar(0, localIP[i]/100);display.update();delay(digitTO);
-      display.clear();display.update();delay(digitGapTO);
-      display.setTubeChar(0, (localIP[i]%100)/10);display.update();delay(digitTO);
-      display.clear();display.update();delay(digitGapTO);
-      display.setTubeChar(0, (localIP[i]%100)%10);display.update();delay(digitTO);
-      display.clear();display.update();delay(groupGapTO);
+      IPChars[i*4+3]=localIP[i]/100+'0';
+      IPChars[i*4+4]=localIP[i]%100/10+'0';
+      IPChars[i*4+5]=(localIP[i]%100)%10+'0';
+      IPChars[i*4+6]='.';
     }
     server.begin();
   }
 }
 
 void loadConfig(){ // Load the config from SPIFFS
-  if(SPIFFS.begin()){
-    if(SPIFFS.exists("/config.json")){
+  if (SPIFFS.begin()) {
+    if (SPIFFS.exists("/config.json")) {
       // File exists, reading and loading
       File configFile=SPIFFS.open("/config.json","r");
-      if(configFile){
+      if (configFile) {
         size_t size=configFile.size();
         std::unique_ptr<char[]> buf(new char[size]); // Buffer for config
         configFile.readBytes(buf.get(), size);
         DynamicJsonDocument doc(1024);
         DeserializationError error=deserializeJson(doc, buf.get());
-        if(error){
+        if (error) {
           // Failed to load json config
-        }else{
+        }
+	else {
           // List of params to load
           int time_mode=doc["time_mode"];
           int led_mode=doc["led_mode"];
@@ -132,7 +130,8 @@ void loadConfig(){ // Load the config from SPIFFS
         }
         configFile.close();
       }
-    }else{
+    } 
+    else {
     // Failed to mount FS
     }
   }
@@ -149,9 +148,10 @@ void saveConfig(){ // Save the config to SPIFFS
 
   // Save params
   File configFile=SPIFFS.open("/config.json", "w");
-  if(configFile){
+  if (configFile){
     serializeJson(doc, configFile);
     configFile.close();
+    display.scrollMessage(IPChars, 16, 2);
   }
 }
 
@@ -168,10 +168,13 @@ void setup() {
   loadConfig(); // Needs to happen before the display is started
   display.begin();
   Wire.begin(D2,D1);
-
+  
   //Do some wifi magic config
   setupWifi();
-  //If we have some defined networks, try to connect to them.
+
+  uint8_t hello[] = {'H', 'E', 'L', 'L', 'O', '.', '.', '.'};
+  display.scrollMessage(hello, sizeof(hello), 4);
+
   if (WiFi.status()==WL_CONNECTED) {
     setupOTA();
   }
@@ -217,7 +220,6 @@ void setup() {
     if(!timeT) rtc.adjust(DateTime(2001, 1, 1, 12, 0, 0));
   }
 
-  display.hello();
   display.update();
   delay(1000);
 }
