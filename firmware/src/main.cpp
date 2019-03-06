@@ -134,6 +134,7 @@ void loadConfig(){ // Load the config from SPIFFS
     else {
     // Failed to mount FS
     }
+    display.scrollMessage(IPChars, 16, 2);
   }
 }
 
