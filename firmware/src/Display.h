@@ -66,7 +66,7 @@ class Display {
     void displayInt(int val);
 
     void hello(); //displays the word hello as a welcome message.
-    void scrollMessage(uint8_t *message, int length, int speed);
+    void scrollMessage(char *message, int speed);
 
     void clear(); //clears display and data
     void blank(); //clears the display, but doesnt clear data, so calling refreshDisplay will unblank it.

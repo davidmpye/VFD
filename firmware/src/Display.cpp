@@ -155,8 +155,9 @@ void Display::displayInt(int x, int base) {
   }
 }
 
-void Display::scrollMessage(uint8_t *message, int length, int speed) {
+void Display::scrollMessage(char *message, int speed) {
   clear();
+  size_t length = strlen(message);
   for (int i=0; i<NUM_TUBES+length; i++) {
     for (int t=0; t<NUM_TUBES; t++)
     if (i+1-(NUM_TUBES-t)<0 or i+1-(NUM_TUBES-t)>=length) {
