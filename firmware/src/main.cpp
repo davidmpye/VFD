@@ -17,6 +17,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include <FS.h> // (SPIFFS) This needs to be first, or it all crashes and burns...
 #include <Arduino.h>
 #include <Wire.h>
 #include <ESP8266WiFi.h>
@@ -30,22 +31,17 @@
 #include "Display.h"
 #include "Config.h"
 #include <NtpClientLib.h>
-#include <DNSServer.h>            //Local DNS Server used for redirecting all requests to the configuration portal
-#include <ESP8266WebServer.h>     //Local WebServer used to serve the configuration portal
-#include <WiFiManager.h>          //https://github.com/tzapu/WiFiManager WiFi Configuration Magic
+#include <DNSServer.h> // Local DNS Server used for redirecting all requests to the configuration portal
+#include <ESP8266WebServer.h> // Local WebServer used to serve the configuration portal
+#include <WiFiManager.h> // https://github.com/tzapu/WiFiManager WiFi Configuration Magic
+#include <ArduinoJson.h> //https://github.com/bblanchon/ArduinoJson for storing configuration data
 
-const int NETWORKS = 0; //Set this to the number of wifi networks you define below.
-const char *SSID[NETWORKS] = {}; // e.g. {"AP1","Slate3","AP3"}; // Add multiple APs
-const char *PASSWORD[NETWORKS] = {}; //e.g. {"key1","moonBeam9","key3"}; // Add multiple keys
+char led_mode[sizeof(LED_MODE)];
+
+WiFiServer server(80); // Set web server port number to 80
+
 const char *ota_hostname="espvfd";
 const char *ota_password="";
-
-//#define IP_STATIC
-#ifdef IP_STATIC
-  IPAddress ip(192, 168, 1, 20);
-  IPAddress gateway(192, 168, 1, 1);
-  IPAddress subnet(255, 255, 255, 0);
-#endif
 
 Display display;
 RTC_DS3231 rtc;
@@ -94,30 +90,9 @@ void setRTC() {
 }
 
 void setupWifi() {
-  WiFi.mode(WIFI_STA);
-  #ifdef IP_STATIC
-    WiFi.config(ip, gateway, subnet);
-  #endif
-  // Connect to WiFi AP
-  int ssids = WiFi.scanNetworks();
-  for(int j=0; j<NETWORKS; j++){
-    for(int i=0; i<ssids; i++){
-      // Loop through SSIDs, attempt connection.
-      display.setTubeChar(0, 0xA);
-      display.setTubeChar(1, j);
-      display.update();
-      if(!strcmp(WiFi.SSID(i).c_str(),SSID[j])){
-        int retryCount=3;
-        for(int k=0; k<retryCount; k++){
-          WiFi.begin(SSID[j], PASSWORD[j]);
-          // Successful connection, end loops.
-          if(WiFi.status()==WL_CONNECTED)
-            return;
-          delay(3333);
-        }
-      }
-    }
-  }
+  WiFiManager wifiManager;
+  wifiManager.setConfigPortalTimeout(180);
+  wifiManager.autoConnect("VFD-Clock"); // Name of temporary access point
   // Display IP
   if(WiFi.status()==WL_CONNECTED){
     IPAddress localIP=WiFi.localIP();
@@ -128,6 +103,55 @@ void setupWifi() {
       IPChars[i*4+5]=(localIP[i]%100)%10+'0';
       IPChars[i*4+6]='.';
     }
+    server.begin();
+  }
+}
+
+void loadConfig(){ // Load the config from SPIFFS
+  if (SPIFFS.begin()) {
+    if (SPIFFS.exists("/config.json")) {
+      // File exists, reading and loading
+      File configFile=SPIFFS.open("/config.json","r");
+      if (configFile) {
+        size_t size=configFile.size();
+        std::unique_ptr<char[]> buf(new char[size]); // Buffer for config
+        configFile.readBytes(buf.get(), size);
+        DynamicJsonDocument doc(1024);
+        DeserializationError error=deserializeJson(doc, buf.get());
+        if (error) {
+          // Failed to load json config
+        }
+	else {
+          // List of params to load
+          int time_mode=doc["time_mode"];
+          int led_mode=doc["led_mode"];
+          display.setTimeMode((TIME_MODE)time_mode);
+          display.setLEDMode((LED_MODE)led_mode);
+        }
+        configFile.close();
+      }
+    } 
+    else {
+    // Failed to mount FS
+    }
+    display.scrollMessage(IPChars, 16, 2);
+  }
+}
+
+void saveConfig(){ // Save the config to SPIFFS
+  DynamicJsonDocument doc(1024);
+
+  // List of params to save
+  TIME_MODE time_mode=display.getTimeMode();
+  LED_MODE led_mode=display.getLEDMode();
+  doc["time_mode"]=(int)time_mode;
+  doc["led_mode"]=(int)led_mode;
+
+  // Save params
+  File configFile=SPIFFS.open("/config.json", "w");
+  if (configFile){
+    serializeJson(doc, configFile);
+    configFile.close();
     display.scrollMessage(IPChars, 16, 2);
   }
 }
@@ -142,15 +166,17 @@ void setup() {
   //Button 4
   pinMode(1, INPUT);
 
+  loadConfig(); // Needs to happen before the display is started
   display.begin();
   Wire.begin(D2,D1);
+  
+  //Do some wifi magic config
+  setupWifi();
 
   uint8_t hello[] = {'H', 'E', 'L', 'L', 'O', '.', '.', '.'};
   display.scrollMessage(hello, sizeof(hello), 4);
 
-  //If we have some defined networks, try to connect to them.
-  if (NETWORKS>0) {
-    setupWifi();
+  if (WiFi.status()==WL_CONNECTED) {
     setupOTA();
   }
 
@@ -256,10 +282,63 @@ void handleButtonEvent(BUTTON_EVENT e) {
 
         default:
           break;
-    }
+  }
+  // Only save relevant changes
+  if(e & (BUTTON_B_SHORTPRESS | BUTTON_C_SHORTPRESS)) saveConfig();
 }
 
-byte dash = false;
+void handleWebServer(){
+  WiFiClient client=server.available();
+  if(client){ // If a new client connects
+    String header="";
+    String currentLine=""; // make a String to hold incoming data from the client
+    while(client.connected()){ // loop while the client's connected
+      if(client.available()){ // if there's bytes to read from the client,
+        char c=client.read(); // read a byte
+        header+=c;
+        if(c=='\n'){ // if the byte is a newline character
+          // if the current line is blank, you got two newline characters in a row
+          // that's the end of the client HTTP request, so send a response
+          if(currentLine.length()==0){
+            // act on http gets
+            if (header.indexOf("GET /opt1/on") >= 0) {
+            } else if (header.indexOf("GET /opt2/on") >= 0) {
+            } else if (header.indexOf("GET /opt3/on") >= 0) {
+            } else if (header.indexOf("GET /opt4/on") >= 0) {
+            } else if (header.indexOf("GET /opt5/on") >= 0) {
+            }
+            // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
+            // and a content-type so the client knows what's coming, then a blank line
+            client.println("HTTP/1.1 200 OK");
+            client.println("Content-type:text/html");
+            client.println("Connection: close");
+            client.println();
+            // Display the HTML web page
+            client.println("<!DOCTYPE html><html><body><h1>ESP8266 Web Server</h1>");
+            client.println("<p>Option1</p><p><a href=\"/opt1/on\"><button class=\"button\">ON</button></a></p>");
+            client.println("<p>Option2</p><p><a href=\"/opt2/on\"><button class=\"button\">ON</button></a></p>");
+            client.println("<p>Option3</p><p><a href=\"/opt3/on\"><button class=\"button\">ON</button></a></p>");
+            client.println("<p>Option4</p><p><a href=\"/opt4/on\"><button class=\"button\">ON</button></a></p>");
+            client.println("<p>Option5</p><p><a href=\"/opt5/on\"><button class=\"button\">ON</button></a></p>");
+            client.println("</body></html>");
+            // The HTTP response ends with another blank line
+            client.println();
+            // Break out of the while loop
+            break;
+          }else{ // if you got a newline, then clear currentLine
+            currentLine = "";
+          }
+        }else if(c!='\r'){ // if you got anything else but a carriage return character
+          currentLine+=c; // add it to the end of the currentLine
+        }
+      }
+    }
+    header = ""; // Clear the header variable
+    client.stop(); // Close the connection
+  }
+}
+
+byte dash=false;
 void loop() {
   static int lastSec = -1;
 
@@ -276,5 +355,7 @@ void loop() {
   handleButtonEvent(buttonHandler.poll());
   //process any outstanding OTA events
   ArduinoOTA.handle();
+  //Handle web server requests
+  handleWebServer();
   delay(100);
 }

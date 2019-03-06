@@ -104,7 +104,6 @@ class Display {
 
   CRGB leds[NUM_LEDS];
 
-  //Now with added hex... This contains the font data for 0-9, A-F
   uint8_t _fontTable[95] = {
     0x00,  // space
     0x82,  // !
