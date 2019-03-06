@@ -130,11 +130,10 @@ void loadConfig(){ // Load the config from SPIFFS
         }
         configFile.close();
       }
-    } 
+    }
     else {
     // Failed to mount FS
     }
-    display.scrollMessage(IPChars, 16, 2);
   }
 }
 
@@ -152,7 +151,6 @@ void saveConfig(){ // Save the config to SPIFFS
   if (configFile){
     serializeJson(doc, configFile);
     configFile.close();
-    display.scrollMessage(IPChars, 16, 2);
   }
 }
 
@@ -169,7 +167,7 @@ void setup() {
   loadConfig(); // Needs to happen before the display is started
   display.begin();
   Wire.begin(D2,D1);
-  
+
   //Do some wifi magic config
   setupWifi();
 
