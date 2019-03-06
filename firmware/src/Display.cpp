@@ -159,11 +159,11 @@ void Display::hello() {
   clear();
   for (int i=0; i<NUM_TUBES+sizeof(_helloFontTable); i++) {
     for (int t=0; t<NUM_TUBES; t++)
-    if (i+1-(NUM_TUBES-t)<0 or i+1-(NUM_TUBES-t)>=sizeof(_helloFontTable)) {
+    if (i-t<0 or i-t>=sizeof(_helloFontTable)) {
       setTubeByte(t, 0x00);
     }
     else {
-      setTubeByte(t, _helloFontTable[i+1-(NUM_TUBES-t)]);
+      setTubeByte(t, _helloFontTable[t]);
     }
     update();
     delay(250);
@@ -219,7 +219,7 @@ void Display::update() {
           leds[4].setHue(hue);
           leds[5].setHue(hue);
         }
-        else if (NUM_TUBES == 8) {
+	else if (NUM_TUBES == 8) {
           uint8_t hue;
 	        hue  = (getTubeChar(0) * 10 + getTubeChar(1)) * 10;
           leds[0].setHue(hue);
