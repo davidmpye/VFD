@@ -318,9 +318,18 @@ const LED_MODE Display::getLEDMode() {
 }
 
 void Display::test() {
-  //Set all tubes to display 8 to test all segments
-  memset(_displayData, 0xFF, NUM_TUBES);
+  clear();
   brightness = 255;
+  for (int i = 0; i < NUM_TUBES; ++i) {
+    for (int j=0; j<8; ++j) {
+      setTubeByte(i, 0x01<<j);
+      update();
+      delay(100);
+    }
+    setTubeByte(i, 0xFF);
+    update();
+  }
+  delay(1000);
 }
 
 void Display::setTubeByte(int tube, uint8_t b) {
