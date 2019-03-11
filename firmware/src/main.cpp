@@ -92,21 +92,23 @@ void setRTC() {
 }
 
 void setupWifi() {
-  //wifiManager.setConfigPortalTimeout(180);
-  //wifiManager.autoConnect("VFD-Clock"); // Name of temporary access point
-  /*
+  display.scrollMessage("Access point setup",4);
+  wifiManager.setConfigPortalTimeout(180);
+  wifiManager.startConfigPortal("VFD-Clock"); // Name of temporary access point
   // Display IP
   if(WiFi.status()==WL_CONNECTED){
     IPAddress localIP=WiFi.localIP();
-    uint8_t IPChars[19] = {'I', 'P', '-'};
+    char ipChars[20] = {'I', 'P', '-'};
     for(int i=0; i<4; i++){
-      IPChars[i*4+3]=localIP[i]/100+'0';
-      IPChars[i*4+4]=localIP[i]%100/10+'0';
-      IPChars[i*4+5]=(localIP[i]%100)%10+'0';
-      IPChars[i*4+6]='.';
+      ipChars[(i*4)+3]=(localIP[i]/100)+48;
+      ipChars[(i*4)+4]=((localIP[i]%100)/10)+48;
+      ipChars[(i*4)+5]=((localIP[i]%100)%10)+48;
+      ipChars[(i*4)+6]='.';
     }
+    ipChars[19]=0; // Terminate this string
+    display.scrollMessage(ipChars, 4);
     server.begin();
-  }*/
+  }
 }
 
 void loadConfig() { // Load the config from SPIFFS
@@ -166,9 +168,6 @@ void setup() {
   loadConfig(); // Needs to happen before the display is started
   display.begin();
   Wire.begin(D2,D1);
-
-  //Do some wifi magic config
-  setupWifi();
 
   display.scrollMessage("HELLO...", 4);
 
@@ -268,6 +267,10 @@ void handleButtonEvent(BUTTON_EVENT e) {
         display.displayInt(analogRead(A0));
         display.update();
         delay(1000);
+        break;
+
+      case BUTTON_D_SHORTPRESS:
+        setupWifi();
         break;
 
       case BUTTON_D_LONGPRESS:
