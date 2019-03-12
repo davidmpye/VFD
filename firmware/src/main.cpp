@@ -91,24 +91,39 @@ void setRTC() {
   rtc.adjust(DateTime(y.Year + 1970, y.Month, y.Day, x.Hour, x.Minute, x.Second));
 }
 
+
+// Check if WiFi is connected, execute callback function on success
+void tryWifi(void (*callback)()){
+  for(int i=0; i<3; i++){ // Try three times
+    if(WiFi.status()==WL_CONNECTED){ // Check WiFi connectivity
+      i=3; // Success, end loop early.
+      (*callback)(); // Execute callback function
+    }else{
+      delay(999); // Failure, wait a second.
+    }
+  }
+}
+
+void displayIP(){
+  // Build IP string
+  IPAddress localIP=WiFi.localIP();
+  char ipChars[19] = {'I', 'P', '-'};
+  for(int i=0; i<4; i++){
+    // Convert values to ASCII (+48)
+    ipChars[(i*4)+3]=(localIP[i]/100)+48;
+    ipChars[(i*4)+4]=((localIP[i]%100)/10)+48;
+    ipChars[(i*4)+5]=((localIP[i]%100)%10)+48;
+     // Add a dot separator.  On the 4th loop, add a null-terminator.
+    ipChars[(i*4)+6]=i<3?'.':0;
+  }
+  display.scrollMessage(ipChars, 4);
+}
+
 void setupWifi() {
   display.scrollMessage("Access point setup",4);
   wifiManager.setConfigPortalTimeout(180);
   wifiManager.startConfigPortal("VFD-Clock"); // Name of temporary access point
-  // Display IP
-  if(WiFi.status()==WL_CONNECTED){
-    IPAddress localIP=WiFi.localIP();
-    char ipChars[20] = {'I', 'P', '-'};
-    for(int i=0; i<4; i++){
-      ipChars[(i*4)+3]=(localIP[i]/100)+48;
-      ipChars[(i*4)+4]=((localIP[i]%100)/10)+48;
-      ipChars[(i*4)+5]=((localIP[i]%100)%10)+48;
-      ipChars[(i*4)+6]='.';
-    }
-    ipChars[19]=0; // Terminate this string
-    display.scrollMessage(ipChars, 4);
-    server.begin();
-  }
+  tryWifi(displayIP);
 }
 
 void loadConfig() { // Load the config from SPIFFS
@@ -171,9 +186,13 @@ void setup() {
 
   display.scrollMessage("HELLO...", 4);
 
-  if (WiFi.status()==WL_CONNECTED) {
+  // https://en.cppreference.com/w/cpp/language/lambda
+  // Call tryWiFi with a lambda containing three function calls
+  tryWifi([]{
     setupOTA();
-  }
+    server.begin();
+    displayIP();
+  });
 
   buttonHandler.begin(D0, D5, 3, 1, &display);
   display.setBrightness(0xFF);
