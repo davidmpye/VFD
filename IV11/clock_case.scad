@@ -166,14 +166,19 @@ translate([material_thickness, outer_y*2 + outer_z + 10 + material_thickness*2 +
 translate([material_thickness, outer_y*2 + outer_z *2 + 15 + material_thickness*2 + 3 ,0]) difference() {
 short_side_face();
       translate([2*material_thickness + 1, 2*material_thickness, -1]) {
-            //the four switch holes.
-            //m4
-          
+       
+       //the four switch holes.
+       //m4
        translate([222.5 - 18.5 - 12.5*0 ,3, 0]) circle(d=5);
        translate([222.5 - 18.5 - 12.5*1 ,3, 0]) circle(d=5);
        translate([222.5 - 18.5 - 12.5*2 ,3, 0]) circle(d=5);
        translate([222.5 - 18.5 - 12.5*3 ,3 ,0]) circle(d=5);
-
+          
+       //Labels for the switch button holes   
+       translate([222.5 - 18.5 - 12.5*0 +2.25 ,12, 0]) rotate([0,0,180]) text(size=4, text="A");
+       translate([222.5 - 18.5 - 12.5*1 +2.25 ,12, 0]) rotate([0,0,180]) text(size=4, text="B");
+       translate([222.5 - 18.5 - 12.5*2 +2.25 ,12, 0]) rotate([0,0,180]) text(size=4, text="C");
+       translate([222.5 - 18.5 - 12.5*3 +2.25 ,12, 0]) rotate([0,0,180]) text(size=4, text="D");
       
       //The USB power connector.
       //14wide, 12 high.
