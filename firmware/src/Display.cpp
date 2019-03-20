@@ -59,7 +59,7 @@ void Display::displayTime(DateTime t) {
      //Normal modes...
      if (_timeMode == AMPM_MODE && t.hour() > 12) {
        //If it's PM, dont display a 0 as first digit.
-       if ((t.hour() - 12 )/10 == 0) setTubeNumber(0,0);
+       if ((t.hour() - 12 )/10 == 0) setTubeByte(0,0x00);
        else setTubeNumber(0,1);
        setTubeDP(0, true);
        setTubeNumber(1, (t.hour()-12)%10);
