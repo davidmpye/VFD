@@ -57,21 +57,15 @@ void Display::displayTime(DateTime t) {
   }
   else {
      //Normal modes...
-     if (_timeMode == AMPM_MODE) {
-       if (t.hour() > 12) {
-         //If it's PM, dont display a 0 as first digit.
-         if ((t.hour() - 12 )/10 == 0) setTubeByte(7,0x00);
-         else setTubeNumber(7,1);
-         setTubeDP(0, true);
-         setTubeNumber(1, (t.hour()-12)%10);
-       }
-       else {
-         //24 HR clock mode.
-         setTubeNumber(0,t.hour()/10);
-         setTubeNumber(1,t.hour()%10);
-       }
+     if (_timeMode == AMPM_MODE && t.hour() > 12) {
+       //If it's PM, dont display a 0 as first digit.
+       if ((t.hour() - 12 )/10 == 0) setTubeNumber(0,0);
+       else setTubeNumber(0,1);
+       setTubeDP(0, true);
+       setTubeNumber(1, (t.hour()-12)%10);
      }
-     else if (_timeMode == TWENTYFOURHR_MODE) {
+     else {
+       //Display as 24 hour mode.
        setTubeNumber(0,t.hour()/10);
        setTubeNumber(1,t.hour()%10);
      }
