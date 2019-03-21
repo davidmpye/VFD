@@ -106,24 +106,24 @@ tmElements_t ButtonHandler::getDate(DateTime *t ) {
     }
 
     if (buttonB->wasPressed()) {
-       int val = display->getTubeChar(tubecount);
+       int val = display->getTubeNumber(tubecount);
        val ++;
        //assuming DDMMYY....//FIXME
        if (NUM_TUBES == 6) {
          if (tubecount == 0 && val>3) val = 0;
-         else if (tubecount == 1 && val > 1 && display->getTubeChar(0) ==3) val = 0; //Can't go above 31.
+         else if (tubecount == 1 && val > 1 && display->getTubeNumber(0) ==3) val = 0; //Can't go above 31.
          else if (tubecount == 2 && val>1) val = 0;
-         else if (tubecount == 3 && val >2 && display->getTubeChar(2) == 1) val = 0; //Can't go above 12.
+         else if (tubecount == 3 && val >2 && display->getTubeNumber(2) == 1) val = 0; //Can't go above 12.
          else if (val>9) val = 0;
        }
        else if (NUM_TUBES == 8) {
          if (tubecount == 0 && val>3) val = 0;
-         else if (tubecount==1 && val > 1 && display->getTubeChar(0) ==3) val = 0; //Can't go above 31.
+         else if (tubecount==1 && val > 1 && display->getTubeNumber(0) ==3) val = 0; //Can't go above 31.
          else if (tubecount == 3 && val>1) val = 0;
-         else if (tubecount == 4 && val >2 && display->getTubeChar(3) == 1) val = 0; //Can't go above 12.
+         else if (tubecount == 4 && val >2 && display->getTubeNumber(3) == 1) val = 0; //Can't go above 12.
          else if (val>9) val = 0;
        }
-       display->setTubeChar(tubecount, val);
+       display->setTubeNumber(tubecount, val);
        display->update();
     }
 
@@ -144,14 +144,14 @@ tmElements_t ButtonHandler::getDate(DateTime *t ) {
       //Build the time we have made and return it
       tmElements_t e;
       if (NUM_TUBES == 6) {
-        e.Day = display->getTubeChar(0)*10  + display->getTubeChar(1);
-        e.Month = display->getTubeChar(2)*10 + display->getTubeChar(3);
-        e.Year = 30 +  display->getTubeChar(4)*10 + display->getTubeChar(5); //30 is because we are starting at year 2000, not 1970
+        e.Day = display->getTubeNumber(0)*10  + display->getTubeNumber(1);
+        e.Month = display->getTubeNumber(2)*10 + display->getTubeNumber(3);
+        e.Year = 30 +  display->getTubeNumber(4)*10 + display->getTubeNumber(5); //30 is because we are starting at year 2000, not 1970
       }
       else if (NUM_TUBES == 8) {
-        e.Day = display->getTubeChar(0)*10  + display->getTubeChar(1);
-        e.Month = display->getTubeChar(3)*10 + display->getTubeChar(4);
-        e.Year = 30 +  display->getTubeChar(6)*10 + display->getTubeChar(7); //30 is because we are starting at year 2000, not 1970
+        e.Day = display->getTubeNumber(0)*10  + display->getTubeNumber(1);
+        e.Month = display->getTubeNumber(3)*10 + display->getTubeNumber(4);
+        e.Year = 30 +  display->getTubeNumber(6)*10 + display->getTubeNumber(7); //30 is because we are starting at year 2000, not 1970
       }
       return e;
     }
@@ -167,12 +167,12 @@ tmElements_t ButtonHandler::getTime(DateTime *t) {
   int tubecount = 0;
   //Set the seconds to zero.
   if (NUM_TUBES == 6) {
-  display->setTubeChar(4,0);
-  display->setTubeChar(5,0);
+  display->setTubeNumber(4,0);
+  display->setTubeNumber(5,0);
   }
   else if(NUM_TUBES == 8) {
-    display->setTubeChar(6,0);
-    display->setTubeChar(7,0);
+    display->setTubeNumber(6,0);
+    display->setTubeNumber(7,0);
   }
   int last_blinked = millis();
 
@@ -196,16 +196,16 @@ tmElements_t ButtonHandler::getTime(DateTime *t) {
 
     //Button A increments the digit
     if (buttonB->wasPressed()) {
-      int val = display->getTubeChar(tubecount);
+      int val = display->getTubeNumber(tubecount);
       val ++;
       //24 hour clock mode.
       if (NUM_TUBES ==6) {
         //Hour can be 0, 1, 2 only.
          if (tubecount == 0 && val == 3) val = 0;
          //If someone chaages the hour 'ten' digit to 2, make sure this wouldn't create a hour > 23
-         else if (tubecount == 0 && val == 2 && display->getTubeChar(1) >3) display->setTubeChar(1, 0);
+         else if (tubecount == 0 && val == 2 && display->getTubeNumber(1) >3) display->setTubeNumber(1, 0);
          //Don't allow hours > 23
-         else if (tubecount == 1 && display->getTubeChar(0) == 2 && val == 4) val = 0;
+         else if (tubecount == 1 && display->getTubeNumber(0) == 2 && val == 4) val = 0;
          //Don't allow mins/secs 'tens' to be greater than 5.
          else if ((tubecount == 2 ) && val == 6) val = 0;
          //everything can go up to 9.
@@ -215,15 +215,15 @@ tmElements_t ButtonHandler::getTime(DateTime *t) {
        //Hour can be 0, 1, 2 only.
         if (tubecount == 0 && val == 3) val = 0;
         //If someone chaages the hour 'ten' digit to 2, make sure this wouldn't create a hour > 23
-        else if (tubecount == 0 && val == 2 && display->getTubeChar(1) >3) display->setTubeChar(1, 0);
+        else if (tubecount == 0 && val == 2 && display->getTubeNumber(1) >3) display->setTubeNumber(1, 0);
         //Don't allow hours > 23
-        else if (tubecount == 1 && display->getTubeChar(0) == 2 && val == 4) val = 0;
+        else if (tubecount == 1 && display->getTubeNumber(0) == 2 && val == 4) val = 0;
         //Don't allow mins/secs 'tens' to be greater than 5.
         else if ((tubecount == 3 ) && val == 6) val = 0;
         //everything can go up to 9.
         else if (val>9) val = 0;
       }
-      display->setTubeChar(tubecount, val);
+      display->setTubeNumber(tubecount, val);
       display->update();
     };
 
@@ -248,13 +248,13 @@ tmElements_t ButtonHandler::getTime(DateTime *t) {
       //Build the time we have made and return it
       tmElements_t e;
       if (NUM_TUBES == 6) {
-        e.Hour = display->getTubeChar(0)*10  + display->getTubeChar(1);
-        e.Minute = display->getTubeChar(2)*10 + display->getTubeChar(3);
+        e.Hour = display->getTubeNumber(0)*10  + display->getTubeNumber(1);
+        e.Minute = display->getTubeNumber(2)*10 + display->getTubeNumber(3);
         e.Second = 0;
       }
       else if (NUM_TUBES == 8) {
-        e.Hour = display->getTubeChar(0)*10  + display->getTubeChar(1);
-        e.Minute = display->getTubeChar(3)*10 + display->getTubeChar(4);
+        e.Hour = display->getTubeNumber(0)*10  + display->getTubeNumber(1);
+        e.Minute = display->getTubeNumber(3)*10 + display->getTubeNumber(4);
         e.Second = 0;
       }
       return e;

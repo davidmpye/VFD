@@ -344,7 +344,6 @@ void loop() {
      lastSec = t.second();
      display.displayTime(t);
   }
-
   updateBrightness();
   display.update();
   //Handle any button presses.
