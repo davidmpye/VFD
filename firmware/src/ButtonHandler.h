@@ -1,6 +1,6 @@
-/* 
-    VFD clock firmware (c) 2018 David Pye <davidmpye@gmail.com> 
-    
+/*
+    VFD clock firmware (c) 2018 David Pye <davidmpye@gmail.com>
+
     http://www.davidmpye.com/VFD
 
     This program is free software: you can redistribute it and/or modify
@@ -56,7 +56,7 @@ class ButtonHandler {
   private:
     Button *buttonA, *buttonB, *buttonC, *buttonD;
     Display *display;
-
+    unsigned long msButtonLastChange;
 }
 ;
 
