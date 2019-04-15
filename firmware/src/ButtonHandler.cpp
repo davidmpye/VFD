@@ -44,37 +44,26 @@ void ButtonHandler::begin(int a, int b, int c, int d, Display *disp) {
 }
 
 BUTTON_EVENT ButtonHandler::poll() {
-  buttonA->read();
-  buttonB->read();
-  buttonC->read();
-  buttonD->read();
+  Button *button[]={buttonA, buttonB, buttonC, buttonD};
 
-  if (buttonA->pressedFor(LONG_BUTTON_PRESS_TIME)) {
-    return  BUTTON_A_LONGPRESS;
-  }
-  if (buttonA->wasPressed()) {
-    return BUTTON_A_SHORTPRESS;
-  }
-  if (buttonB->pressedFor(LONG_BUTTON_PRESS_TIME)) {
-    return  BUTTON_B_LONGPRESS;
-  }
-  if (buttonB->wasPressed()) {
-    return BUTTON_B_SHORTPRESS;
-  }
-  if (buttonC->pressedFor(LONG_BUTTON_PRESS_TIME)) {
-    return  BUTTON_C_LONGPRESS;
-  }
-  if (buttonC->wasPressed()) {
-    return BUTTON_C_SHORTPRESS;
-  }
-  if (buttonD->pressedFor(LONG_BUTTON_PRESS_TIME)) {
-    return  BUTTON_D_LONGPRESS;
-  }
-  if (buttonD->wasPressed()) {
-    return BUTTON_D_SHORTPRESS;
+  BUTTON_EVENT be=NO_PRESS;
+  BUTTON_EVENT beArray[]={BUTTON_A_SHORTPRESS, BUTTON_A_LONGPRESS,
+      BUTTON_B_SHORTPRESS, BUTTON_B_LONGPRESS,
+      BUTTON_C_SHORTPRESS, BUTTON_C_LONGPRESS,
+      BUTTON_D_SHORTPRESS, BUTTON_D_LONGPRESS};
+
+  for(int i=0; i<4; i++){ // Number of buttons
+    button[i]->read();
+    if(button[i]->wasPressed())
+      msButtonLastChange=button[i]->lastChange(); // Store timestamp of last button change
+    else if(button[i]->wasReleased()
+        && (button[i]->lastChange()-msButtonLastChange)<LONG_BUTTON_PRESS_TIME)
+      be=beArray[i*2]; // Short press
+    else if(button[i]->pressedFor(LONG_BUTTON_PRESS_TIME))
+      be=beArray[i*2+1]; // Long press
   }
 
-  return NO_PRESS;
+  return be;
 }
 
 tmElements_t ButtonHandler::getDate(DateTime *t ) {
