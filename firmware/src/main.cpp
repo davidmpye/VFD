@@ -302,7 +302,7 @@ void handleButtonEvent(BUTTON_EVENT e) {
           break;
   }
   // Only save relevant changes
-  if(e & (BUTTON_B_SHORTPRESS | BUTTON_C_SHORTPRESS)) saveConfig();
+  if(e==BUTTON_B_SHORTPRESS || e==BUTTON_C_SHORTPRESS) saveConfig();
 }
 
 void handleWebServer(){
@@ -318,12 +318,15 @@ void handleWebServer(){
           // if the current line is blank, you got two newline characters in a row
           // that's the end of the client HTTP request, so send a response
           if (currentLine.length()==0) {
+            TIME_MODE timeModeEnum[]={AMPM_MODE,TWENTYFOURHR_MODE,EPOCH_MODE};
+            char*timeModeName[]={"12 Hour","24 Hour","Epoch"};
             // act on http gets
-            if (header.indexOf("GET /opt1/on") >= 0) {
-            } else if (header.indexOf("GET /opt2/on") >= 0) {
-            } else if (header.indexOf("GET /opt3/on") >= 0) {
-            } else if (header.indexOf("GET /opt4/on") >= 0) {
-            } else if (header.indexOf("GET /opt5/on") >= 0) {
+            for(int i=0; i<3; i++){
+              char buff[99];
+              sprintf(buff,"timeModeRadio=%i",timeModeEnum[i]);
+              if(header.indexOf(buff) >= 0) {
+                display.setTimeMode(timeModeEnum[i]);
+              }
             }
             // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
             // and a content-type so the client knows what's coming, then a blank line
@@ -332,12 +335,29 @@ void handleWebServer(){
             client.println("Connection: close");
             client.println();
             // Display the HTML web page
-            client.println("<!DOCTYPE html><html><body><h1>ESP8266 Web Server</h1>");
-            client.println("<p>Option1</p><p><a href=\"/opt1/on\"><button class=\"button\">ON</button></a></p>");
-            client.println("<p>Option2</p><p><a href=\"/opt2/on\"><button class=\"button\">ON</button></a></p>");
-            client.println("<p>Option3</p><p><a href=\"/opt3/on\"><button class=\"button\">ON</button></a></p>");
-            client.println("<p>Option4</p><p><a href=\"/opt4/on\"><button class=\"button\">ON</button></a></p>");
-            client.println("<p>Option5</p><p><a href=\"/opt5/on\"><button class=\"button\">ON</button></a></p>");
+            client.print("<!DOCTYPE html><html>");
+            client.print("<script>function autoSubmit(){document.forms['timeModeForm'].submit();}</script>");
+            client.print("<body><h1>ESP8266 Web Server</h1>");
+
+            for(int i=0; i<4; i++){
+              char buff[99];
+              sprintf(buff,"<p>Option%d<a href='/opt%d/on'><button class='button'>ON</button></a></p>",i,i);
+              client.println(buff);
+            }
+
+            client.println("<h2>Time Mode</h2>");
+            client.println("<form id='timeModeForm' name='timeModeForm'>");
+            for(int i=0; i<3; i++){
+              char buff[99];
+              sprintf(buff,"<input type='radio' name='timeModeRadio' value='%i' onChange='autoSubmit();'",timeModeEnum[i]);
+              client.println(buff);
+              if(timeModeEnum[i]==display.getTimeMode()) client.print(" checked>");
+              else client.print(">");
+              sprintf(buff,"<label for='%i>'>%s</label>",timeModeEnum[i],timeModeName[i]);
+              client.println(buff);
+            }
+            client.println("</form>");
+
             client.println("</body></html>");
             // The HTTP response ends with another blank line
             client.println();
