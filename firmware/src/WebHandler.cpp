@@ -1,8 +1,4 @@
-#include <ESP8266WiFi.h>
-#include <WiFiClient.h>
-#include <ESP8266WebServer.h>
-#include <ESP8266mDNS.h>
-#include <FS.h>
+
 #include <WebHandler.h>
 
 WebHandler::WebHandler() {
@@ -159,6 +155,9 @@ void WebHandler::begin() {
     if(!handleFileRead(httpServer.uri()))
       httpServer.send(404, "text/plain", "404 Not Found - Have you forgotten to upload the flash filesystem? See wiki <a href='https://github.com/davidmpye/VFD/wiki/Firmware'>here</a>");
   });
+  //Set up the http updater
+  httpUpdater.setup(&httpServer);
+
   //Start the webserver
   httpServer.begin(WEBSERVER_PORT);
   //Configure and start the web socket server (this is used to make the UI responsive and receives change messages etc from the client)

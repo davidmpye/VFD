@@ -2,6 +2,12 @@
 #include <ESP8266WebServer.h>
 #include <WebSocketsServer.h>
 #include <ArduinoJson.h>
+#include <ESP8266HTTPUpdateServer.h>
+#include <ESP8266WiFi.h>
+#include <WiFiClient.h>
+#include <ESP8266mDNS.h>
+#include <FS.h>
+
 #include "Config.h"
 #include "ConfigManager.h"
 #include "Display.h"
@@ -18,8 +24,6 @@ class WebHandler
       void setConfigManager(ConfigManager*);
       void handleEvents();
 
-
-
    private:
     String getContentType(String filename);
     bool handleFileRead(String path);
@@ -29,6 +33,7 @@ class WebHandler
 
     ESP8266WebServer httpServer;
     WebSocketsServer *webSocketServer;
+    ESP8266HTTPUpdateServer httpUpdater;
 
     ConfigManager *configManager;
 

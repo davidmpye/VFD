@@ -94,6 +94,7 @@ void setup() {
   configManager.begin();
   configManager.setConfigChangedCallback(loadConfig);
   loadConfig(); // Needs to happen before the display is started
+  
   display.begin();
   Wire.begin(D2,D1);
   setupWifi();
@@ -103,7 +104,7 @@ void setup() {
 
   display.setBrightness(0xFF);
   display.scrollMessage("HELLO...", 4);
-//  buttonHandler.begin(D0, D5, 3, 1, &display);
+  buttonHandler.begin(D0, D5, 3, 1, &display);
 }
 
 void handleButtonEvent(BUTTON_EVENT e) {
