@@ -20,7 +20,6 @@ extern "C" {
 #include "user_interface.h"
 }
 
-
 #include <FS.h>
 #include <Arduino.h>
 #include <Wire.h>
@@ -170,6 +169,7 @@ void handleButtonEvent(BUTTON_EVENT e) {
 }
 
 void loop() {
+  static unsigned long lastMillis = 0;
   static int lastSec = -1;
   DateTime t = rtc.now();
   //If the time has moved forward, we will update the display:
@@ -178,10 +178,15 @@ void loop() {
      display.displayTime(t);
   }
 
-  updateBrightness();
-  display.update();
-  //Handle any button presses.
-//  handleButtonEvent(buttonHandler.poll());
+  if (millis() > lastMillis + 100) {
+    //We update brightness and the display every 100mS
+    lastMillis = millis();
+    updateBrightness();
+    display.update();
+  }
+
+  handleButtonEvent(buttonHandler.poll());
   webHandler.handleEvents();
+  //Handle any other events.
   delay(10);
 }

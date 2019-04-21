@@ -7,7 +7,6 @@
 
 WebHandler::WebHandler() {
   configManager = NULL;
-
 }
 
 
@@ -54,7 +53,6 @@ void WebHandler::handleFileList() {
 
   Dir dir = SPIFFS.openDir(path);
   String output = "[";
-
   while(dir.next()){
     File entry = dir.openFile("r");
     if (output != "[") output += ',';
@@ -75,7 +73,6 @@ void WebHandler::webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, s
      char datablock[length+1];
      memcpy(datablock, payload, length);
      datablock[length] = 0x00;
-
      String message(datablock);
 
      switch(type) {
@@ -115,19 +112,18 @@ void WebHandler::webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, s
           default:
             //We don't handle binary or other clever message types (yet)
             break;
-
       }
   }
 
 void WebHandler::handleParamChange(String param, String val) {
-  if (configManager) {
-    if (val == "true" ) {
-    configManager->saveParam("led_mode", String(RAINBOW_MODE));
-  }
-  else  {
-    configManager->saveParam("led_mode", String(STEALTH_MODE));
-  }
-  }
+  if (!configManager) return;
+  //This doesnt work yet, needs to handle params properly!
+  if (val == "true" ) {
+      configManager->saveParam("led_mode", String(RAINBOW_MODE));
+    }
+    else  {
+      configManager->saveParam("led_mode", String(STEALTH_MODE));
+    }
 }
 
 String WebHandler::generateInfo() {
@@ -141,6 +137,7 @@ String WebHandler::generateInfo() {
   doc["wifi_ip_address"] = WiFi.localIP().toString();
   doc["wifi_mac_address"] = WiFi.macAddress();
   doc["wifi_ssid"] = WiFi.SSID();
+
   if (configManager != NULL) doc["config_dump"] = configManager->dumpConfig();
 
   long millisecs = millis();
@@ -162,16 +159,17 @@ void WebHandler::begin() {
     if(!handleFileRead(httpServer.uri()))
       httpServer.send(404, "text/plain", "404 Not Found - Have you forgotten to upload the flash filesystem? See wiki <a href='https://github.com/davidmpye/VFD/wiki/Firmware'>here</a>");
   });
-
+  //Start the webserver
   httpServer.begin(WEBSERVER_PORT);
-
+  //Configure and start the web socket server (this is used to make the UI responsive and receives change messages etc from the client)
+  //NB If you change the port, you will need to change it in the javascript in app.html that is sent to the client, otherwise it wont connect
   webSocketServer = new WebSocketsServer(WEBSOCKET_PORT);
   webSocketServer->onEvent([&](uint8_t num, WStype_t type, uint8_t * payload, size_t length){ webSocketEvent(num, type, payload, length) ; });
   webSocketServer->begin();
 }
 
 void WebHandler::handleEvents() {
-  //Handle events from both httpServer and the Web Socket Server
+  //Handle events from both httpServer and the WebSocket Server
    httpServer.handleClient();
    webSocketServer->loop();
 }
