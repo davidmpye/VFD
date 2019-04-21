@@ -177,6 +177,10 @@ void Display::blank() {
   digitalWrite(LATCH_PIN, HIGH);
 }
 
+void Display::loadConfig() {
+  _ledMode = configManager->loadParam("led_color_mode").toInt();
+}
+
 void Display::update() {
   // Calculate the new data for the LEDs.
   static long lastLEDUpdate = millis();
@@ -189,9 +193,8 @@ void Display::update() {
     lastLEDUpdate = millis();
     ledRefreshNeeded = true;
 
-
     switch (_ledMode) {
-      case RAINBOW_MODE:
+      case 0:
         rainbow_counter++;
         fill_rainbow(leds, NUM_LEDS, rainbow_counter, 255/NUM_LEDS);
         break;
@@ -229,13 +232,6 @@ void Display::update() {
           leds[7].setHue(hue);
         }
         break;
-      case STEALTH_MODE:
-        if (FastLED.getBrightness() > 0) {
-          LEDS.setBrightness(0); //All LEDs off
-          FastLED.show();
-        }
-        ledRefreshNeeded = false;
-        break;
       default:
         break;
 
@@ -258,6 +254,10 @@ void Display::update() {
     FastLED.show();
     analogWrite(OE_PIN, 255 - brightness);
   }
+}
+
+void Display::setConfigManager(ConfigManager * mgr) {
+  configManager = mgr;
 }
 
 void Display::setBrightness (uint8_t requestedBrightness) {
@@ -303,7 +303,7 @@ void Display::setDateMode(DATE_MODE m) {
 }
 
 void Display::setLEDMode(LED_MODE m) {
-  _ledMode = m;
+
 }
 
 const TIME_MODE Display::getTimeMode() {
@@ -315,7 +315,7 @@ const DATE_MODE Display::getDateMode() {
 }
 
 const LED_MODE Display::getLEDMode() {
-  return _ledMode;
+
 }
 
 void Display::test() {

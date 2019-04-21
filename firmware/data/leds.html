@@ -6,33 +6,46 @@
             </div>
             <div data-role="content">
                 <form action="/set_leds" method="POST" id="leds_form">
+
 					<div class="dispInlineLabel">
-							<label for="backlight">LED Backlight</label>
+							<label for="backlight">Backlight</label>
 					</div>
 					<div class="dispInline">
 							<input onchange="elementChange(this)" type="checkbox"
-							data-role="flipswitch" name="backlight" id="backlight"
+							data-role="flipswitch" name="led_backlight" id="led_backlight"
 							data-on-text="On" data-off-text="Off"
 							data-wrapper-class="custom-label-flipswitch">
 					</div>
 					<div class="clearFloats"></div>
+
+          <div class="dispInlineLabel">
+              <label for="led_autodim">Autodim</label>
+          </div>
+          <div class="dispInline">
+              <input onchange="elementChange(this)" type="checkbox"
+              data-role="flipswitch" name="led_autodim" id="led_autodim"
+              data-on-text="On" data-off-text="Off"
+              data-wrapper-class="custom-label-flipswitch">
+          </div>
+          <div class="clearFloats"></div>
+
 					<div class="dispInlineLabel">
-							<label for="hue_cycling">Colour change mode</label>
+							<label for="led_color_mode">Colour change mode</label>
 					</div>
 					<div class="dispInline">
-                                        	<select onchange="elementChange(this)" type="picklist"
-                                                id="led_mode" data-mini="true">
-                                                <option value="0">Rainbow</option>
-                                                <option value="1">Color by number</option>
-						<option value="2">HHMMSS Col by time</option>
-                                                <option value="3">All Col by time</option>
-                                                </select>
-                                        </div>
+            <select onchange="elementChange(this)" type="picklist"
+              id="led_color_mode" data-mini="true">
+                <option value="0">Rainbow</option>
+                <option value="1">Color by digit</option>
+                <option value="2">Colour by time</option>
+                <option value="3">Static</option>
+            </select>
+          </div>
+
 					<div class="clearFloats"></div>
-					<div data-role="fieldcontain">
-						<label for="cycle_time">Cycle Time (s)</label>
-						<input onchange="elementChange(this)" type="range" name="cycle_time" id="cycle_time" data-highlight="true" min="6" max="1200" step="6">
-                    </div>
+
+
+
                     <div data-role="fieldcontain">
                     	<div id="color-box">
                     		<div id="color-overlay"></div>

@@ -69,14 +69,7 @@ void setupWifi() {
 }
 
 void loadConfig() {
-    display.setTimeMode((TIME_MODE) configManager.loadParam("time_mode").toInt() );
-    display.setLEDMode((LED_MODE)configManager.loadParam("led_mode").toInt() );
-}
-
-void saveConfig(){
-  configManager.saveParam("time_mode", String(display.getTimeMode()));
-  configManager.saveParam("led_mode", String(display.getLEDMode()));
-  configManager.saveToFlash();
+    display.loadConfig();
 }
 
 void setup() {
@@ -93,6 +86,9 @@ void setup() {
 
   configManager.begin();
   configManager.setConfigChangedCallback(loadConfig);
+  
+  display.setConfigManager(&configManager);
+
   loadConfig(); // Needs to happen before the display is started
 
   display.begin();
@@ -166,7 +162,7 @@ void handleButtonEvent(BUTTON_EVENT e) {
           break;
   }
   // Only save relevant changes
-  if(e & (BUTTON_B_SHORTPRESS | BUTTON_C_SHORTPRESS)) saveConfig();
+  //if(e & (BUTTON_B_SHORTPRESS | BUTTON_C_SHORTPRESS)) saveConfig();
 }
 
 void loop() {

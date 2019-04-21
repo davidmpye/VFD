@@ -13,8 +13,12 @@ void ConfigManager::resetToDefaults() {
   delete configStore;
   SPIFFS.remove("/config.json");
   configStore = new DynamicJsonDocument(JSON_CONFIG_FILE_SIZE);
-  saveParam("led_mode", String(0));
-  saveParam("time_mode",String(0));
+
+  //LED settings.
+  saveParam("led_backlight", "true");
+  saveParam("led_autodim", "true");
+  saveParam("led_color_mode", "0"); //rainbow
+
   saveToFlash();
 }
 

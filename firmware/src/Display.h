@@ -29,6 +29,7 @@
 #include <Timezone.h>
 #include <RTClib.h>
 #include "Config.h"
+#include "ConfigManager.h"
 
 enum TIME_MODE {
   TWENTYFOURHR_MODE,
@@ -55,6 +56,9 @@ class Display {
     ~Display();
 
     void begin();
+
+    void setConfigManager(ConfigManager *);
+    void loadConfig();
 
     //Higher level functions
     //Displays the current time on the tubes, using TIME_MODE format
@@ -98,6 +102,9 @@ class Display {
     const char getTubeChar(int tube);
 
   private:
+
+  ConfigManager *configManager;
+
   uint8_t brightness;
   uint16_t rainbow_counter;
   uint8_t _displayData[NUM_TUBES];
@@ -205,7 +212,7 @@ class Display {
 
   DATE_MODE _dateMode = DDMMYY_MODE;
   TIME_MODE _timeMode = TWENTYFOURHR_MODE;
-  LED_MODE _ledMode = RAINBOW_MODE;
+  int _ledMode = 0;
 };
 
 #endif

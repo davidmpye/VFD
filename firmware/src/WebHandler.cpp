@@ -112,14 +112,8 @@ void WebHandler::webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, s
   }
 
 void WebHandler::handleParamChange(String param, String val) {
-  if (!configManager) return;
-  //This doesnt work yet, needs to handle params properly!
-  if (val == "true" ) {
-      configManager->saveParam("led_mode", String(RAINBOW_MODE));
-    }
-    else  {
-      configManager->saveParam("led_mode", String(STEALTH_MODE));
-    }
+  if (configManager == NULL) return;
+  configManager->saveParam(param, val);
 }
 
 String WebHandler::generateInfo() {
@@ -134,7 +128,7 @@ String WebHandler::generateInfo() {
   doc["wifi_mac_address"] = WiFi.macAddress();
   doc["wifi_ssid"] = WiFi.SSID();
 
-  if (configManager != NULL) doc["config_dump"] = configManager->dumpConfig();
+  //if (configManager != NULL) doc["config_dump"] = configManager->dumpConfig();
 
   long millisecs = millis();
   doc["uptime"] = String( (millisecs / (1000 * 60 * 60 * 24)) % 365)  + " Days, " + String(millisecs / (1000 * 60 * 60) % 24)  + " Hours, " + String(millisecs / (1000 * 60) % 60) + " Mins";
