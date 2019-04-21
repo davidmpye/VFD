@@ -160,7 +160,7 @@ void WebHandler::begin() {
   //If not 'declared' above, try to load the file from SPIFFS.
   httpServer.onNotFound([&](){
     if(!handleFileRead(httpServer.uri()))
-      httpServer.send(404, "text/plain", "FileNotFound");
+      httpServer.send(404, "text/plain", "404 Not Found - Have you forgotten to upload the flash filesystem? See wiki <a href='https://github.com/davidmpye/VFD/wiki/Firmware'>here</a>");
   });
 
   httpServer.begin(WEBSERVER_PORT);
