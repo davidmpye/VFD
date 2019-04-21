@@ -20,6 +20,7 @@
 
 #ifndef __CONFIG__H__
 #define __CONFIG__H__//Pin definitions for Wemos->data lines
+
 #define LED_PIN D6
 #define NUM_TUBES 8
 #define NUM_LEDS 8
@@ -36,4 +37,8 @@
 #define LEDS_OFF_BRIGHTNESS_CUTOFF 15
 #define LED_ANIMATION_STEPTIME 100 //mS
 
+#define WEBSERVER_PORT 80
+#define WEBSOCKET_PORT 81
+
+#define JSON_CONFIG_FILE_SIZE 1024
 #endif
