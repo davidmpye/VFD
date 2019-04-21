@@ -7,6 +7,7 @@
 #include "Display.h"
 #ifndef __WEBHANDLER_H__
 #define __WEBHANDLER_H__
+
 class WebHandler
 {
     public:
