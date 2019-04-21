@@ -1,0 +1,53 @@
+        <div data-role="page" id="LEDs">
+            <div data-role="header" data-position="fixed">
+                <h1>LEDs</h1>
+				<a href="#mainMenu" data-rel="main-menu-panel" class="ui-btn ui-btn-left ui-btn-icon-notext ui-icon-bars ui-corner-all"></a>
+				<a onclick="presetsMenu('leds.html');" href="#" id="set_icon_leds"  class="ui-btn-right ui-btn headerText ui-btn-icon-right ui-icon-carat-d"></a>
+            </div>
+            <div data-role="content">
+                <form action="/set_leds" method="POST" id="leds_form">
+					<div class="dispInlineLabel">
+							<label for="backlight">LED Backlight</label>
+					</div>
+					<div class="dispInline">
+							<input onchange="elementChange(this)" type="checkbox"
+							data-role="flipswitch" name="backlight" id="backlight"
+							data-on-text="On" data-off-text="Off"
+							data-wrapper-class="custom-label-flipswitch">
+					</div>
+					<div class="clearFloats"></div>
+					<div class="dispInlineLabel">
+							<label for="hue_cycling">Colour change mode</label>
+					</div>
+					<div class="dispInline">
+                                        	<select onchange="elementChange(this)" type="picklist"
+                                                id="led_mode" data-mini="true">
+                                                <option value="0">Rainbow</option>
+                                                <option value="1">Color by number</option>
+						<option value="2">HHMMSS Col by time</option>
+                                                <option value="3">All Col by time</option>
+                                                </select>
+                                        </div>
+					<div class="clearFloats"></div>
+					<div data-role="fieldcontain">
+						<label for="cycle_time">Cycle Time (s)</label>
+						<input onchange="elementChange(this)" type="range" name="cycle_time" id="cycle_time" data-highlight="true" min="6" max="1200" step="6">
+                    </div>
+                    <div data-role="fieldcontain">
+                    	<div id="color-box">
+                    		<div id="color-overlay"></div>
+                    	</div>
+						<label for="hue">Hue</label>
+						<input onchange="HilightColor();elementChange(this)" type="range" name="hue" id="hue" min="0" max="255" value="0">
+                    </div>
+                    <div data-role="fieldcontain">
+						<label for="saturation">Saturation</label>
+						<input onchange="HilightColor();elementChange(this)" type="range" name="saturation" id="saturation" min="0" max="255" value="255">
+                    </div>
+                    <div data-role="fieldcontain">
+						<label for="led_scale">Brightness</label>
+						<input onchange="HilightColor();elementChange(this)" type="range" name="led_scale" id="led_scale" min="0" max="255" value="255">
+                    </div>
+                </form>
+            </div>
+        </div>

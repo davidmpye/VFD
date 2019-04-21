@@ -1,0 +1,25 @@
+        <div data-role="page" id="Presets">
+            <div data-role="header" data-position="fixed">
+                <h1>Presets</h1>
+				<a href="#mainMenu" data-rel="main-menu-panel" class="ui-btn ui-btn-left ui-btn-icon-notext ui-icon-bars ui-corner-all"></a>
+            </div>
+            <div data-role="content">
+                <form action="/set_presets" method="POST" id="presets_form">
+				    <fieldset data-role="controlgroup">
+				        <legend>Choose one!</legend>
+				        <input onchange="elementChange(this);closePresetsMenu();" type="radio" name="preset" id="set1" value="set1">
+				        <label for="set1" id="set1_label">Clock 1</label>
+				        <input data-rel="close" onchange="elementChange(this);closePresetsMenu();" type="radio" name="preset" id="set2" value="set2">
+				        <label for="set2" id="set2_label" >Clock 2</label>
+				        <input data-rel="close" onchange="elementChange(this);closePresetsMenu();" type="radio" name="preset" id="set3" value="set3">
+				        <label for="set3" id="set3_label">Clock 3</label>
+				        <input data-rel="close" onchange="elementChange(this);closePresetsMenu();" type="radio" name="preset" id="set4" value="set4">
+				        <label for="set4" id="set4_label">Conditioner</label>
+				        <input data-rel="close" onchange="elementChange(this);closePresetsMenu();" type="radio" name="preset" id="set5" value="set5">
+				        <label for="set5" id="set5_label">Manual</label>
+				    </fieldset>
+				</form>
+				<a onclick='editPresetNames();' class="ui-shadow ui-btn ui-corner-all ui-btn-inline">Edit Names</a>            
+            </div>
+        </div>
+        

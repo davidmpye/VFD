@@ -1,0 +1,30 @@
+        <div data-role="page" id="Info">
+            <div data-role="header" data-position="fixed">
+                <h1>Info</h1>
+				<a href="#mainMenu" data-rel="main-menu-panel" class="ui-btn ui-btn-left ui-btn-icon-notext ui-icon-bars ui-corner-all"></a>
+            </div>
+            <div data-role="content">
+				<table data-role="table" id="clock-info" data-mode="columntoggle:none" class="ui-responsive table-stripe">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Value</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr><th>IP Address</th><td id="wifi_ip_address">...</td></tr>
+						<tr><th>MAC Address</th><td id="wifi_mac_address">...</td></tr>
+						<tr><th>Connected To</th><td id="wifi_ssid">...</td></tr>
+						<tr><th>SSID</th><td id="wifi_ap_ssid">...</td></tr>
+						<tr><th>Chip ID</th><td id="esp_chip_id">...</td></tr>
+						<tr><th>Free Heap</th><td id="esp_free_heap">...</td></tr>
+						<tr><th>Sketch Size</th><td id="esp_sketch_size">...</td></tr>
+						<tr><th>Free Sketch Space</th><td id="esp_sketch_space">...</td></tr>
+						<tr><th>Flash Size</th><td id="esp_flash_size">...</td></tr>
+						<tr><th>Boot Version</th><td id="esp_boot_version">...</td></tr>
+						<tr><th>Uptime</th><td id="uptime">...</td></tr>
+						<tr><th>Dumped Config:</th><td id="config_dump">...</td></tr>
+					</tbody>
+				</table>
+			</div>
+        </div>

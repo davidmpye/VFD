@@ -1,0 +1,15 @@
+        <div data-role="page" id="Preset Names" data-dialog="true">
+            <div data-role="content">
+                <form action="/set_preset_names" method="POST" id="preset_names_form">
+				    <fieldset data-role="controlgroup">
+				        <legend>Edit the preset names</legend>
+				        <input onblur="elementBlur(this)" type="text" maxlength="12" name="set1_name" id="set1_name" value="Clock 1" placeholder="preset 1 name">
+				        <input onblur="elementBlur(this)" type="text" maxlength="12" name="set2_name" id="set2_name" value="Clock 2" placeholder="preset 2 name">
+				        <input onblur="elementBlur(this)" type="text" maxlength="12" name="set3_name" id="set3_name" value="Clock 3" placeholder="preset 3 name">
+				        <input onblur="elementBlur(this)" type="text" maxlength="12" name="set4_name" id="set4_name" value="Conditioner" placeholder="preset 4 name">
+				        <input onblur="elementBlur(this)" type="text" maxlength="12" name="set5_name" id="set5_name" value="Manual" placeholder="preset 5 name">
+				    </fieldset>
+				</form>
+				<a onclick='closePresetNames();'  class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-mini">Close</a>
+            </div>
+        </div>

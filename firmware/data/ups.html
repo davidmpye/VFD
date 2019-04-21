@@ -1,0 +1,49 @@
+        <div data-role="page" id="UPS">
+            <div data-role="header">
+                <h1>UPS</h1>
+				<a href="#mainMenu" data-rel="main-menu-panel" class="ui-btn ui-btn-left ui-btn-icon-notext ui-icon-bars ui-corner-all"></a>
+				<a onclick="presetsMenu('ups.html');" href="#" id="set_icon_ups"  class="ui-btn-right ui-btn headerText ui-btn-icon-right ui-icon-carat-d"></a>
+            </div>
+            <div data-role="content">
+                <form action="/set_ups" method="POST" id="ups_form">
+					<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
+					    <legend>Charge Rate</legend>
+					    <input onchange="elementChange(this)" type="radio" name="charge_rate" id="cr_auto" value="0">
+					    <label for="cr_auto">Auto</label>
+					    <input onchange="elementChange(this)" type="radio" name="charge_rate" id="cr_100" value="1">
+					    <label for="cr_100">100mA</label>
+					    <input onchange="elementChange(this)" type="radio" name="charge_rate" id="cr_500" value="2">
+					    <label for="cr_500">500mA</label>
+					</fieldset>
+					<div class="dispInlineLabel">
+							<label for="lpm">Low Power Mode</label>
+					</div>
+					<div class="dispInline">
+							<input onchange="elementChange(this)" type="checkbox"
+							data-role="flipswitch" name="lpm" id="lpm"
+							data-on-text="On" data-off-text="Off"
+							data-wrapper-class="custom-label-flipswitch">
+					</div>
+					<label for="wakeup_time">Wakeup Duration</label>
+					<input onchange="elementChange(this)" type="range" name="wakeup_time" id="wakeup_time" min="5" max="100" value="20">
+					<div class="clearFloats"></div>
+                    <div data-role="fieldcontain">
+						<label for="sensitivity">Tap Sensitivity</label>
+						<input onchange="elementChange(this)" type="range" name="sensitivity" id="sensitivity" min="30" max="100" value="40">
+                    </div>
+                </form>
+				<table data-role="table" id="ups-info" data-mode="columntoggle:none" class="ui-responsive table-stripe">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Value</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr><th>Power</th><td id="power">...</td></tr>
+						<tr><th>Charge Rate</th><td id="charge_rate_txt">...</td></tr>
+						<tr><th>USB Rating</th><td id="usb_rating">...</td></tr>
+					</tbody>
+				</table>
+            </div>
+        </div>
