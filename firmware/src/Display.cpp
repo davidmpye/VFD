@@ -250,7 +250,14 @@ void Display::update() {
   }
   digitalWrite(LATCH_PIN, HIGH);
 
-  if (ledRefreshNeeded) FastLED.show();
+  if (ledRefreshNeeded) {
+    //This little dance is needed to make the LEDs not flicker.
+    analogWrite(OE_PIN, 0);
+    pinMode(OE_PIN, OUTPUT);
+    digitalWrite(OE_PIN, HIGH);
+    FastLED.show();
+    analogWrite(OE_PIN, 255 - brightness);
+  }
 }
 
 void Display::setBrightness (uint8_t requestedBrightness) {

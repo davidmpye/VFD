@@ -94,7 +94,7 @@ void setup() {
   configManager.begin();
   configManager.setConfigChangedCallback(loadConfig);
   loadConfig(); // Needs to happen before the display is started
-  
+
   display.begin();
   Wire.begin(D2,D1);
   setupWifi();
