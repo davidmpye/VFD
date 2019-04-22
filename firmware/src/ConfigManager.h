@@ -1,14 +1,17 @@
+
+#ifndef __CONFIGMANAGER_H__
+#define  __CONFIGMANAGER_H__
+
 #include <FS.h>
 #include <Arduino.h>
 #include <ArduinoJson.h>
+
 #include "Config.h"
 
-  #ifndef __CONFIGHANDLER_H__
-  #define  __CONFIGHANDLER_H__
+class DMPClock;
 
-  class  ConfigManager
+class ConfigManager  {
 
-  {
       public:
 
        ConfigManager();
@@ -20,17 +23,14 @@
        void saveParam(String name, String value);
 
        String dumpConfig();
-
-       void setConfigChangedCallback(void (*ptr)());
-
+       void setClock(DMPClock*);
      private:
 
        DynamicJsonDocument *configStore;
-       void (*changedCallback)(void);
+       DMPClock *clock;
+
+
 
   };
 
   #endif
-void resetToDefaults();
-void saveToFlash();
-String loadParam(String name);

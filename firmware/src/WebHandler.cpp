@@ -116,6 +116,10 @@ void WebHandler::handleParamChange(String param, String val) {
   configManager->saveParam(param, val);
 }
 
+void WebHandler::setConfigManager(ConfigManager *m) {
+  configManager = m;
+}
+
 String WebHandler::generateInfo() {
   DynamicJsonDocument doc(JSON_CONFIG_FILE_SIZE);
   doc["esp_boot_version"] = ESP.getBootVersion();
@@ -128,7 +132,7 @@ String WebHandler::generateInfo() {
   doc["wifi_mac_address"] = WiFi.macAddress();
   doc["wifi_ssid"] = WiFi.SSID();
 
-  //if (configManager != NULL) doc["config_dump"] = configManager->dumpConfig();
+  if (configManager != NULL) doc["config_dump"] = configManager->dumpConfig();
 
   long millisecs = millis();
   doc["uptime"] = String( (millisecs / (1000 * 60 * 60 * 24)) % 365)  + " Days, " + String(millisecs / (1000 * 60 * 60) % 24)  + " Hours, " + String(millisecs / (1000 * 60) % 60) + " Mins";
@@ -136,10 +140,6 @@ String WebHandler::generateInfo() {
   String returnStr;
   serializeJson(doc, returnStr);
   return returnStr;
-}
-
-void WebHandler::setConfigManager (ConfigManager *mgr) {
-  configManager = mgr;
 }
 
 void WebHandler::begin() {

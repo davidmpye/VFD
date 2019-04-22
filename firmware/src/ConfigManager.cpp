@@ -1,8 +1,9 @@
 #include "ConfigManager.h"
+#include "Clock.h"
 
 ConfigManager::ConfigManager() {
   configStore = new DynamicJsonDocument(JSON_CONFIG_FILE_SIZE);
-  changedCallback = NULL;
+  clock = NULL;
 }
 
 ConfigManager::~ConfigManager() {
@@ -24,12 +25,8 @@ void ConfigManager::resetToDefaults() {
 
 String ConfigManager::dumpConfig() {
   String dump;
-  serializeJson(*configStore, dump);
+  serializeJsonPretty(*configStore, dump);
   return dump;
-}
-
-void ConfigManager::setConfigChangedCallback(void (*ptr)()) {
-  changedCallback = ptr;
 }
 
 void ConfigManager::begin() {
@@ -50,6 +47,10 @@ void ConfigManager::begin() {
     configFile.close();
 }
 
+void ConfigManager::setClock(DMPClock *d) {
+  clock = d;
+}
+
 String ConfigManager::loadParam(String name) {
   //Will return NULL if not present.
   return configStore->getMember(name).as<String>();
@@ -57,7 +58,8 @@ String ConfigManager::loadParam(String name) {
 
 void ConfigManager::saveParam(String name, String value) {
   (*configStore)[name] = value;
-  if (changedCallback != NULL) changedCallback();
+  if (clock != NULL) clock->loadConfig();
+  saveToFlash();
 }
 
 void ConfigManager::saveToFlash() {

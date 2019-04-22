@@ -22,12 +22,11 @@
 
 #define FASTLED_ALLOW_INTERRUPTS 0
 
-
-
 #include <FastLED.h>
 #include <Time.h>
 #include <Timezone.h>
 #include <RTClib.h>
+
 #include "Config.h"
 #include "ConfigManager.h"
 
@@ -47,6 +46,12 @@ enum LED_MODE {
   COL_PER_NUM_MODE,
   COL_BY_TIME_MODE,
   STEALTH_MODE,
+};
+
+enum SEPARATORS {
+  NONE,
+  DASHES,
+  DOUBLE_DASHES,
 };
 
 class Display {
@@ -82,8 +87,6 @@ class Display {
     void setTimeMode(TIME_MODE m);
     void setDateMode(DATE_MODE m);
     void setLEDMode(LED_MODE m);
-
-    void enableDashes(bool);
 
     const TIME_MODE getTimeMode();
     const DATE_MODE getDateMode();
@@ -208,11 +211,17 @@ class Display {
     0x0F,  // }
   };
 
-  bool _dashes = false;
 
   DATE_MODE _dateMode = DDMMYY_MODE;
   TIME_MODE _timeMode = TWENTYFOURHR_MODE;
+
+
+  bool _ledsEnabled = true;
   int _ledMode = 0;
+
+  SEPARATORS _separators = NONE;
+
+
 };
 
 #endif

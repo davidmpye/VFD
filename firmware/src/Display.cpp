@@ -20,9 +20,11 @@
 #include "Display.h"
 
 Display::Display() {
+
 }
 
 Display::~Display() {
+
 }
 
 void Display::begin() {
@@ -44,6 +46,8 @@ void Display::begin() {
 
   //Full brightness.
   brightness = 255;
+
+  loadConfig();
   update();
 }
 
@@ -85,10 +89,15 @@ void Display::displayTime(DateTime t) {
       setTubeNumber(7, t.second()%10);
     }
    }
-   if (_dashes && NUM_TUBES == 8 && ( _timeMode == TWENTYFOURHR_MODE || _timeMode == AMPM_MODE )) {
+   if (_separators != NONE && NUM_TUBES == 8 && ( _timeMode == TWENTYFOURHR_MODE || _timeMode == AMPM_MODE )) {
      if (t.second() %2 == 0) {
-       setTubeByte(2, 0x40);
-       setTubeByte(5, 0x40);
+       byte b;
+       if (_separators == DASHES ) {
+         b = 0x40;
+       }
+       else b = 0x48;
+       setTubeByte(2, b);
+       setTubeByte(5, b);
      }
      else {
      //clear() will set these to blank anyway.
@@ -178,17 +187,37 @@ void Display::blank() {
 }
 
 void Display::loadConfig() {
+  if (configManager->loadParam("led_backlight") == "true") {
+    _ledsEnabled = true;
+  }
+  else _ledsEnabled = false;
+
   _ledMode = configManager->loadParam("led_color_mode").toInt();
+
+
+  if (configManager->loadParam("separators")  == "true") {
+    if (configManager->loadParam("separator") == "0") {
+      _separators = DASHES;
+    }
+    else _separators = DOUBLE_DASHES;
+  }
+  else _separators = NONE;
+
+
+  if (!_ledsEnabled) {
+    //Turn off the LEDs.
+    LEDS.setBrightness(0);
+    FastLED.show();
+  }
 }
 
 void Display::update() {
   // Calculate the new data for the LEDs.
   static long lastLEDUpdate = millis();
-
   bool ledRefreshNeeded = false;
 
   //If we're due an LED update, update the animation.
-  if (millis() > lastLEDUpdate + LED_ANIMATION_STEPTIME) {
+  if (_ledsEnabled && millis() > lastLEDUpdate + LED_ANIMATION_STEPTIME) {
 
     lastLEDUpdate = millis();
     ledRefreshNeeded = true;
@@ -290,7 +319,6 @@ void Display::setBrightness (uint8_t requestedBrightness) {
     if (brightness > LEDS_OFF_BRIGHTNESS_CUTOFF) LEDS.setBrightness(brightness);
     else LEDS.setBrightness(0);
   }
-
   analogWrite(OE_PIN, 255 - brightness);
 }
 
@@ -354,10 +382,6 @@ void Display::setTubeChar(int tube, char c) {
 void Display::setTubeDP(int tube, bool enabled) {
   if (enabled ) _displayData[tube] |= 0x80;
   else _displayData[tube] &= ~0x80;
-}
-
-void Display::enableDashes(bool b) {
-  _dashes = b;
 }
 
 const uint8_t Display::getTubeByte(int tube) {

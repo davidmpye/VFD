@@ -1,6 +1,6 @@
-/* 
-    VFD clock firmware (c) 2018 David Pye <davidmpye@gmail.com> 
-    
+/*
+    VFD clock firmware (c) 2018 David Pye <davidmpye@gmail.com>
+
     http://www.davidmpye.com/VFD
 
     This program is free software: you can redistribute it and/or modify
@@ -17,16 +17,12 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
-
 #ifndef __BUTTONHANDLER__
 #define __BUTTONHANDLER__
+
 #include <JC_Button.h>
+
 #include "Display.h"
-#include "Config.h"
-#include <Time.h>
-#include <Timezone.h>
-#include <RTClib.h>
 
 typedef enum BUTTON_EVENT {
   NO_PRESS,
@@ -46,7 +42,7 @@ class ButtonHandler {
     ButtonHandler();
     ~ButtonHandler();
 
-    void begin(int a, int b, int c, int d, Display *); //four pin numbers.
+    void begin(int a, int b, int c, int d, Display *e); //four pin numbers.
 
     BUTTON_EVENT poll();
 
@@ -57,7 +53,6 @@ class ButtonHandler {
     Button *buttonA, *buttonB, *buttonC, *buttonD;
     Display *display;
 
-}
-;
+};
 
 #endif

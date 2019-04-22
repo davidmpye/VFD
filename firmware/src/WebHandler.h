@@ -1,3 +1,6 @@
+#ifndef __WEBHANDLER_H__
+#define __WEBHANDLER_H__
+
 #include <Arduino.h>
 #include <ESP8266WebServer.h>
 #include <WebSocketsServer.h>
@@ -10,9 +13,7 @@
 
 #include "Config.h"
 #include "ConfigManager.h"
-#include "Display.h"
-#ifndef __WEBHANDLER_H__
-#define __WEBHANDLER_H__
+
 
 class WebHandler
 {
