@@ -24,18 +24,18 @@ void ConfigManager::resetToDefaults() {
 }
 
 String ConfigManager::dumpConfig() {
-  String dump;
+  String dump = ":";
   serializeJsonPretty(*configStore, dump);
   return dump;
 }
 
 void ConfigManager::begin() {
     File configFile=SPIFFS.open("/config.json","r");
-    if (!configFile) {
+  //  if (!configFile) {
       //There is no config file yet, so build the default one.
       resetToDefaults();
-      return;
-    }
+    //  return;
+  //  }
 
     size_t size=configFile.size();
     std::unique_ptr<char[]> buf(new char[size]); // Buffer for config

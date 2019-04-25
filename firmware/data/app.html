@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-    
+
 <head>
 <meta charset="utf-8"/>
-	<title>STC</title>
+	<title>ESP8266 Clock</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<!-- build:js script.js -->
@@ -20,12 +20,12 @@ $(document).on("mobileinit", function () {
 	<script src="/jquery/rs/1.3/rs.min.js"></script>
 	<script src="/jquery/jq-tp.min.js"></script>
     <!-- endbuild -->
-    
+
 	<!-- build:css script.css -->
 	<link rel="stylesheet" href="/jquery/m/1.4.5/jq.m.min.css" />
 	<link href="/jquery/rs/1.3/rs.min.css" rel="stylesheet" />
-	<!-- endbuild -->                                  
-	
+	<!-- endbuild -->
+
 	<link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAABFFBMVEUAAACSkpIxMTEKCgo/Pz9YWFgMDAwMDAwPDw8gICAqKipqamqSkpJ1dXUICAgGBgYQEBAEBAQNDQ0LCwsPDw8REREKCgoODg4TExMPDw8PDw8TExMdHR0SEhIVFRUiIiISEhISEhI5OTlHR0cXFxcbGxsXFxcbGxsbGxs2NjYfHx8pKSkwMDAzMzNKSkouLi5NTU1ZWVkqKipdXV1OTk5BQUEREREHBwcJCQkLCwscHBwVFRUrKyshISE4ODgUFBQgICAWFhYbGxsbGxsSEhIlJSUqKipNTU0WFhZbW1tSUlIiIiIbGxs7Ozs9PT1bW1sfHx8yMjJvb282NjZRUVEmJiZWVlZCQkJnZ2fw8PAAAAAKCgo+WiZ7AAAAWnRSTlMABDHtGgno2sdeQSEJBvn59vbx5OPa1MG/vrGuq6qmnZeQi4F9e3FuaGBaTko9OicjIB8ZEg3p59vLyb27t6mfl5GLhXZ0cGxqZmZkWFZQTko2LCooKBwUEATs1IN1AAAA/0lEQVQ4y4WQRXIDQRAEexakRTFLFjOjmZkZy///hxXhmzXTzksdMk9Ff5jMXFIiXNfr1B7o/VVIdV0HAlZvOwvsyIJi2nYO8UvIW/VaStBj/qKWgx75znytBk6FzvbM6vA4ON6MkAS/JO53x9XurVkGNFlhdO7E0CC6tBCekpp5cgDdZgL7JheaHZwIZVBqIE6kFfaf5b6fDCK2XG9Ccq6uY9CJJYCt/4IK6z+BJzZoI8v6j43oiPNmOtrj/NRKaYwWzUTTZ/woU18Qw1veIJbCnPeLRHnABkUAa6bavwBYFuqgAawDUL9wBLRbcZwqgxaCPonuuTIwwg7x9EnOD7yqJHNnrSJeAAAAAElFTkSuQmCC" />
 	<style type="text/css">
 /* Custom indentations are needed because the length of custom labels differs from
@@ -155,20 +155,20 @@ $(document).on("mobileinit", function () {
 		if (typeof displayOff != 'undefined') {
 			$('#on_range').roundSlider("setValue", displayOff, 2);
 			delete values["display_off"];
-		}		
+		}
 		var pinMap = values["pin_order"];
 		if (typeof pinMap != 'undefined') {
 			resetList(pinMap);
 			delete values["pin_order"];
 		}
-		
+
 		Object.keys(values).forEach(function(key, index) {
 			var element = $('#' + key);
-			
+
 			if (key == "digits_on") {
 				values[key] = values[key]/1000;
 			}
-			
+
 			var elType = element.attr('type');
 			if (elType == "checkbox") {
 				element.prop("checked", this[key]);
@@ -194,18 +194,18 @@ $(document).on("mobileinit", function () {
 					element.selectmenu("refresh");
 				}
 			}
-			
+
 			if (key == "hue" || key == "saturation" || key == "led_scale") {
 				HilightColor();
 			}
 		}, values);
 		serverSetting = false;
 	}
-	
+
 	function updateStatus(msg) {
-		$("#status").html(msg);		
+		$("#status").html(msg);
 	}
-	
+
 	function url(s) {
 	    var l = window.location;
 	    return ((l.protocol === "https:") ? "wss://" : "ws://") + l.host + s;
@@ -220,13 +220,13 @@ $(document).on("mobileinit", function () {
 			return element.val();
 		}
 	}
-	
+
 	var pageMap = {};
-	
-	function getPageId(pageName) {		
+
+	function getPageId(pageName) {
 		return pageMap[pageName];
 	}
-	
+
 	function elementBlur(element, value) {
 		if (serverSetting) {
 			return;
@@ -239,18 +239,18 @@ $(document).on("mobileinit", function () {
 		if (elType == "radio") {
 		    name = $(element).attr('name');
 		}
-		
+
 		if (element.id == "digits_on") {
 			value *= 1000;
 		}
 		var msg = '9:'+pageId+':'+name+':'+value;
 		safeSend(msg);
 	}
-	
+
 	function elementChange(element, value) {
 		elementBlur(element, value);
 	}
-	
+
 	function hsv_to_hsl(h, s, v) {
 	    // both hsv and hsl values are in [0, 1]
 	    var l = (2 - s) * v / 2;
@@ -267,7 +267,7 @@ $(document).on("mobileinit", function () {
 
 	    return [h, s, l]
 	}
-	
+
 	function HilightColor() {
 		var hSlider = $("#hue");
 		var h = getElementValue(hSlider);
@@ -275,34 +275,34 @@ $(document).on("mobileinit", function () {
 		var s = getElementValue(sSlider);
 		var vSlider = $("#led_scale");
 		var v = getElementValue(vSlider);
-		
+
 		var color = "hsla(" + (h * 360 / 255 | 0) + ",100%," + (100 - s * 50 / 255 | 0) + "%," + v / 255 + ")";
 		$("#color-overlay").css("background-color", color);
 	}
-	
+
 	var presetFrom='';
-	
+
 	function presetsMenu(fromPage) {
 		presetFrom = fromPage;
 		$.mobile.changePage('presets.html', { transition: "slidedown"});
 	}
-	
+
 	function closePresetsMenu() {
 		$.mobile.changePage(presetFrom, { transition: "slideup"});
 	}
-	
+
 	function editPresetNames() {
-		$.mobile.changePage('preset_names.html', { transition: "flip"});		
+		$.mobile.changePage('preset_names.html', { transition: "flip"});
 	}
-	
+
 	function closePresetNames() {
-		$.mobile.changePage('presets.html', { transition: "flip"});		
+		$.mobile.changePage('presets.html', { transition: "flip"});
 	}
-	
+
 	function initializeMenu(values) {
 		var htmlString = '<ul id="menuList" data-role="listview" data-inset="true">';
 		pageMap = {};
-		
+
 		for (var i = 0; i < values.length; i++) {
 			var obj = values[i];
 			var key = Object.keys(obj)[0];
@@ -321,42 +321,42 @@ $(document).on("mobileinit", function () {
 			$.mobile.changePage(obj[key].url);
 		}
 	}
-	
+
 	function pageRefresh(activePage){
 		if (typeof activePage != 'undefined') {
 			safeSend(getPageId(activePage) + ':');
 		}
 	} ;
-	
+
 	function getMenu() {
 		safeSend("0:");
 	}
-	
+
 	var ws;
 
 	ws = new WebSocket(url(":81/ws"));
-	
+
 	// subscribe to visibility change events
 	document.addEventListener('visibilitychange', function() {
 	    // fires when app transitions from prerender, user returns to the app / tab.
-	    if (document.visibilityState == 'visible') { 
+	    if (document.visibilityState == 'visible') {
 	    	if (!ws || !(ws.readyState == WebSocket.OPEN || ws.readyState == WebSocket.CONNECTING)) {
 	    		ws = new WebSocket(url(":81/ws"));
 	    	}
 	    }
 	});
-	
+
 	ws.onopen = function(event) {
 		try {
 			getMenu();
-		} catch (e) {			
+		} catch (e) {
 			(console.error || console.log).call(console, e.stack || e);
 		}
 	}
-	
+
 	ws.onmessage= function(event) {
 	  var msg = JSON.parse(event.data);
-	  
+
 	  switch(msg.type) {
 	    case "sv.update":
 	    case "sv.init.ups":	// Received initialization object
@@ -370,11 +370,11 @@ $(document).on("mobileinit", function () {
 	    	console.log(msg.type);
 	    	updateElements(msg.value);
 	    	break;
-	      
+
 	    case "sv.status":
 	    	updateStatus(msg.value);
 	    	break;
-	    	
+
 	    case "sv.init.menu":
 	    	initializeMenu(msg.value);
 	    	break;
@@ -389,22 +389,22 @@ $(document).on("mobileinit", function () {
 			console.log(e.stack || e);
 		}
 	}
-	
+
 	function resetList(order) {
 		var order = order || "0123456789ab";
-		
+
 		for (var i=0; i<order.length; i++) {
 			$('#pin_order [id=' + order[i] + ']')
 				.remove()
-				.appendTo($('#pin_order'));             
+				.appendTo($('#pin_order'));
 		}
-    	
+
     	elementBlur($('#pin_order')[0], order);
 	}
-	
+
 	$(document).ready(function () {
 		$(document).on('pagecontainerchange', function(event, ui) {
-		    var current = ui.toPage[0].id;   
+		    var current = ui.toPage[0].id;
 			pageRefresh(current);
 		    // Remove active class from nav buttons
 		    $("#menuList a.ui-btn-active").removeClass("ui-btn-active");
@@ -415,13 +415,13 @@ $(document).on("mobileinit", function () {
 		            $(this).addClass("ui-btn-active");
 		        }
 		    });
-				
-		});		
+
+		});
 	});
-	
+
 	$(document).on("pagecontainerchange", function() {
 	});
-	
+
 	$(document).on("pagecreate", function() {
 		console.log("pagecreate");
 		$.fn.roundSlider.prototype._invertRange = true;
@@ -437,12 +437,12 @@ $(document).on("mobileinit", function () {
 			  startAngle: 0,
 			  endAngle: "+360",
 			  handleSize: "+8",
-			  
+
 			  change: function(e) {
 				if (serverSetting) {
 					return;
 				}
-				
+
 				var values = e.value.split(',');
 				var pageId = getPageId($(".ui-page-active").attr("id"));
 				var msg = '9:'+pageId+':display_on:'+values[0];
@@ -451,7 +451,7 @@ $(document).on("mobileinit", function () {
 				safeSend(msg);
 			  }
 			});
-		
+
 		$("#digit").roundSlider({
 			  sliderType: "default",
 			  //showTooltip: false,
@@ -465,28 +465,28 @@ $(document).on("mobileinit", function () {
 			  startAngle: 90,
 			  endAngle: 54,
 			  handleSize: "+8",
-			  
+
 			  change: function(e) {
 					if (serverSetting) {
 						return;
 					}
-					
+
 					var pageId = getPageId($(".ui-page-active").attr("id"));
 					var msg = '9:'+pageId+':digit:'+e.value;
 					safeSend(msg);
 				  },
-		  
+
 		  drag: function(e) {
 				if (serverSetting) {
 					return;
 				}
-				
+
 				var pageId = getPageId($(".ui-page-active").attr("id"));
 				var msg = '9:'+pageId+':digit:'+e.value;
 				safeSend(msg);
 			  }
 		});
-		
+
 	    $( "#pin_order" ).sortable();
 	    $( "#pin_order" ).disableSelection();
 	    <!-- Refresh list to the end of sort to have a correct display -->
@@ -495,17 +495,17 @@ $(document).on("mobileinit", function () {
 	    });
 	    $( "#pin_order" ).on( "sortupdate", function( event, ui ) {
 	    	var sortedIDs = $(this).sortable( "toArray" ).join('');
-	    	
+
 	    	elementBlur(this, sortedIDs);
 	    } );
-	    
+
 		console.log("end_pagecreate");
 	});
-	
+
 	$(function () {
         $("div[data-role='panel']").panel().enhanceWithin();
     });
-    
+
 </script>
 </head>
    <body>
