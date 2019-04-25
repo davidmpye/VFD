@@ -104,6 +104,9 @@ class Display {
     const char getTubeChar(int tube);
 
   private:
+    void fillLEDData();
+    void updateTubes();
+    void updateLEDs();
 
   ConfigManager *configManager;
 
@@ -216,6 +219,7 @@ class Display {
 
 
   bool _ledsEnabled = true;
+  bool _ledAutodim = true;
   int _ledMode = 0;
 
   SEPARATORS _separators = NONE;
