@@ -28,6 +28,11 @@ void DMPClock::begin() {
 
     configManager.begin();
     configManager.setClock(this);
+    //If you hold down Button 1 and Button 2 at powerup, it will resetToDefaults
+    if (digitalRead(D0) == 0 && digitalRead(D5) == 0) {
+      configManager.resetToDefaults();
+    }
+
 
     display.setConfigManager(&configManager);
     display.begin();
