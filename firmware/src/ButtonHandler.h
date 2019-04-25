@@ -49,6 +49,9 @@ class ButtonHandler {
     tmElements_t getTime(DateTime*);
     tmElements_t getDate(DateTime*);
 
+    void setConfigManager(ConfigManager *);
+
+
   private:
     Button *buttonA, *buttonB, *buttonC, *buttonD;
     Display *display;

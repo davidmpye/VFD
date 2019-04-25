@@ -113,7 +113,18 @@ void WebHandler::webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, s
 
 void WebHandler::handleParamChange(String param, String val) {
   if (configManager == NULL) return;
-  configManager->saveParam(param, val);
+  if (param == "led_backlight") {
+    configManager->data.led_backlight =  val == "true" ? true : false;
+    return;
+  }
+  if (param == "led_autodim") {
+    configManager->data.led_backlight =  val == "true" ? true : false;
+    return;
+  }
+  if (param == "led_color_mode") {
+    configManager->data.led_color_mode =  val.toInt();
+    return;
+  }
 }
 
 void WebHandler::setConfigManager(ConfigManager *m) {
@@ -151,7 +162,6 @@ void WebHandler::begin() {
   });
   //Set up the http updater
   httpUpdater.setup(&httpServer);
-
   //Start the webserver
   httpServer.begin(WEBSERVER_PORT);
   //Configure and start the web socket server (this is used to make the UI responsive and receives change messages etc from the client)

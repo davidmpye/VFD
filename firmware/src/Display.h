@@ -62,7 +62,6 @@ class Display {
     void begin();
 
     void setConfigManager(ConfigManager *);
-    void loadConfig();
 
     //Higher level functions
     //Displays the current time on the tubes, using TIME_MODE format
@@ -218,9 +217,6 @@ class Display {
   TIME_MODE _timeMode = TWENTYFOURHR_MODE;
 
 
-  bool _ledsEnabled = true;
-  bool _ledAutodim = true;
-  int _ledMode = 0;
 
   SEPARATORS _separators = NONE;
 

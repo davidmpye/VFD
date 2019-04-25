@@ -47,7 +47,6 @@ void Display::begin() {
   //Full brightness.
   brightness = 255;
 
-  loadConfig();
   update();
 }
 
@@ -186,38 +185,16 @@ void Display::blank() {
   digitalWrite(LATCH_PIN, HIGH);
 }
 
-void Display::loadConfig() {
-  if (configManager->loadParam("led_backlight") == "true") {
-    _ledsEnabled = true;
-  }
-  else {
-    _ledsEnabled = false;
-  }
-  _ledMode = configManager->loadParam("led_color_mode").toInt();
-
-  if (configManager->loadParam("led_autodim") == "true") {
-    _ledAutodim = true;
-  }
-  else _ledAutodim = false;
-
-  if (configManager->loadParam("separators")  == "true") {
-    if (configManager->loadParam("separator") == "0") {
-      _separators = DASHES;
-    }
-    else _separators = DOUBLE_DASHES;
-  }
-  else _separators = NONE;
-}
 
 void Display::fillLEDData() {
   //If the LEDs are disabled, just set brightness to 0.
-  if (!_ledsEnabled) {
+  if (!configManager->data.led_backlight) {
     LEDS.setBrightness(0);
     return;
   }
 
   //LEDs are enabled, generate the appropriate colour patterns.
-  switch (_ledMode) {
+  switch (configManager->data.led_color_mode) {
     case 0:
       rainbow_counter++;
       fill_rainbow(leds, NUM_LEDS, rainbow_counter, 255/NUM_LEDS);
@@ -326,7 +303,7 @@ void Display::setBrightness (uint8_t requestedBrightness) {
     brightness = requestedBrightness;
   }
 
-  if (_ledAutodim) {
+  if (configManager->data.led_autodim) {
     if (brightness > LEDS_OFF_BRIGHTNESS_CUTOFF) LEDS.setBrightness(brightness);
     else LEDS.setBrightness(0);
   }
@@ -342,10 +319,6 @@ void Display::setDateMode(DATE_MODE m) {
   _dateMode = m;
 }
 
-void Display::setLEDMode(LED_MODE m) {
-
-}
-
 const TIME_MODE Display::getTimeMode() {
   return _timeMode;
 }
@@ -354,9 +327,6 @@ const DATE_MODE Display::getDateMode() {
   return _dateMode;
 }
 
-const LED_MODE Display::getLEDMode() {
-
-}
 
 void Display::test() {
   clear();

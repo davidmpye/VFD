@@ -10,6 +10,13 @@
 
 class DMPClock;
 
+struct configObject {
+  bool led_autodim;
+  bool led_backlight;
+  int led_color_mode;
+};
+
+
 class ConfigManager  {
 
       public:
@@ -19,14 +26,16 @@ class ConfigManager  {
        void begin();
        void resetToDefaults();
        void saveToFlash();
-       String loadParam(String name);
+       const String loadParam(String name);
        void saveParam(String name, String value);
 
        String dumpConfig();
        void setClock(DMPClock*);
+       configObject data;
+
      private:
 
-       DynamicJsonDocument *configStore;
+
        DMPClock *clock;
 
 

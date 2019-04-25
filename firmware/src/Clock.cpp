@@ -27,7 +27,7 @@ void DMPClock::begin() {
     SPIFFS.begin();
 
     configManager.begin();
-    configManager.setClock(this);
+    
     //If you hold down Button 1 and Button 2 at powerup, it will resetToDefaults
     if (digitalRead(D0) == 0 && digitalRead(D5) == 0) {
       configManager.resetToDefaults();
@@ -91,10 +91,6 @@ void DMPClock::setupWifi() {
   WiFi.softAP("ESP_Clock");
 }
 
-void DMPClock::loadConfig() {
-    display.loadConfig();
-}
-
 void DMPClock::handleButtonEvent(BUTTON_EVENT e) {
   switch(e) {
     case BUTTON_A_SHORTPRESS:
@@ -122,17 +118,9 @@ void DMPClock::handleButtonEvent(BUTTON_EVENT e) {
         break;
 
       case BUTTON_B_SHORTPRESS:
-        switch(display.getLEDMode()) {
-          case RAINBOW_MODE:
-            display.setLEDMode(COL_PER_NUM_MODE);
-            break;
-          case COL_PER_NUM_MODE:
-            display.setLEDMode(COL_BY_TIME_MODE);
-            break;
-          case COL_BY_TIME_MODE:
-            display.setLEDMode(RAINBOW_MODE);
-            break;
-          }
+        if (configManager.data.led_color_mode == 2)
+          configManager.data.led_color_mode = 0;
+        else configManager.data.led_color_mode++;
           break;
 
       case BUTTON_C_LONGPRESS:
