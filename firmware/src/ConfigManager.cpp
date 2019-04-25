@@ -13,6 +13,7 @@ void ConfigManager::resetToDefaults() {
   data.led_autodim = true;
   data.led_color_mode = 0;
   data.led_backlight = true;
+
   saveToFlash();
 }
 

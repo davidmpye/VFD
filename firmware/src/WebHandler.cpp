@@ -118,7 +118,7 @@ void WebHandler::handleParamChange(String param, String val) {
     return;
   }
   if (param == "led_autodim") {
-    configManager->data.led_backlight =  val == "true" ? true : false;
+    configManager->data.led_autodim =  val == "true" ? true : false;
     return;
   }
   if (param == "led_color_mode") {
