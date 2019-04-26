@@ -27,7 +27,7 @@ void DMPClock::begin() {
     SPIFFS.begin();
 
     configManager.begin();
-    
+
     //If you hold down Button 1 and Button 2 at powerup, it will resetToDefaults
     if (digitalRead(D0) == 0 && digitalRead(D5) == 0) {
       configManager.resetToDefaults();
@@ -139,7 +139,7 @@ void DMPClock::handleButtonEvent(BUTTON_EVENT e) {
           break;
   }
   // Only save relevant changes
-  //if(e & (BUTTON_B_SHORTPRESS | BUTTON_C_SHORTPRESS)) saveConfig();
+  if(e & (BUTTON_B_SHORTPRESS | BUTTON_C_SHORTPRESS)) configManager.saveToFlash();
 }
 
 

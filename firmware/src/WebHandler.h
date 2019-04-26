@@ -30,7 +30,7 @@ class WebHandler
     bool handleFileRead(String path);
     void handleFileList();
     void  webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length) ;
-    String generateInfo();
+    String generateResponse(int);
 
     ESP8266WebServer httpServer;
     WebSocketsServer *webSocketServer;
