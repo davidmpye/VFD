@@ -73,12 +73,12 @@ class Display {
     void displayInt(int val);
 
     void hello(); //displays the word hello as a welcome message.
-    void scrollMessage(char *message, int speed);
+    void scrollMessage(const char *message, int speed);
 
     void clear(); //clears display and data
     void blank(); //clears the display, but doesnt clear data, so calling refreshDisplay will unblank it.
 
-    void setBrightness(uint8_t); //Sets the brightness of the tubes (and LEDs) - for the tubes, it uses PWM, for the LEDs it uses Fastled's setBrightness.
+    void setBrightness(); //Sets the brightness of the tubes (and LEDs) - for the tubes, it uses PWM, for the LEDs it uses Fastled's setBrightness.
 
     void update(); //Updates the tubes and LEDs.
 
@@ -106,11 +106,11 @@ class Display {
     void fillLEDData();
     void updateTubes();
     void updateLEDs();
+    void updateBrightness();
 
   ConfigManager *configManager;
 
   uint8_t brightness;
-  uint16_t rainbow_counter;
   uint8_t _displayData[NUM_TUBES];
 
   CRGB leds[NUM_LEDS];

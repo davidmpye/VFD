@@ -14,6 +14,8 @@ void ConfigManager::resetToDefaults() {
   data.led_autodim = true;
   data.led_color_mode = 0;
 
+  data.disp_welcomemsg = "HELLO";
+
   saveToFlash();
 }
 
@@ -36,6 +38,9 @@ void ConfigManager::begin() {
         data.led_backlight = doc["led_backlight"] == "true" ? true : false;
         data.led_autodim = doc["led_autodim"]  == "true" ? true : false;
         data.led_color_mode = doc["led_color_mode"];
+
+        data.disp_welcomemsg = doc["disp_welcomemsg"].as<String>();
+
         configFile.close();
       }
     }
@@ -49,6 +54,9 @@ void ConfigManager::saveToFlash() {
   doc["led_backlight"] = data.led_backlight ? String("true") : String("false");
   doc["led_autodim"] = data.led_autodim ? String("true") : String("false");
   doc["led_color_mode"] = data.led_color_mode;
+
+  doc["disp_welcomemsg"] = data.disp_welcomemsg;
+
   // Save params
   File configFile=SPIFFS.open("/config.json", "w");
   if (configFile) {

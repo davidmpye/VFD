@@ -19,6 +19,10 @@
 
 #include "Display.h"
 
+extern "C" {
+  void stopWaveform(int);
+}
+
 Display::Display() {
 
 }
@@ -157,7 +161,7 @@ void Display::displayInt(int x, int base) {
   }
 }
 
-void Display::scrollMessage(char *message, int speed) {
+void Display::scrollMessage(const char *message, int speed) {
   clear();
   size_t length = strlen(message);
   for (int i=0; i<NUM_TUBES+length; i++) {
@@ -187,12 +191,7 @@ void Display::blank() {
 
 
 void Display::fillLEDData() {
-  //If the LEDs are disabled, just set brightness to 0.
-  if (!configManager->data.led_backlight) {
-    LEDS.setBrightness(0);
-    return;
-  }
-
+  static uint16_t rainbow_counter = 0;
   //LEDs are enabled, generate the appropriate colour patterns.
   switch (configManager->data.led_color_mode) {
     case 0:
@@ -251,33 +250,38 @@ void Display::updateLEDs() {
   //This little dance is needed to make the LEDs not flicker.
   //Basically, we disable the PWM that does the dimming of the VFDs for the brief time of writing out
   //the LED data, so FastLED doesn't get interrupted.
-  analogWrite(OE_PIN, 0);
-  pinMode(OE_PIN, OUTPUT);
-  digitalWrite(OE_PIN, HIGH);
+  stopWaveform(OE_PIN);
   FastLED.show();
   analogWrite(OE_PIN, 255 - brightness);
 }
 
 void Display::update() {
+
+  static unsigned long lastUpdate = -1;
   // Calculate the new data for the LEDs.
-  static unsigned long lastLEDUpdate = millis();
-  bool ledRefreshNeeded = false;
 
   //If we're due an LED update, update the animation.
-  if (millis() > lastLEDUpdate + LED_ANIMATION_STEPTIME) {
-    ledRefreshNeeded = true;
-    lastLEDUpdate = millis();
+  if (millis() > (lastUpdate + LED_ANIMATION_STEPTIME)) {
+    lastUpdate = millis();
+
     fillLEDData();
+    updateBrightness();
+
+    updateLEDs();
+    updateTubes();
   }
-  updateTubes();
-  if (ledRefreshNeeded) updateLEDs();
+
 }
 
 void Display::setConfigManager(ConfigManager * mgr) {
   configManager = mgr;
 }
 
-void Display::setBrightness (uint8_t requestedBrightness) {
+void Display::updateBrightness() {
+  int b = analogRead(A0) / 4;
+  if (b > 255) b = 255;  //In case b is 1024...
+  uint8_t requestedBrightness = 255 - b;
+
   static uint8_t lastBrightness = 0;
 
   if (requestedBrightness>200) requestedBrightness = 255; //full brightness
@@ -303,12 +307,11 @@ void Display::setBrightness (uint8_t requestedBrightness) {
     brightness = requestedBrightness;
   }
 
-  if (configManager->data.led_autodim) {
-    if (brightness > LEDS_OFF_BRIGHTNESS_CUTOFF) LEDS.setBrightness(brightness);
-    else LEDS.setBrightness(0);
+  if (brightness > LEDS_OFF_BRIGHTNESS_CUTOFF) LEDS.setBrightness(brightness);
+  else {
+    LEDS.setBrightness(0);
   }
   analogWrite(OE_PIN, 255 - brightness);
-
 }
 
 void Display::setTimeMode(TIME_MODE m) {

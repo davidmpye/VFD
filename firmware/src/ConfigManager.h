@@ -14,6 +14,9 @@ struct configObject {
   bool led_autodim;
   bool led_backlight;
   int led_color_mode;
+
+
+  String disp_welcomemsg;
 };
 
 

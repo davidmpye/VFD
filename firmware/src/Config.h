@@ -35,7 +35,7 @@
 
 //If brightness is set below this cutoff, the LEDS will go off.
 #define LEDS_OFF_BRIGHTNESS_CUTOFF 15
-#define LED_ANIMATION_STEPTIME 100 //mS
+#define LED_ANIMATION_STEPTIME 250 //mS
 
 #define WEBSERVER_PORT 80
 #define WEBSOCKET_PORT 81

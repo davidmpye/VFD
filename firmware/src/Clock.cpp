@@ -33,7 +33,6 @@ void DMPClock::begin() {
       configManager.resetToDefaults();
     }
 
-
     display.setConfigManager(&configManager);
     display.begin();
 
@@ -43,14 +42,11 @@ void DMPClock::begin() {
     webHandler.setConfigManager(&configManager);
     webHandler.begin();
 
-    display.setBrightness(0xFF);
-    display.scrollMessage("HELLO...", 4);
+    display.scrollMessage(configManager.data.disp_welcomemsg.c_str(), 4);
     buttonHandler.begin(D0, D5, 3, 1, &display);
 }
 
 void DMPClock::loop() {
-
-    static unsigned long lastMillis = 0;
     static int lastSec = -1;
     DateTime t = rtc.now();
     //If the time has moved forward, we will update the display:
@@ -59,18 +55,12 @@ void DMPClock::loop() {
        display.displayTime(t);
     }
 
-    if (millis() > lastMillis + 100) {
-      //We update brightness and the display every 100mS
-      lastMillis = millis();
-      updateBrightness();
-      display.update();
-    }
+    display.update();
 
     handleButtonEvent(buttonHandler.poll());
     webHandler.handleEvents();
     //Handle any other events.
     delay(10);
-
 }
 
 
@@ -140,11 +130,4 @@ void DMPClock::handleButtonEvent(BUTTON_EVENT e) {
   }
   // Only save relevant changes
   if(e & (BUTTON_B_SHORTPRESS | BUTTON_C_SHORTPRESS)) configManager.saveToFlash();
-}
-
-
-void DMPClock::updateBrightness() {
-  int b = analogRead(A0) / 4;
-  if (b > 255) b = 255;  //In case b is 1024...
-  display.setBrightness(255 - b);
 }
