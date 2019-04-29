@@ -14,8 +14,10 @@ void ConfigManager::resetToDefaults() {
   data.led_autodim = true;
   data.led_color_mode = 0;
 
-  data.disp_welcomemsg = "HELLO";
+  data.disp_welcomemsg = "HELLO...";
 
+  data.disp_timeformat  =  0; // 0 = 24 hr, 1 = am/pm, 2 = epoch mode.
+  data.disp_dateformat = 0;   //0 = DDMMYY, 1 = MMDDYY.
   saveToFlash();
 }
 

@@ -56,7 +56,7 @@ void Display::begin() {
 
 void Display::displayTime(DateTime t) {
   clear();
-  if (_timeMode == EPOCH_MODE) {
+  if (configManager->data.disp_timeformat == EPOCH_MODE) {
        time_t epochtime = t.unixtime(); //!
        for (int i=0; i<8; i++) {
          setTubeNumber(NUM_TUBES - 1 - i, (epochtime>>(4*i)) & 0x0F);
@@ -64,7 +64,7 @@ void Display::displayTime(DateTime t) {
   }
   else {
      //Normal modes...
-     if (_timeMode == AMPM_MODE && t.hour() > 12) {
+     if (configManager->data.disp_timeformat == AMPM_MODE && t.hour() > 12) {
        //If it's PM, dont display a 0 as first digit.
        if ((t.hour() - 12 )/10 == 0) setTubeByte(0,0x00);
        else setTubeNumber(0,1);
@@ -92,15 +92,17 @@ void Display::displayTime(DateTime t) {
       setTubeNumber(7, t.second()%10);
     }
    }
-   if (_separators != NONE && NUM_TUBES == 8 && ( _timeMode == TWENTYFOURHR_MODE || _timeMode == AMPM_MODE )) {
+   if (false && NUM_TUBES == 8 && ( configManager->data.disp_timeformat == TWENTYFOURHR_MODE || configManager->data.disp_timeformat == AMPM_MODE)) {
      if (t.second() %2 == 0) {
        byte b;
+       /*
        if (_separators == DASHES ) {
          b = 0x40;
        }
        else b = 0x48;
        setTubeByte(2, b);
        setTubeByte(5, b);
+       */
      }
      else {
      //clear() will set these to blank anyway.
@@ -111,7 +113,7 @@ void Display::displayTime(DateTime t) {
 void Display::displayDate(DateTime t) {
   clear();
   if (NUM_TUBES == 6) {
-    switch (_dateMode) {
+    switch (configManager->data.disp_dateformat) {
       case DDMMYY_MODE:
         setTubeNumber(0, t.day()/10);
         setTubeNumber(1, t.day()%10);
@@ -129,7 +131,7 @@ void Display::displayDate(DateTime t) {
     setTubeNumber(5, (t.year()-2000)%10);
   }
   else if (NUM_TUBES ==8) {
-    switch (_dateMode) {
+    switch (configManager->data.disp_dateformat) {
       case DDMMYY_MODE:
         setTubeNumber(0, t.day()/10);
         setTubeNumber(1, t.day()%10);
@@ -313,23 +315,6 @@ void Display::updateBrightness() {
   }
   analogWrite(OE_PIN, 255 - brightness);
 }
-
-void Display::setTimeMode(TIME_MODE m) {
-  _timeMode = m;
-}
-
-void Display::setDateMode(DATE_MODE m) {
-  _dateMode = m;
-}
-
-const TIME_MODE Display::getTimeMode() {
-  return _timeMode;
-}
-
-const DATE_MODE Display::getDateMode() {
-  return _dateMode;
-}
-
 
 void Display::test() {
   clear();

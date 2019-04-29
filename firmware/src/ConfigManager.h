@@ -15,8 +15,10 @@ struct configObject {
   bool led_backlight;
   int led_color_mode;
 
-
   String disp_welcomemsg;
+  int disp_timeformat;
+  int disp_dateformat;
+
 };
 
 

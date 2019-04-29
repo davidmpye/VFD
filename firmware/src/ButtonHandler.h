@@ -55,6 +55,7 @@ class ButtonHandler {
   private:
     Button *buttonA, *buttonB, *buttonC, *buttonD;
     Display *display;
+    ConfigManager *configManager;
 
 };
 

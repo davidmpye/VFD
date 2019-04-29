@@ -29,6 +29,10 @@ ButtonHandler::~ButtonHandler() {
   delete buttonD;
 }
 
+void ButtonHandler::setConfigManager(ConfigManager *mgr) {
+  configManager = mgr;
+}
+
 void ButtonHandler::begin(int a, int b, int c, int d, Display *disp) {
   buttonA = new Button(a,25,false,true);
   buttonB = new Button(b,25,false,true);
@@ -78,7 +82,7 @@ BUTTON_EVENT ButtonHandler::poll() {
 }
 
 tmElements_t ButtonHandler::getDate(DateTime *t ) {
-  display->setDateMode(DDMMYY_MODE);
+  configManager->data.disp_dateformat = DDMMYY_MODE;
   display->displayDate(*t);
   display->update();
 
@@ -160,7 +164,7 @@ tmElements_t ButtonHandler::getDate(DateTime *t ) {
 }
 
 tmElements_t ButtonHandler::getTime(DateTime *t) {
-  display->setTimeMode(TWENTYFOURHR_MODE);
+  configManager->data.disp_timeformat = TWENTYFOURHR_MODE;
   display->displayTime(*t);
   display->update();
   //Start with hour.

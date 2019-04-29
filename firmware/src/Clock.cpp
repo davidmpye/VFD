@@ -43,6 +43,8 @@ void DMPClock::begin() {
     webHandler.begin();
 
     display.scrollMessage(configManager.data.disp_welcomemsg.c_str(), 4);
+
+    buttonHandler.setConfigManager(&configManager);
     buttonHandler.begin(D0, D5, 3, 1, &display);
 }
 
@@ -94,20 +96,12 @@ void DMPClock::handleButtonEvent(BUTTON_EVENT e) {
       break;
 
     case BUTTON_C_SHORTPRESS:
-      switch (display.getTimeMode()) {
-        case TWENTYFOURHR_MODE:
-          display.setTimeMode(AMPM_MODE);
-          break;
-        case AMPM_MODE:
-          display.setTimeMode(EPOCH_MODE);
-          break;
-        case EPOCH_MODE:
-          display.setTimeMode(TWENTYFOURHR_MODE);
-          break;
-        }
-        break;
+      if (configManager.data.disp_timeformat == 2) {
+        configManager.data.disp_timeformat = 0;
+      }
+      else configManager.data.disp_timeformat++;
 
-      case BUTTON_B_SHORTPRESS:
+    case BUTTON_B_SHORTPRESS:
         if (configManager.data.led_color_mode == 2)
           configManager.data.led_color_mode = 0;
         else configManager.data.led_color_mode++;

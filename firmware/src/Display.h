@@ -82,14 +82,6 @@ class Display {
 
     void update(); //Updates the tubes and LEDs.
 
-    void setTimeMode(TIME_MODE m);
-    void setDateMode(DATE_MODE m);
-    void setLEDMode(LED_MODE m);
-
-    const TIME_MODE getTimeMode();
-    const DATE_MODE getDateMode();
-    const LED_MODE getLEDMode();
-
     void test(); //Lights all segments on all tubes
 
     //Lower level manipulations.
@@ -211,16 +203,6 @@ class Display {
     0x30,  // |
     0x0F,  // }
   };
-
-
-  DATE_MODE _dateMode = DDMMYY_MODE;
-  TIME_MODE _timeMode = TWENTYFOURHR_MODE;
-
-
-
-  SEPARATORS _separators = NONE;
-
-
 };
 
 #endif
