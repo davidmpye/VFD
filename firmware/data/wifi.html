@@ -1,0 +1,48 @@
+        <div data-role="page" id="WiFi">
+            <div data-role="header">
+                <h1>Sync</h1>
+				<a href="#mainMenu" data-rel="main-menu-panel" class="ui-btn ui-btn-left ui-btn-icon-notext ui-icon-bars ui-corner-all"></a>
+				<a onclick="presetsMenu('sync.html');" href="#" id="set_icon_sync"  class="ui-btn-right ui-btn headerText ui-btn-icon-right ui-icon-carat-d"></a>
+            </div>
+            <div data-role="content">
+                <form action="/set_wifi" method="POST" id="wifi_form">
+
+
+
+ 	       <div class="dispInlineLabel">
+                 <label for="wifi_mode">WiFi mode</label>
+               </div>
+               <div class="dispInline">
+            	<select onchange="elementChange(this)" type="picklist"
+              		id="wifi_mode" data-mini="true">
+                  <option value="0">Standalone (softAP)</option>
+                  <option value="1">Join network</option>
+            	</select>
+              </div>
+              <div class="clearFloats"></div>
+
+
+		 <label for="wifi_ssid">WiFi SSID:</label> <input
+                          onblur="elementBlur(this)" type="text"  id="wifi_ssid"
+                 data-mini="true" />
+
+		 <label for="wifi_pw">WiFi Password:</label> <input
+                          onblur="elementBlur(this)" type="text"  id="wifi_pw"
+                 data-mini="true" />
+
+    <div class="clearFloats"></div>
+   <div class="dispInlineLabel">
+    <label for="wifi_ip_mode">IP address allocation</label>
+   <div>
+   <div class="dispInline">
+    <select onchange="elementChange(this)" type="picklist"
+        id="wifi_ip_mode" data-mini="true">
+   <option value="0">Static IP</option>
+   <option value="1">DHCP</option>
+   </select>
+   </div>
+  <div class="clearFloats"></div>
+
+            </form>
+          </div>
+        </div>
