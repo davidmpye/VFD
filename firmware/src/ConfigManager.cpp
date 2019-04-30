@@ -18,6 +18,17 @@ void ConfigManager::resetToDefaults() {
 
   data.disp_timeformat  =  0; // 0 = 24 hr, 1 = am/pm, 2 = epoch mode.
   data.disp_dateformat = 0;   //0 = DDMMYY, 1 = MMDDYY.
+
+  data.wifi_mode = WIFI_STANDALONE;
+  data.wifi_ssid = "ESP_CLOCK_" + WiFi.macAddress().substring(2,6);
+  data.wifi_pw = "VFDCLOCK";
+
+  data.wifi_mdns_name = "ESP_CLOCK";
+  data.wifi_ip_mode = WIFI_IP_DHCP;
+  data.wifi_ip = IPAddress(192,168,0,1);
+  data.wifi_netmask = IPAddress(255,255,255,0);
+  data.wifi_gateway = IPAddress(192,168,0,199);
+
   saveToFlash();
 }
 
@@ -43,6 +54,17 @@ void ConfigManager::begin() {
 
         data.disp_welcomemsg = doc["disp_welcomemsg"].as<String>();
 
+        data.wifi_mode = doc["wifi_mode"];
+        data.wifi_ssid = doc["wifi_ssid"].as<String>();
+        data.wifi_pw  = doc["wifi_pw"].as<String>();
+        data.wifi_mdns_name = doc["wifi_mdns_name"].as<String>();
+
+        data.wifi_ip_mode = doc["wifi_ip_mode"];
+
+        data.wifi_ip.fromString(doc["wifi_ip"].as<String>());
+        data.wifi_netmask.fromString(doc["wifi_netmask"].as<String>());
+        data.wifi_gateway.fromString(doc["wifi_gateway"].as<String>());
+
         configFile.close();
       }
     }
@@ -58,6 +80,15 @@ void ConfigManager::saveToFlash() {
   doc["led_color_mode"] = data.led_color_mode;
 
   doc["disp_welcomemsg"] = data.disp_welcomemsg;
+
+  doc["wifi_mode"] = data.wifi_mode;
+  doc["wifi_ssid"] = data.wifi_ssid;
+  doc["wifi_pw"] = data.wifi_pw;
+  doc["wifi_mdns_name"] = data.wifi_mdns_name;
+  doc["wifi_ip_mode"] = data.wifi_ip_mode;
+  doc["wifi_ip"] = data.wifi_ip.toString();
+  doc["wifi_netmask"] =  data.wifi_netmask.toString();
+  doc["wifi_gateway"] = data.wifi_gateway.toString();
 
   // Save params
   File configFile=SPIFFS.open("/config.json", "w");

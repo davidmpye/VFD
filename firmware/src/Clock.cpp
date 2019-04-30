@@ -76,11 +76,19 @@ void DMPClock::setRTC() {
 
 
 void DMPClock::setupWifi() {
-  IPAddress local_ip(192,168,0,1);
-  IPAddress gateway(192,168,0,2);
-  IPAddress subnet(255,255,255,0);
-  WiFi.softAPConfig (local_ip, gateway, subnet);
-  WiFi.softAP("ESP_Clock");
+  if (configManager.data.wifi_mode == WIFI_STANDALONE) {
+    //Set up as a standlone hotspot
+    WiFi.softAPConfig (configManager.data.wifi_ip, configManager.data.wifi_gateway, configManager.data.wifi_netmask);
+    WiFi.softAP(configManager.data.wifi_ssid, configManager.data.wifi_pw);
+  }
+  else {
+    //Join the desired network
+    WiFi.begin(configManager.data.wifi_ssid, configManager.data.wifi_pw);
+    if (configManager.data.wifi_ip_mode == WIFI_IP_STATIC) {
+        //set the IP details.
+        WiFi.config(configManager.data.wifi_ip, configManager.data.wifi_gateway, configManager.data.wifi_netmask);
+    }
+  }
 }
 
 void DMPClock::handleButtonEvent(BUTTON_EVENT e) {
@@ -108,12 +116,14 @@ void DMPClock::handleButtonEvent(BUTTON_EVENT e) {
           break;
 
       case BUTTON_C_LONGPRESS:
+        //Display the brightness level the LDR is seeing.
         display.displayInt(analogRead(A0));
         display.update();
         delay(1000);
         break;
 
       case BUTTON_D_LONGPRESS:
+        //Test the segments of the display.
         display.test();
         display.update();
         delay(1000);
