@@ -19,12 +19,12 @@
 #include "ButtonHandler.h"
 #include "WebHandler.h"
 
-class DMPClock {
+class Clock {
 
     public:
 
-  DMPClock();
-  ~DMPClock();
+  Clock();
+  ~Clock();
 
 
   void begin();

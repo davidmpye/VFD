@@ -21,7 +21,7 @@
 
 
 
-DMPClock c;
+Clock c;
 
 void setup() {
   c.begin();

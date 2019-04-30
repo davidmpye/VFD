@@ -1,20 +1,16 @@
 #include "Clock.h"
 
-
-
-
-
-DMPClock::DMPClock() {
+Clock::Clock() {
 
 
 }
 
-DMPClock::~DMPClock() {
+Clock::~Clock() {
 
 
 }
 
-void DMPClock::begin() {
+void Clock::begin() {
       //Button 1
     pinMode(D0, INPUT);
     //Button 2
@@ -48,7 +44,7 @@ void DMPClock::begin() {
     buttonHandler.begin(D0, D5, 3, 1, &display);
 }
 
-void DMPClock::loop() {
+void Clock::loop() {
     static int lastSec = -1;
     DateTime t = rtc.now();
     //If the time has moved forward, we will update the display:
@@ -66,7 +62,7 @@ void DMPClock::loop() {
 }
 
 
-void DMPClock::setRTC() {
+void Clock::setRTC() {
   DateTime t = rtc.now(); //This will get the default time from above.
   tmElements_t y = buttonHandler.getDate(&t);
   tmElements_t x  = buttonHandler.getTime(&t);
@@ -75,7 +71,7 @@ void DMPClock::setRTC() {
 }
 
 
-void DMPClock::setupWifi() {
+void Clock::setupWifi() {
   if (configManager.data.wifi_mode == WIFI_STANDALONE) {
     //Set up as a standlone hotspot
     WiFi.softAPConfig (configManager.data.wifi_ip, configManager.data.wifi_gateway, configManager.data.wifi_netmask);
@@ -91,7 +87,7 @@ void DMPClock::setupWifi() {
   }
 }
 
-void DMPClock::handleButtonEvent(BUTTON_EVENT e) {
+void Clock::handleButtonEvent(BUTTON_EVENT e) {
   switch(e) {
     case BUTTON_A_SHORTPRESS:
       display.displayDate(rtc.now());
