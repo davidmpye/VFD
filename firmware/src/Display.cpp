@@ -319,7 +319,7 @@ void Display::test() {
   for (int i = 0; i < NUM_TUBES; ++i) {
     for (int j=0; j<8; ++j) {
       setTubeByte(i, 0x01<<j);
-      update();
+      updateTubes();
       delay(100);
     }
     setTubeByte(i, 0xFF);
