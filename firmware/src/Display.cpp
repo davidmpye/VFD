@@ -323,7 +323,7 @@ void Display::test() {
       delay(100);
     }
     setTubeByte(i, 0xFF);
-    update();
+    updateTubes();
   }
   delay(1000);
 }
