@@ -92,20 +92,17 @@ void Display::displayTime(DateTime t) {
       setTubeNumber(7, t.second()%10);
     }
    }
-   if (false && NUM_TUBES == 8 && ( configManager->data.disp_timeformat == TWENTYFOURHR_MODE || configManager->data.disp_timeformat == AMPM_MODE)) {
+   if (NUM_TUBES == 8 && ( configManager->data.disp_timeformat == TWENTYFOURHR_MODE || configManager->data.disp_timeformat == AMPM_MODE)) {
      if (t.second() %2 == 0) {
-       byte b;
-       /*
-       if (_separators == DASHES ) {
+       byte b = 0x00;
+       if (configManager->data.disp_separator == SEP_DASH) {
          b = 0x40;
        }
-       else b = 0x48;
+       else if (configManager->data.disp_separator == SEP_DOUBLE_DASH) {
+         b = 0x09;
+       }
        setTubeByte(2, b);
        setTubeByte(5, b);
-       */
-     }
-     else {
-     //clear() will set these to blank anyway.
      }
    }
 }

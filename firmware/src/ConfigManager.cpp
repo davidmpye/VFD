@@ -15,9 +15,9 @@ void ConfigManager::resetToDefaults() {
   data.led_color_mode = 0;
 
   data.disp_welcomemsg = "HELLO...";
-
   data.disp_timeformat  =  0; // 0 = 24 hr, 1 = am/pm, 2 = epoch mode.
   data.disp_dateformat = 0;   //0 = DDMMYY, 1 = MMDDYY.
+  data.disp_separator = SEP_NONE;
 
   //WiFi settings.
   data.wifi_mode = WIFI_STANDALONE;
@@ -55,6 +55,10 @@ void ConfigManager::begin() {
       data.led_autodim = doc["led_autodim"]  == "true" ? true : false;
       data.led_color_mode = doc["led_color_mode"];
       data.disp_welcomemsg = doc["disp_welcomemsg"].as<String>();
+      data.disp_separator = doc["disp_separator"];
+
+
+
         //WiFi settings.
       data.wifi_mode = doc["wifi_mode"];
       data.wifi_ssid = doc["wifi_ssid"].as<String>();
@@ -79,6 +83,7 @@ void ConfigManager::saveToFlash() {
   doc["led_color_mode"] = data.led_color_mode;
 
   doc["disp_welcomemsg"] = data.disp_welcomemsg;
+  doc["disp_separator"] = data.disp_separator;
 
   //WiFi settings.
   doc["wifi_mode"] = data.wifi_mode;

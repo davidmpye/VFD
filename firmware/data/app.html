@@ -359,13 +359,8 @@ $(document).on("mobileinit", function () {
 
 	  switch(msg.type) {
 	    case "sv.update":
-	    case "sv.init.ups":	// Received initialization object
-	    case "sv.init.clock":	// Received initialization object
+	    case "sv.init.display":	// Received initialization object
 	    case "sv.init.leds":	// Received initialization object
-	    case "sv.init.extra":	// Received initialization object
-	    case "sv.init.sync":	// Received initialization object
-	    case "sv.init.presets":	// Received initialization object
-	    case "sv.init.preset_names":	// Received initialization object
 	    case "sv.init.info":	// Received initialization object
 	    	console.log(msg.type);
 	    	updateElements(msg.value);

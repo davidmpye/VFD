@@ -22,6 +22,12 @@ enum WIFI_MODE {
   WIFI_JOINNETWORK,
 };
 
+enum SEPARATOR_MODE {
+   SEP_NONE,
+   SEP_DASH,
+   SEP_DOUBLE_DASH,
+};
+
 struct configObject {
   bool led_autodim;
   bool led_backlight;
@@ -30,6 +36,7 @@ struct configObject {
   String disp_welcomemsg;
   int disp_timeformat;
   int disp_dateformat;
+  int disp_separator;
 
 
   //Wifi settings

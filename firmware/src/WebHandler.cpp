@@ -77,14 +77,19 @@ void WebHandler::webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, s
              switch (messageType) {
                case 0:
                 webSocketServer->sendTXT(num, "{\"type\":\"sv.init.menu\",\"value\": [ \
-                  {\"1\": { \"url\" : \"clock.html\", \"title\" : \"Clock\" }}, \
-                  {\"2\": { \"url\" : \"leds.html\", \"title\" : \"LEDs\" }},   \
-                  {\"3\": { \"url\" : \"extra.html\", \"title\" : \"Extra\" }}, \
-			            {\"7\": { \"url\" : \"ups.html\", \"title\" : \"UPS\" }}, \
-			            {\"8\": { \"url\" : \"sync.html\", \"title\" : \"Sync\" }}, \
-			            {\"4\": { \"url\" : \"presets.html\", \"title\" : \"Presets\" }}, \
-			            {\"5\": { \"url\" : \"info.html\", \"title\" : \"Info\" }}, \
-			            {\"6\": { \"url\" : \"preset_names.html\", \"title\" : \"Preset Names\", \"noNav\" : true}}	  ] }");
+                  {\"1\": { \"url\" : \"display.html\", \"title\" : \"Display\" }}, \
+                  {\"2\": { \"url\" : \"leds.html\", \"title\" : \"LEDs\" }}   \
+                  ] }");
+
+
+                /*  {\"3\": { \"url\" : \"extra.html\", \"title\" : \"Extra\" }}, \
+			          //  {\"7\": { \"url\" : \"ups.html\", \"title\" : \"UPS\" }}, \
+			          //  {\"8\": { \"url\" : \"sync.html\", \"title\" : \"Sync\" }}, \
+			          //  {\"4\": { \"url\" : \"presets.html\", \"title\" : \"Presets\" }}, \
+
+                {\"6\": { \"url\" : \"preset_names.html\", \"title\" : \"Preset Names\", \"noNav\" : true}}
+			          //  {\"5\": { \"url\" : \"info.html\", \"title\" : \"Info\" }}, */
+
                   break;
                 case 9:
                       //Paramter update. Message format is : 9:1:param:result
@@ -112,12 +117,16 @@ String WebHandler::generateResponse(int messageType) {
 
 
   switch(messageType) {
-
+    case 1:
+      doc["disp_welcomemsg"] = configManager->data.disp_welcomemsg;
+      doc["disp_timeformat"] = configManager->data.disp_timeformat;
+      doc["disp_dateformat"] = configManager->data.disp_dateformat;
+      doc["disp_separator"] = configManager->data.disp_separator;
+      break;
     case 2:
       doc["led_backlight"] = configManager->data.led_backlight ? String("true") : String("false");
       doc["led_autodim"] = configManager->data.led_autodim ? String("true") : String("false");
       doc["led_color_mode"] = configManager->data.led_color_mode;
-
       break;
     case 5:
       doc["esp_boot_version"] = ESP.getBootVersion();
@@ -152,6 +161,12 @@ void WebHandler::handleParamChange(String param, String val) {
   }
   else if (param == "led_color_mode") {
     configManager->data.led_color_mode =  val.toInt();
+  }
+  else if (param == "disp_separator") {
+    configManager->data.disp_separator = val.toInt();
+  }
+  else if (param == "disp_timeformat") {
+    configManager->data.disp_timeformat = val.toInt();
   }
 
   configManager->saveToFlash();
