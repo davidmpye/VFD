@@ -79,11 +79,14 @@ void Clock::setupWifi() {
   }
   else {
     //Join the desired network
-    WiFi.begin(configManager.data.wifi_ssid, configManager.data.wifi_pw);
     if (configManager.data.wifi_ip_mode == WIFI_IP_STATIC) {
         //set the IP details.
         WiFi.config(configManager.data.wifi_ip, configManager.data.wifi_gateway, configManager.data.wifi_netmask);
     }
+    WiFi.begin(configManager.data.wifi_ssid, configManager.data.wifi_pw);
+  }
+  if (configManager.data.wifi_mdns_name != "") {
+    MDNS.begin(configManager.data.wifi_mdns_name);
   }
 }
 
