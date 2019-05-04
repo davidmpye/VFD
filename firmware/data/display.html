@@ -10,7 +10,7 @@
 		<form action="/set_display" method="POST" id="display_form">
 
 			<div class="dispInlineLabel">
-				<label for="time_format">Time Format</label>
+				<label for="disp_timeformat">Time Format</label>
 			</div>
 			<div class="dispInline">
 				<select onchange="elementChange(this)" type="picklist"
@@ -18,6 +18,18 @@
 					<option value="0">24-hour clock</option>
 					<option value="1">12-hour clock</option>
 					<option value="2">UNIX Epoch</option>
+				</select>
+			</div>
+			<div class="clearFloats"></div>
+
+			<div class="dispInlineLabel">
+				<label for="disp_dateformat">Date Format</label>
+			</div>
+			<div class="dispInline">
+				<select onchange="elementChange(this)" type="picklist"
+					id="disp_dateformat" data-mini="true">
+					<option value="0">DD-MM-YY</option>
+					<option value="1">MM-DD-YY</option>
 				</select>
 			</div>
 			<div class="clearFloats"></div>
@@ -31,9 +43,18 @@
 					<option value="0">None</option>
 					<option value="1">-</option>
 					<option value="2">=</option>
-
 				</select>
 			</div>
+
+			<div class="clearFloats"></div>
+			<div class="dispInlineLabel">
+				<label for="disp_welcomemsg">Welcome message</label>
+			</div>
+			<div class="dispInline">
+			<input onblur="elementBlur(this)" type="text" maxlength="12" name="disp_welcomemsg" id="disp_welcomemsg"></input>
+		</div>
+
+
 
 
 		</form>

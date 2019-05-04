@@ -85,6 +85,7 @@ void Clock::setupWifi() {
     }
     WiFi.begin(configManager.data.wifi_ssid, configManager.data.wifi_pw);
   }
+  //If we have an MDNS name configured, enable that.
   if (configManager.data.wifi_mdns_name != "") {
     MDNS.begin(configManager.data.wifi_mdns_name);
   }

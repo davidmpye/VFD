@@ -27,6 +27,22 @@ enum SEPARATOR_MODE {
    SEP_DASH,
    SEP_DOUBLE_DASH,
 };
+enum TIME_MODE {
+  TWENTYFOURHR_MODE,
+  AMPM_MODE,
+  EPOCH_MODE,
+};
+
+enum DATE_MODE {
+  DDMMYY_MODE,
+  MMDDYY_MODE,
+};
+
+enum LED_MODE {
+  RAINBOW_MODE,
+  COL_PER_NUM_MODE,
+  COL_BY_TIME_MODE,
+};
 
 struct configObject {
   bool led_autodim;
@@ -68,13 +84,10 @@ class ConfigManager  {
        void saveParam(String name, String value);
 
        String dumpConfig();
-       void setClock(DMPClock*);
        configObject data;
 
      private:
 
-
-       DMPClock *clock;
 
 
 

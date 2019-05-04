@@ -35,7 +35,7 @@ bool WebHandler::handleFileRead(String path){
     if(SPIFFS.exists(pathWithGz))
       path += ".gz";
     File file = SPIFFS.open(path, "r");
-    size_t sent = httpServer.streamFile(file, contentType);
+    httpServer.streamFile(file, contentType);
     file.close();
     return true;
   }
@@ -118,10 +118,10 @@ String WebHandler::generateResponse(int messageType) {
 
   switch(messageType) {
     case 1:
-      doc["disp_welcomemsg"] = configManager->data.disp_welcomemsg;
       doc["disp_timeformat"] = configManager->data.disp_timeformat;
       doc["disp_dateformat"] = configManager->data.disp_dateformat;
       doc["disp_separator"] = configManager->data.disp_separator;
+      doc["disp_welcomemsg"] = configManager->data.disp_welcomemsg;
       break;
     case 2:
       doc["led_backlight"] = configManager->data.led_backlight ? String("true") : String("false");
@@ -162,13 +162,18 @@ void WebHandler::handleParamChange(String param, String val) {
   else if (param == "led_color_mode") {
     configManager->data.led_color_mode =  val.toInt();
   }
-  else if (param == "disp_separator") {
-    configManager->data.disp_separator = val.toInt();
-  }
   else if (param == "disp_timeformat") {
     configManager->data.disp_timeformat = val.toInt();
   }
-
+  else if (param == "disp_dateformat") {
+    configManager->data.disp_dateformat = val.toInt();
+  }
+  else if (param == "disp_separator") {
+      configManager->data.disp_separator = val.toInt();
+  }
+  else if (param == "disp_welcomemsg") {
+      configManager->data.disp_welcomemsg = val;
+  }
   configManager->saveToFlash();
 }
 

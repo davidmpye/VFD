@@ -30,29 +30,6 @@
 #include "Config.h"
 #include "ConfigManager.h"
 
-enum TIME_MODE {
-  TWENTYFOURHR_MODE,
-  AMPM_MODE,
-  EPOCH_MODE,
-};
-
-enum DATE_MODE {
-  DDMMYY_MODE,
-  MMDDYY_MODE,
-};
-
-enum LED_MODE {
-  RAINBOW_MODE,
-  COL_PER_NUM_MODE,
-  COL_BY_TIME_MODE,
-};
-
-enum SEPARATORS {
-  NONE,
-  DASHES,
-  DOUBLE_DASHES,
-};
-
 class Display {
   public:
 

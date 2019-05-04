@@ -2,7 +2,7 @@
 #include "Clock.h"
 
 ConfigManager::ConfigManager() {
-  clock = NULL;
+
 }
 
 ConfigManager::~ConfigManager() {
@@ -15,15 +15,16 @@ void ConfigManager::resetToDefaults() {
   data.led_color_mode = 0;
 
   data.disp_welcomemsg = "HELLO...";
-  data.disp_timeformat  =  0; // 0 = 24 hr, 1 = am/pm, 2 = epoch mode.
-  data.disp_dateformat = 0;   //0 = DDMMYY, 1 = MMDDYY.
+  data.disp_timeformat  =  TWENTYFOURHR_MODE;
+  data.disp_dateformat = DDMMYY_MODE;
   data.disp_separator = SEP_NONE;
 
   //WiFi settings.
   data.wifi_mode = WIFI_STANDALONE;
-  data.wifi_ssid = "ESP_CLOCK_" + WiFi.macAddress().substring(12,14) + WiFi.macAddress().substring(15,17);
+  data.wifi_ssid = "VFD_CLOCK_" + WiFi.macAddress().substring(12,14) + WiFi.macAddress().substring(15,17);
   data.wifi_pw = "VFDCLOCK";
-  data.wifi_mdns_name = "ESP_CLOCK";
+  data.wifi_mdns_name = "VFD_CLOCK";
+
   data.wifi_ip_mode = WIFI_IP_DHCP;
   data.wifi_ip = IPAddress(192,168,0,1);
   data.wifi_netmask = IPAddress(255,255,255,0);
@@ -51,15 +52,16 @@ void ConfigManager::begin() {
     DynamicJsonDocument doc(1024);
     if (!deserializeJson(doc, buf))  {
       // List of params to load
+      //LED settings
       data.led_backlight = doc["led_backlight"] == "true" ? true : false;
       data.led_autodim = doc["led_autodim"]  == "true" ? true : false;
       data.led_color_mode = doc["led_color_mode"];
+      //Display settings
       data.disp_welcomemsg = doc["disp_welcomemsg"].as<String>();
+      data.disp_timeformat = doc["disp_timeformat"];
+      data.disp_dateformat = doc["disp_dateformat"];
       data.disp_separator = doc["disp_separator"];
-
-
-
-        //WiFi settings.
+      //WiFi settings.
       data.wifi_mode = doc["wifi_mode"];
       data.wifi_ssid = doc["wifi_ssid"].as<String>();
       data.wifi_pw  = doc["wifi_pw"].as<String>();
@@ -83,6 +85,8 @@ void ConfigManager::saveToFlash() {
   doc["led_color_mode"] = data.led_color_mode;
 
   doc["disp_welcomemsg"] = data.disp_welcomemsg;
+  doc["disp_timeformat"] = data.disp_timeformat;
+  doc["disp_dateformat"] = data.disp_dateformat;
   doc["disp_separator"] = data.disp_separator;
 
   //WiFi settings.
