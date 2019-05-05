@@ -80,8 +80,9 @@ void WebHandler::webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, s
                   {\"1\": { \"url\" : \"display.html\", \"title\" : \"Display\" }}, \
                   {\"2\": { \"url\" : \"leds.html\", \"title\" : \"LEDs\" }},   \
                   {\"3\": { \"url\" : \"wifi.html\", \"title\" : \"WiFi\" }}, \
-                  {\"8\": { \"url\" : \"/update\", \"title\" : \"Firmware update\" }}, \
-                  {\"8\": { \"url\" : \"/restart\", \"title\" : \"Restart clock\" }} \
+                  {\"4\": { \"url\" : \"time.html\", \"title\" : \"Time\" }}, \
+                  {\"999\": { \"url\" : \"/update\", \"title\" : \"Firmware update\" }}, \
+                  {\"999\": { \"url\" : \"/restart\", \"title\" : \"Restart clock\" }} \
                   ] }");
 
 
@@ -141,7 +142,13 @@ String WebHandler::generateResponse(int messageType) {
       doc["wifi_netmask"] =  configManager->data.wifi_netmask.toString();
       doc["wifi_gateway"] = configManager->data.wifi_gateway.toString();
       break;
-
+    case 4:
+    /*
+      DateTime t = rtc.now();
+      doc["time_time"] =  String(t.hour()) + ":" +  String(t.minute());
+      doc["time_date"] = String(t.day()) + "/" + String(t.month()) + "/" + String(t.year());
+    */
+      break;
     case 5:
       doc["esp_boot_version"] = ESP.getBootVersion();
       doc["esp_free_heap"] = ESP.getFreeHeap();
@@ -207,6 +214,13 @@ void WebHandler::handleParamChange(String param, String val) {
   }
   else if (param == "wifi_gateway") {
     configManager->data.wifi_gateway.fromString(val);
+  }
+  //These are different - for setting the date and time!
+  else if (param == "time_time") {
+    //set it!
+  }
+  else if (param == "time_date") {
+    //set it!
   }
   configManager->saveToFlash();
 }

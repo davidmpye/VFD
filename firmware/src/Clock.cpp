@@ -109,7 +109,7 @@ void Clock::handleButtonEvent(BUTTON_EVENT e) {
   switch(e) {
     case BUTTON_A_SHORTPRESS:
       display.displayDate(rtc.now());
-      display.update();
+      display.updateTubes();
       delay(2000);
       break;
 

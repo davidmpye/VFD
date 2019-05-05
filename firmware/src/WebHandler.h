@@ -10,6 +10,9 @@
 #include <WiFiClient.h>
 #include <ESP8266mDNS.h>
 #include <FS.h>
+#include <RTClib.h>
+#include <Time.h>
+#include <Timezone.h>
 
 #include "Config.h"
 #include "ConfigManager.h"
