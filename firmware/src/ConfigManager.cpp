@@ -33,10 +33,6 @@ void ConfigManager::resetToDefaults() {
   saveToFlash();
 }
 
-String ConfigManager::dumpConfig() {
-  return String();
-}
-
 void ConfigManager::begin() {
   if (!SPIFFS.exists("/config.json")) {
     resetToDefaults();

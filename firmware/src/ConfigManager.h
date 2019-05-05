@@ -83,7 +83,6 @@ class ConfigManager  {
        const String loadParam(String name);
        void saveParam(String name, String value);
 
-       String dumpConfig();
        configObject data;
 
      private:

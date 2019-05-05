@@ -152,7 +152,6 @@ String WebHandler::generateResponse(int messageType) {
       doc["wifi_ip_address"] = WiFi.localIP().toString();
       doc["wifi_mac_address"] = WiFi.macAddress();
       doc["wifi_ssid"] = WiFi.SSID();
-      if (configManager != NULL) doc["config_dump"] = configManager->dumpConfig();
       long millisecs = millis();
       doc["uptime"] = String( (millisecs / (1000 * 60 * 60 * 24)) % 365)  + " Days, " + String(millisecs / (1000 * 60 * 60) % 24)  + " Hours, " + String(millisecs / (1000 * 60) % 60) + " Mins";
       break;
