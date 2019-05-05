@@ -11,6 +11,10 @@ Clock::~Clock() {
 }
 
 void Clock::begin() {
+
+    bool didReset = false;
+
+
       //Button 1
     pinMode(D0, INPUT);
     //Button 2
@@ -26,11 +30,17 @@ void Clock::begin() {
 
     //If you hold down Button 1 and Button 2 at powerup, it will resetToDefaults
     if (digitalRead(D0) == 0 && digitalRead(D5) == 0) {
+      didReset = true;
       configManager.resetToDefaults();
     }
 
     display.setConfigManager(&configManager);
     display.begin();
+
+    if (didReset) {
+      //Display message to user confirming reset.
+      display.scrollMessage("RESET", 4);
+    }
 
     Wire.begin(D2,D1);
     setupWifi();
