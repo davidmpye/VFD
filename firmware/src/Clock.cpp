@@ -67,6 +67,9 @@ void Clock::loop() {
 
     handleButtonEvent(buttonHandler.poll());
     webHandler.handleEvents();
+    //MDNS responder
+    MDNS.update();
+
     //Handle any other events.
     delay(10);
 }
@@ -98,6 +101,7 @@ void Clock::setupWifi() {
   //If we have an MDNS name configured, enable that.
   if (configManager.data.wifi_mdns_name != "") {
     MDNS.begin(configManager.data.wifi_mdns_name);
+    MDNS.addService("http", "tcp", 80);
   }
 }
 
