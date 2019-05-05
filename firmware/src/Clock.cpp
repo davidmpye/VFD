@@ -71,7 +71,7 @@ void Clock::loop() {
     MDNS.update();
 
     //Handle any other events.
-    delay(10);
+    yield();
 }
 
 

@@ -84,7 +84,7 @@ BUTTON_EVENT ButtonHandler::poll() {
 tmElements_t ButtonHandler::getDate(DateTime *t ) {
   configManager->data.disp_dateformat = DDMMYY_MODE;
   display->displayDate(*t);
-  display->update();
+  display->updateTubes();
 
   int tubecount = 0;
   int last_blinked = millis();
@@ -102,10 +102,10 @@ tmElements_t ButtonHandler::getDate(DateTime *t ) {
     if (now > last_blinked+1000) {
       char b = display->getTubeChar(tubecount);
       display->setTubeByte(tubecount, 0x00);
-      display->update();
+      display->updateTubes();
       delay(200);
       display->setTubeChar(tubecount, b);
-      display->update();
+      display->updateTubes();
       last_blinked = now;
     }
 
@@ -128,7 +128,7 @@ tmElements_t ButtonHandler::getDate(DateTime *t ) {
          else if (val>9) val = 0;
        }
        display->setTubeNumber(tubecount, val);
-       display->update();
+       display->updateTubes();
     }
 
     if (buttonA->wasPressed()) {
@@ -166,7 +166,7 @@ tmElements_t ButtonHandler::getDate(DateTime *t ) {
 tmElements_t ButtonHandler::getTime(DateTime *t) {
   configManager->data.disp_timeformat = TWENTYFOURHR_MODE;
   display->displayTime(*t);
-  display->update();
+  display->updateTubes();
   //Start with hour.
   int tubecount = 0;
   //Set the seconds to zero.
@@ -191,10 +191,10 @@ tmElements_t ButtonHandler::getTime(DateTime *t) {
     if (now > last_blinked+1000) {
       char b = display->getTubeChar(tubecount);
       display->setTubeByte(tubecount, 0x00);
-      display->update();
+      display->updateTubes();
       delay(200);
       display->setTubeChar(tubecount, b);
-      display->update();
+      display->updateTubes();
       last_blinked = now;
     }
 
@@ -228,7 +228,7 @@ tmElements_t ButtonHandler::getTime(DateTime *t) {
         else if (val>9) val = 0;
       }
       display->setTubeNumber(tubecount, val);
-      display->update();
+      display->updateTubes();
     };
 
     //Button B changes digit

@@ -20,11 +20,11 @@
 #include "Display.h"
 
 extern "C" {
+  //We use this to turn off the brightness PWM while using FastLED
   void stopWaveform(int);
 }
 
 Display::Display() {
-
 }
 
 Display::~Display() {
@@ -50,6 +50,8 @@ void Display::begin() {
 
   //Full brightness.
   brightness = 255;
+
+  ledsOff = false;
 
   update();
 }
@@ -188,7 +190,6 @@ void Display::blank() {
   digitalWrite(LATCH_PIN, HIGH);
 }
 
-
 void Display::fillLEDData() {
   static uint16_t rainbow_counter = 0;
   //LEDs are enabled, generate the appropriate colour patterns.
@@ -246,12 +247,21 @@ void Display::updateTubes() {
 }
 
 void Display::updateLEDs() {
+  static bool updateNeeded = true;
   //This little dance is needed to make the LEDs not flicker.
   //Basically, we disable the PWM that does the dimming of the VFDs for the brief time of writing out
   //the LED data, so FastLED doesn't get interrupted.
-  stopWaveform(OE_PIN);
-  FastLED.show();
-  analogWrite(OE_PIN, 255 - brightness);
+  if (updateNeeded) {
+    stopWaveform(OE_PIN);
+    digitalWrite(OE_PIN, HIGH);
+    noInterrupts();
+    FastLED.show();
+    interrupts();
+    analogWrite(OE_PIN, 255 - brightness);
+  }
+
+  if (ledsOff) updateNeeded = false; //no further updates needed after this one.
+  else updateNeeded = true;
 }
 
 void Display::update() {
@@ -269,7 +279,6 @@ void Display::update() {
     updateLEDs();
     updateTubes();
   }
-
 }
 
 void Display::setConfigManager(ConfigManager * mgr) {
@@ -306,9 +315,14 @@ void Display::updateBrightness() {
     brightness = requestedBrightness;
   }
 
-  if (brightness > LEDS_OFF_BRIGHTNESS_CUTOFF) LEDS.setBrightness(brightness);
+  if (brightness > LEDS_OFF_BRIGHTNESS_CUTOFF) {
+    LEDS.setBrightness(brightness);
+    ledsOff = false;
+  }
   else {
+    //LEDs off, it's quite dark!
     LEDS.setBrightness(0);
+    ledsOff = true;
   }
   analogWrite(OE_PIN, 255 - brightness);
 }
@@ -336,8 +350,7 @@ void Display::setTubeNumber(int tube, uint8_t n ) {
   if (n < 10) {
     setTubeChar(tube, n+'0');
   }
-  else
-  {
+  else  {
     setTubeChar(tube, n-10+'A');
   }
 }

@@ -57,7 +57,9 @@ class Display {
 
     void setBrightness(); //Sets the brightness of the tubes (and LEDs) - for the tubes, it uses PWM, for the LEDs it uses Fastled's setBrightness.
 
-    void update(); //Updates the tubes and LEDs.
+    void update(); //The display's 'main loop'
+
+    void updateTubes();
 
     void test(); //Lights all segments on all tubes
 
@@ -73,13 +75,13 @@ class Display {
 
   private:
     void fillLEDData();
-    void updateTubes();
     void updateLEDs();
     void updateBrightness();
 
   ConfigManager *configManager;
 
   uint8_t brightness;
+  bool ledsOff;
   uint8_t _displayData[NUM_TUBES];
 
   CRGB leds[NUM_LEDS];

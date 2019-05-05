@@ -78,16 +78,19 @@ void WebHandler::webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, s
                case 0:
                 webSocketServer->sendTXT(num, "{\"type\":\"sv.init.menu\",\"value\": [ \
                   {\"1\": { \"url\" : \"display.html\", \"title\" : \"Display\" }}, \
-                  {\"2\": { \"url\" : \"leds.html\", \"title\" : \"LEDs\" }}   \
+                  {\"2\": { \"url\" : \"leds.html\", \"title\" : \"LEDs\" }},   \
+                  {\"3\": { \"url\" : \"wifi.html\", \"title\" : \"WiFi\" }}, \
+                  {\"8\": { \"url\" : \"/update\", \"title\" : \"Firmware update\" }}, \
+                  {\"8\": { \"url\" : \"/restart\", \"title\" : \"Restart clock\" }} \
                   ] }");
 
 
-                /*  {\"3\": { \"url\" : \"extra.html\", \"title\" : \"Extra\" }}, \
+
 			          //  {\"7\": { \"url\" : \"ups.html\", \"title\" : \"UPS\" }}, \
 			          //  {\"8\": { \"url\" : \"sync.html\", \"title\" : \"Sync\" }}, \
 			          //  {\"4\": { \"url\" : \"presets.html\", \"title\" : \"Presets\" }}, \
 
-                {\"6\": { \"url\" : \"preset_names.html\", \"title\" : \"Preset Names\", \"noNav\" : true}}
+            //    {\"6\": { \"url\" : \"preset_names.html\", \"title\" : \"Preset Names\", \"noNav\" : true}}
 			          //  {\"5\": { \"url\" : \"info.html\", \"title\" : \"Info\" }}, */
 
                   break;
@@ -128,6 +131,17 @@ String WebHandler::generateResponse(int messageType) {
       doc["led_autodim"] = configManager->data.led_autodim ? String("true") : String("false");
       doc["led_color_mode"] = configManager->data.led_color_mode;
       break;
+    case 3:
+      doc["wifi_mode"] = configManager->data.wifi_mode;
+      doc["wifi_ssid"] = configManager->data.wifi_ssid;
+      doc["wifi_pw"] = configManager->data.wifi_pw;
+      doc["wifi_mdns_name"] = configManager->data.wifi_mdns_name;
+      doc["wifi_ip_mode"] = configManager->data.wifi_ip_mode;
+      doc["wifi_ip"] = configManager->data.wifi_ip.toString();
+      doc["wifi_netmask"] =  configManager->data.wifi_netmask.toString();
+      doc["wifi_gateway"] = configManager->data.wifi_gateway.toString();
+      break;
+
     case 5:
       doc["esp_boot_version"] = ESP.getBootVersion();
       doc["esp_free_heap"] = ESP.getFreeHeap();
@@ -138,12 +152,9 @@ String WebHandler::generateResponse(int messageType) {
       doc["wifi_ip_address"] = WiFi.localIP().toString();
       doc["wifi_mac_address"] = WiFi.macAddress();
       doc["wifi_ssid"] = WiFi.SSID();
-
       if (configManager != NULL) doc["config_dump"] = configManager->dumpConfig();
-
       long millisecs = millis();
       doc["uptime"] = String( (millisecs / (1000 * 60 * 60 * 24)) % 365)  + " Days, " + String(millisecs / (1000 * 60 * 60) % 24)  + " Hours, " + String(millisecs / (1000 * 60) % 60) + " Mins";
-
       break;
     }
     String returnStr;
@@ -174,6 +185,30 @@ void WebHandler::handleParamChange(String param, String val) {
   else if (param == "disp_welcomemsg") {
       configManager->data.disp_welcomemsg = val;
   }
+  else if (param == "wifi_mode") {
+    configManager->data.wifi_mode = val.toInt();
+  }
+  else if (param == "wifi_ssid") {
+    configManager->data.wifi_ssid = val;
+  }
+  else if (param == "wifi_pw") {
+    configManager->data.wifi_pw = val;
+  }
+  else if (param == "wifi_mdns_name") {
+    configManager->data.wifi_mdns_name = val;
+  }
+  else if (param == "wifi_ip_mode") {
+    configManager->data.wifi_ip_mode = val.toInt();
+  }
+  else if (param == "wifi_ip") {
+    configManager->data.wifi_ip.fromString(val);
+  }
+  else if (param == "wifi_netmask") {
+    configManager->data.wifi_netmask.fromString(val);
+  }
+  else if (param == "wifi_gateway") {
+    configManager->data.wifi_gateway.fromString(val);
+  }
   configManager->saveToFlash();
 }
 
@@ -184,6 +219,9 @@ void WebHandler::setConfigManager(ConfigManager *m) {
 
 void WebHandler::begin() {
   httpServer.on("/list", HTTP_GET, [&](){ handleFileList() ; });
+  //Reboot the clock
+  httpServer.on("/restart", HTTP_GET, [&](){ ESP.reset() ; });
+
   //If not 'declared' above, try to load the file from SPIFFS.
   httpServer.onNotFound([&](){
     if(!handleFileRead(httpServer.uri()))

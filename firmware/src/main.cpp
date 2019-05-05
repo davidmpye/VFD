@@ -30,5 +30,5 @@ void setup() {
 
 void loop() {
   c.loop();
-  delay(0);
+  yield();
 }

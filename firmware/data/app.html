@@ -361,6 +361,7 @@ $(document).on("mobileinit", function () {
 	    case "sv.update":
 	    case "sv.init.display":	// Received initialization object
 	    case "sv.init.leds":	// Received initialization object
+			case "sv.init.wifi":	// Received initialization object
 	    case "sv.init.info":	// Received initialization object
 	    	console.log(msg.type);
 	    	updateElements(msg.value);
