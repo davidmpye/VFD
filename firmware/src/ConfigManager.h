@@ -12,6 +12,7 @@
 
 class DMPClock;
 
+
 enum WIFI_IP_MODE {
   WIFI_IP_STATIC,
   WIFI_IP_DHCP,
@@ -45,6 +46,7 @@ enum LED_MODE {
 };
 
 struct configObject {
+  int version;
   bool led_autodim;
   bool led_backlight;
   int led_color_mode;
@@ -86,6 +88,7 @@ class ConfigManager  {
        configObject data;
 
      private:
+       const int configVersion = 1;
 
 
 

@@ -10,6 +10,7 @@ ConfigManager::~ConfigManager() {
 
 void ConfigManager::resetToDefaults() {
   //LED settings.
+  data.version = configVersion;
   data.led_backlight = true;
   data.led_autodim = true;
   data.led_color_mode = 0;
@@ -49,6 +50,7 @@ void ConfigManager::begin() {
     if (!deserializeJson(doc, buf))  {
       // List of params to load
       //LED settings
+      data.version = doc["version"];
       data.led_backlight = doc["led_backlight"] == "true" ? true : false;
       data.led_autodim = doc["led_autodim"]  == "true" ? true : false;
       data.led_color_mode = doc["led_color_mode"];
@@ -69,6 +71,12 @@ void ConfigManager::begin() {
       configFile.close();
     }
   }
+
+  if (data.version != configVersion) {
+    //Either we've failed to load the config file, or the version number has been
+    //changed, so reset everything
+    resetToDefaults();
+  }
 }
 
 
@@ -76,6 +84,7 @@ void ConfigManager::saveToFlash() {
   //Save to flash.
   DynamicJsonDocument doc(1024);
 
+  doc["version"] = data.version;
   doc["led_backlight"] = data.led_backlight ? String("true") : String("false");
   doc["led_autodim"] = data.led_autodim ? String("true") : String("false");
   doc["led_color_mode"] = data.led_color_mode;

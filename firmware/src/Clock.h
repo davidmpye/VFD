@@ -11,7 +11,6 @@
 #include <Time.h>
 #include <Timezone.h>
 #include <RTClib.h>
-#include <NtpClientLib.h>
 #include <ArduinoJson.h>
 
 
@@ -33,8 +32,6 @@ class Clock {
   void loadConfig();
 
 private:
-
-  void updateBrightness();
   void setRTC();
   void setupWifi();
   void handleButtonEvent(BUTTON_EVENT e);
@@ -44,8 +41,6 @@ private:
   ButtonHandler buttonHandler;
   WebHandler webHandler;
   ConfigManager configManager;
-
-
 };
 
 #endif
