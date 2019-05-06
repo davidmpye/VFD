@@ -130,6 +130,9 @@ void Display::displayDate(DateTime t) {
     setTubeNumber(5, (t.year()-2000)%10);
   }
   else if (NUM_TUBES ==8) {
+    setTubeByte(2, 0x40);
+    setTubeByte(5, 0x40);
+
     switch (configManager->data.disp_dateformat) {
       case DDMMYY_MODE:
         setTubeNumber(0, t.day()/10);
