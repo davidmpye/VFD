@@ -191,10 +191,17 @@ void Display::blank() {
 }
 
 void Display::fillLEDData() {
-  static uint16_t rainbow_counter = 0;
+  if (configManager->data.led_backlight == false) {
+    for (int i = 0; i < NUM_TUBES; ++i) {
+      leds[i] = CRGB::Black;
+    }
+    return;
+  }
   //LEDs are enabled, generate the appropriate colour patterns.
+  static uint16_t rainbow_counter = 0;
+
   switch (configManager->data.led_color_mode) {
-    case 0:
+    case RAINBOW_MODE:
       rainbow_counter++;
       fill_rainbow(leds, NUM_LEDS, rainbow_counter, 255/NUM_LEDS);
       break;
@@ -314,17 +321,20 @@ void Display::updateBrightness() {
   else {
     brightness = requestedBrightness;
   }
-
-  if (brightness > LEDS_OFF_BRIGHTNESS_CUTOFF) {
-    LEDS.setBrightness(brightness);
-    ledsOff = false;
-  }
-  else {
-    //LEDs off, it's quite dark!
-    LEDS.setBrightness(0);
-    ledsOff = true;
-  }
   analogWrite(OE_PIN, 255 - brightness);
+
+  //If the LEDs are supposed to dim, dim them.
+  if (configManager->data.led_autodim) {
+    if (brightness > LEDS_OFF_BRIGHTNESS_CUTOFF) {
+      LEDS.setBrightness(brightness);
+      ledsOff = false;
+    }
+    else {
+      //LEDs off, it's quite dark!
+      LEDS.setBrightness(0);
+      ledsOff = true;
+    }
+  }
 }
 
 void Display::test() {
