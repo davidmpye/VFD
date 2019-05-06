@@ -87,6 +87,7 @@ void Clock::setRTC() {
 void Clock::setupWifi() {
   if (configManager.data.wifi_mode == WIFI_STANDALONE) {
     //Set up as a standlone hotspot
+    WiFi.mode(WIFI_AP);
     WiFi.softAPConfig (configManager.data.wifi_ip, configManager.data.wifi_gateway, configManager.data.wifi_netmask);
     WiFi.softAP(configManager.data.wifi_ssid, configManager.data.wifi_pw);
   }

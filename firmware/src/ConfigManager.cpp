@@ -46,7 +46,7 @@ void ConfigManager::begin() {
     size_t size=configFile.size();
     char buf[size];
     configFile.readBytes(buf, size);
-    DynamicJsonDocument doc(1024);
+    DynamicJsonDocument doc(2048);
     if (!deserializeJson(doc, buf))  {
       // List of params to load
       //LED settings
@@ -82,7 +82,7 @@ void ConfigManager::begin() {
 
 void ConfigManager::saveToFlash() {
   //Save to flash.
-  DynamicJsonDocument doc(1024);
+  DynamicJsonDocument doc(2048);
 
   doc["version"] = data.version;
   doc["led_backlight"] = data.led_backlight ? String("true") : String("false");
