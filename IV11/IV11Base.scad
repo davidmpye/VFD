@@ -16,6 +16,7 @@ pin_diameter = 12;
 pin_hole_dia = 1.8;
 
 //Half with lugs.
+union() {
 difference() {
   cylinder(r=(tube_dia/2) + wall_thickness, h = total_height); 
   translate([0,0,base_thickness]) cylinder(r=tube_dia/2, h = 100);  
@@ -28,7 +29,11 @@ difference() {
   //chop it in half.
  translate([0,-25,0]) cube([50,50,50]);
 
-# translate([-3,-10,0]) cube([5,20,5.4]);
+ translate([-3,-10,0]) cube([5,20,5.4]);
+}
+# translate([-1,-10,0]) cube([1,0.5,5.4]);
+# translate([-1,9.5,0]) cube([1,0.5,5.4]);
+
 }
 
 //Half without lugs!
@@ -43,9 +48,13 @@ translate([10,0,0]) rotate([0,0,180]) difference() {
     difference() {
         translate([0,-25,0]) cube([50,50,50]);
         translate([-2,-10,0]) cube([5,20,5]);
+        
+        
     }
+        # translate([0,-10,0]) cube([1,0.5,5]);
+        # translate([0,9.5,0]) cube([1,0.5,5]);
+
 
 }
-
 
 
