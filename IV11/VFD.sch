@@ -1,6 +1,6 @@
 EESchema Schematic File Version 4
 LIBS:VFD-cache
-EELAYER 26 0
+EELAYER 30 0
 EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
@@ -15,7 +15,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L UDN2981-THT:UDN2981-THT U4
+L VFD-rescue:UDN2981-THT-UDN2981-THT U4
 U 1 1 5B727B46
 P 3150 1800
 F 0 "U4" H 3150 1063 60  0000 C CNN
@@ -271,7 +271,7 @@ Wire Wire Line
 Text GLabel 2500 2350 2    50   Input ~ 0
 TUBE_1_DATA_OUT
 $Comp
-L UDN2981-THT:UDN2981-THT U5
+L VFD-rescue:UDN2981-THT-UDN2981-THT U5
 U 1 1 5B72D8DA
 P 3150 4100
 F 0 "U5" H 3150 3363 60  0000 C CNN
@@ -527,7 +527,7 @@ Wire Wire Line
 Text GLabel 2500 4650 2    50   Input ~ 0
 TUBE_3_DATA_OUT
 $Comp
-L UDN2981-THT:UDN2981-THT U6
+L VFD-rescue:UDN2981-THT-UDN2981-THT U6
 U 1 1 5B73203C
 P 3150 6450
 F 0 "U6" H 3150 5713 60  0000 C CNN
@@ -783,7 +783,7 @@ Wire Wire Line
 Text GLabel 2500 7000 2    50   Input ~ 0
 TUBE_5_DATA_OUT
 $Comp
-L UDN2981-THT:UDN2981-THT U10
+L VFD-rescue:UDN2981-THT-UDN2981-THT U10
 U 1 1 5B73C180
 P 8100 2000
 F 0 "U10" H 8100 1263 60  0000 C CNN
@@ -1039,7 +1039,7 @@ Wire Wire Line
 Text GLabel 7450 2550 2    50   Input ~ 0
 TUBE_2_DATA_OUT
 $Comp
-L UDN2981-THT:UDN2981-THT U11
+L VFD-rescue:UDN2981-THT-UDN2981-THT U11
 U 1 1 5B74BC06
 P 8100 4300
 F 0 "U11" H 8100 3563 60  0000 C CNN
@@ -1293,7 +1293,7 @@ Wire Wire Line
 Text GLabel 7450 4850 2    50   Input ~ 0
 TUBE_4_DATA_OUT
 $Comp
-L UDN2981-THT:UDN2981-THT U12
+L VFD-rescue:UDN2981-THT-UDN2981-THT U12
 U 1 1 5B763504
 P 8100 6500
 F 0 "U12" H 8100 5763 60  0000 C CNN
@@ -1650,7 +1650,7 @@ F 3 "http://www.wemos.cc/Products/d1_mini.html" H 1800 10531 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L UDN2981-THT:UDN2981-THT U16
+L VFD-rescue:UDN2981-THT-UDN2981-THT U16
 U 1 1 5B4DE28E
 P 12950 2200
 F 0 "U16" H 12950 1463 60  0000 C CNN
@@ -1917,7 +1917,7 @@ F 3 "" H 11650 1250 50  0001 C CNN
 	1    0    0    1   
 $EndComp
 $Comp
-L UDN2981-THT:UDN2981-THT U17
+L VFD-rescue:UDN2981-THT-UDN2981-THT U17
 U 1 1 5B5EC00E
 P 12950 4400
 F 0 "U17" H 12950 3663 60  0000 C CNN
@@ -2206,38 +2206,23 @@ $EndComp
 $Comp
 L power:+1V5 #PWR0145
 U 1 1 5B6ECA8F
-P 12050 8350
-F 0 "#PWR0145" H 12050 8200 50  0001 C CNN
-F 1 "+1V5" H 12065 8523 50  0000 C CNN
-F 2 "" H 12050 8350 50  0001 C CNN
-F 3 "" H 12050 8350 50  0001 C CNN
-	1    12050 8350
-	1    0    0    -1  
-$EndComp
-$Comp
-L VFD-rescue:MP2307BuckConverterModule-GenericModules U18
-U 1 1 5B8B2710
-P 12500 8850
-F 0 "U18" H 12550 9315 50  0000 C CNN
-F 1 "MiniBuckBoard" H 12550 9224 50  0000 C CNN
-F 2 "GenericModules:MP2307BuckConverterModule" H 12500 8850 50  0001 C CNN
-F 3 "" H 12500 8850 50  0001 C CNN
-	1    12500 8850
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	13050 8950 13050 9200
-Wire Wire Line
-	12050 8950 12050 9200
-$Comp
-L power:+5V #PWR0153
-U 1 1 5B976A52
 P 13050 8350
-F 0 "#PWR0153" H 13050 8200 50  0001 C CNN
-F 1 "+5V" H 13065 8523 50  0000 C CNN
+F 0 "#PWR0145" H 13050 8200 50  0001 C CNN
+F 1 "+1V5" H 13065 8523 50  0000 C CNN
 F 2 "" H 13050 8350 50  0001 C CNN
 F 3 "" H 13050 8350 50  0001 C CNN
 	1    13050 8350
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5V #PWR0153
+U 1 1 5B976A52
+P 12050 8350
+F 0 "#PWR0153" H 12050 8200 50  0001 C CNN
+F 1 "+5V" H 12065 8523 50  0000 C CNN
+F 2 "" H 12050 8350 50  0001 C CNN
+F 3 "" H 12050 8350 50  0001 C CNN
+	1    12050 8350
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
@@ -2495,7 +2480,7 @@ SW_2
 Wire Wire Line
 	14000 5500 14700 5500
 $Comp
-L 5mmNeopixel:NeoPixel_THT D6
+L VFD-rescue:NeoPixel_THT-5mmNeopixel D6
 U 1 1 5C6047BD
 P 9750 9600
 F 0 "D6" H 10091 9646 50  0000 L CNN
@@ -2506,7 +2491,7 @@ F 3 "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf" H 9850 9225 50  0001 
 	1    0    0    -1  
 $EndComp
 $Comp
-L 5mmNeopixel:NeoPixel_THT D3
+L VFD-rescue:NeoPixel_THT-5mmNeopixel D3
 U 1 1 5C64AD7C
 P 10400 8650
 F 0 "D3" H 10741 8696 50  0000 L CNN
@@ -2517,7 +2502,7 @@ F 3 "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf" H 10500 8275 50  0001
 	1    0    0    -1  
 $EndComp
 $Comp
-L 5mmNeopixel:NeoPixel_THT D5
+L VFD-rescue:NeoPixel_THT-5mmNeopixel D5
 U 1 1 5C64AE2E
 P 9100 9600
 F 0 "D5" H 9441 9646 50  0000 L CNN
@@ -2528,7 +2513,7 @@ F 3 "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf" H 9200 9225 50  0001 
 	1    0    0    -1  
 $EndComp
 $Comp
-L 5mmNeopixel:NeoPixel_THT D2
+L VFD-rescue:NeoPixel_THT-5mmNeopixel D2
 U 1 1 5C64AEE3
 P 9750 8650
 F 0 "D2" H 10091 8696 50  0000 L CNN
@@ -2539,7 +2524,7 @@ F 3 "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf" H 9850 8275 50  0001 
 	1    0    0    -1  
 $EndComp
 $Comp
-L 5mmNeopixel:NeoPixel_THT D7
+L VFD-rescue:NeoPixel_THT-5mmNeopixel D7
 U 1 1 5C64B041
 P 10400 9600
 F 0 "D7" H 10741 9646 50  0000 L CNN
@@ -2550,7 +2535,7 @@ F 3 "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf" H 10500 9225 50  0001
 	1    0    0    -1  
 $EndComp
 $Comp
-L 5mmNeopixel:NeoPixel_THT D8
+L VFD-rescue:NeoPixel_THT-5mmNeopixel D8
 U 1 1 5C64B128
 P 11050 9600
 F 0 "D8" H 11391 9646 50  0000 L CNN
@@ -2561,7 +2546,7 @@ F 3 "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf" H 11150 9225 50  0001
 	1    0    0    -1  
 $EndComp
 $Comp
-L 5mmNeopixel:NeoPixel_THT D4
+L VFD-rescue:NeoPixel_THT-5mmNeopixel D4
 U 1 1 5C64B206
 P 11100 8650
 F 0 "D4" H 11441 8696 50  0000 L CNN
@@ -3171,7 +3156,7 @@ Wire Wire Line
 Wire Wire Line
 	9750 8950 10400 8950
 $Comp
-L 5mmNeopixel:NeoPixel_THT D1
+L VFD-rescue:NeoPixel_THT-5mmNeopixel D1
 U 1 1 5C64AC77
 P 9100 8650
 F 0 "D1" H 9441 8696 50  0000 L CNN
@@ -3289,4 +3274,19 @@ Text GLabel 11000 6150 0    50   Input ~ 0
 SDA
 Text GLabel 11000 6350 0    50   Input ~ 0
 SCL
+$Comp
+L GenericModules:LM2596BuckConverterModule U18
+U 1 1 5DD10807
+P 12500 8850
+F 0 "U18" H 12550 9315 50  0000 C CNN
+F 1 "LM2596BuckConverterModule" H 12550 9224 50  0000 C CNN
+F 2 "GenericModules:LM2596BuckConverterModule" H 12600 9300 50  0001 C CNN
+F 3 "" H 12500 8850 50  0001 C CNN
+	1    12500 8850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	13050 8950 13050 9200
+Wire Wire Line
+	12050 8950 12050 9200
 $EndSCHEMATC
