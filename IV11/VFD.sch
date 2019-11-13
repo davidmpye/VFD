@@ -3275,7 +3275,7 @@ SDA
 Text GLabel 11000 6350 0    50   Input ~ 0
 SCL
 $Comp
-L GenericModules:LM2596BuckConverterModule U18
+L VFD-rescue:LM2596BuckConverterModule-GenericModules U18
 U 1 1 5DD10807
 P 12500 8850
 F 0 "U18" H 12550 9315 50  0000 C CNN

@@ -60,6 +60,22 @@ X E 9 -450 50 200 R 50 50 1 1 O
 ENDDRAW
 ENDDEF
 #
+# LM2596BuckConverterModule-GenericModules
+#
+DEF LM2596BuckConverterModule-GenericModules U 0 40 Y Y 1 F N
+F0 "U" 0 350 50 H V C CNN
+F1 "LM2596BuckConverterModule-GenericModules" 0 -250 50 H V C CNN
+F2 "GenericModules:LM2596BuckConverterModule" 100 450 50 H I C CNN
+F3 "" 0 0 50 H I C CNN
+DRAW
+S -350 300 450 -200 0 1 0 N
+X Vin 1 -450 200 100 R 50 50 1 1 I
+X GND 2 -450 -100 100 R 50 50 1 1 I
+X GND 3 550 -100 100 L 50 50 1 1 O
+X Vout 4 550 200 100 L 50 50 1 1 I
+ENDDRAW
+ENDDEF
+#
 # MP2307BuckConverterModule-GenericModules
 #
 DEF MP2307BuckConverterModule-GenericModules U 0 40 Y Y 1 F N

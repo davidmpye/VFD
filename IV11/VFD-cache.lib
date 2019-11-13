@@ -222,22 +222,6 @@ X ~ 2 0 -150 50 U 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# GenericModules_LM2596BuckConverterModule
-#
-DEF GenericModules_LM2596BuckConverterModule U 0 40 Y Y 1 F N
-F0 "U" 0 350 50 H V C CNN
-F1 "GenericModules_LM2596BuckConverterModule" 0 -250 50 H V C CNN
-F2 "GenericModules:LM2596BuckConverterModule" 100 450 50 H I C CNN
-F3 "" 0 0 50 H I C CNN
-DRAW
-S -350 300 450 -200 0 1 0 N
-X Vin 1 -450 200 100 R 50 50 1 1 I
-X GND 2 -450 -100 100 R 50 50 1 1 I
-X GND 3 550 -100 100 L 50 50 1 1 O
-X Vout 4 550 200 100 L 50 50 1 1 I
-ENDDRAW
-ENDDEF
-#
 # Sensor_Optical_LDR03
 #
 DEF Sensor_Optical_LDR03 R 0 0 N Y 1 F N
@@ -334,6 +318,22 @@ X A 6 -450 650 200 R 50 50 1 1 O
 X G 7 -450 -250 200 R 50 50 1 1 O
 X F 8 -450 -100 200 R 50 50 1 1 O
 X E 9 -450 50 200 R 50 50 1 1 O
+ENDDRAW
+ENDDEF
+#
+# VFD-rescue_LM2596BuckConverterModule-GenericModules
+#
+DEF VFD-rescue_LM2596BuckConverterModule-GenericModules U 0 40 Y Y 1 F N
+F0 "U" 0 350 50 H V C CNN
+F1 "VFD-rescue_LM2596BuckConverterModule-GenericModules" 0 -250 50 H V C CNN
+F2 "GenericModules:LM2596BuckConverterModule" 100 450 50 H I C CNN
+F3 "" 0 0 50 H I C CNN
+DRAW
+S -350 300 450 -200 0 1 0 N
+X Vin 1 -450 200 100 R 50 50 1 1 I
+X GND 2 -450 -100 100 R 50 50 1 1 I
+X GND 3 550 -100 100 L 50 50 1 1 O
+X Vout 4 550 200 100 L 50 50 1 1 I
 ENDDRAW
 ENDDEF
 #
