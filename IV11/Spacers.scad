@@ -1,17 +1,25 @@
+
 $fn = 50;
 
-module spacer() {
+module spacer(height) {
 difference() {
-    circle(d=8);
-    circle(d=4);
-    
-    
+    cylinder(d=8, h=height);
+    translate([0,0,-0.1]) cylinder(d=4, h=height+1);
+
+
 }}
 
 
 
-for (i = [0:10]){
-    for (j = [0:6]) {
-    translate([j*8.2,  i*8.2, 0]) spacer();
+for (i = [0:2]) {
+    for (j = [0:1]) {
+    translate([j*8.2,  i*8.2, 0]) spacer(23);
+}
+}
+
+
+translate([17,0,0]) for (i = [0:2]) {
+    for (j = [0:1]) {
+    translate([j*8.2,  i*8.2, 0]) spacer(3);
 }
 }
