@@ -20,6 +20,6 @@ for (i = [0:2]) {
 
 translate([17,0,0]) for (i = [0:2]) {
     for (j = [0:1]) {
-    translate([j*8.2,  i*8.2, 0]) spacer(3);
+    translate([j*8.2,  i*8.2, 0]) spacer(4.5);
 }
 }
