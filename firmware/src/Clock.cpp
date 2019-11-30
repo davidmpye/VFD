@@ -43,8 +43,19 @@ void Clock::begin() {
     }
 
     Wire.begin(D2,D1);
-    if (!rtc.begin()) {
-      display.scrollMessage("RTC ERR", 4);
+
+    //Init RTC.
+    //This does occasionally fail so give it 10 attempts.
+    bool rtcOk;
+    for (int i=0; i<10; ++i) {
+      delay(250);
+      rtcOk = rtc.begin();
+      if (rtcOk) break;
+      //Final failure
+    }
+
+    if (!rtcOk) {
+        display.scrollMessage("RTC ERR", 4);
     }
 
     setupWifi();
