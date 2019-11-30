@@ -43,6 +43,10 @@ void Clock::begin() {
     }
 
     Wire.begin(D2,D1);
+    if (!rtc.begin()) {
+      display.scrollMessage("RTC ERR", 4);
+    }
+
     setupWifi();
 
     webHandler.setConfigManager(&configManager);
