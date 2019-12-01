@@ -42,8 +42,7 @@ void Clock::begin() {
       display.scrollMessage("RESET", 4);
     }
 
-    Wire.begin(D2,D1);
-
+    //No need to call wire.begin because rtc.begin calls it.
     //Init RTC.
     //This does occasionally fail so give it 10 attempts.
     bool rtcOk;

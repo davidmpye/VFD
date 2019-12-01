@@ -13,7 +13,6 @@
 #include <RTClib.h>
 #include <ArduinoJson.h>
 
-
 #include "Display.h"
 #include "ButtonHandler.h"
 #include "WebHandler.h"
