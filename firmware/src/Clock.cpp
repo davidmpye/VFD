@@ -42,6 +42,9 @@ void Clock::begin() {
       display.scrollMessage("RESET", 4);
     }
 
+    configTime(configManager.data.disp_timezone.c_str(), "pool.ntp.org");
+  
+
     //No need to call wire.begin because rtc.begin calls it.
     //Init RTC.
     //This does occasionally fail so give it 10 attempts.
@@ -59,8 +62,8 @@ void Clock::begin() {
 
     setupWifi();
 
-    webHandler.setConfigManager(&configManager);
-    webHandler.begin();
+    //webHandler.setConfigManager(&configManager);
+    //webHandler.begin();
 
     display.scrollMessage(configManager.data.disp_welcomemsg.c_str(), 4);
 
@@ -80,12 +83,21 @@ void Clock::loop() {
     display.update();
 
     handleButtonEvent(buttonHandler.poll());
-    webHandler.handleEvents();
+    //webHandler.handleEvents();
     //MDNS responder
     MDNS.update();
 
     //Handle any other events.
     yield();
+}
+
+void Clock::checkNTP() {
+  timeval tv;
+  if(WiFi.status() == WL_CONNECTED) {
+      gettimeofday(&tv, nullptr);
+      time_t now = time(nullptr);
+      rtc.adjust(DateTime(1900 + localtime(&now)->tm_year, 1+localtime(&now)->tm_mon, localtime(&now)->tm_mday, localtime(&now)->tm_hour, localtime(&now)->tm_min, localtime(&now)->tm_sec));
+     }
 }
 
 

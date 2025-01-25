@@ -16,6 +16,7 @@ void ConfigManager::resetToDefaults() {
   data.led_color_mode = 0;
 
   data.disp_welcomemsg = "HELLO...";
+  data.disp_timezone = TZ_Europe_London;
   data.disp_timeformat  =  TWENTYFOURHR_MODE;
   data.disp_dateformat = DDMMYY_MODE;
   data.disp_separator = SEP_NONE;

@@ -15,7 +15,8 @@
 
 #include "Display.h"
 #include "ButtonHandler.h"
-#include "WebHandler.h"
+//#include "WebHandler.h"
+
 
 class Clock {
 
@@ -30,6 +31,8 @@ class Clock {
 
   void loadConfig();
 
+  void checkNTP();
+
 private:
   void setRTC();
   void setupWifi();
@@ -38,7 +41,7 @@ private:
   Display display;
   RTC_DS3231 rtc;
   ButtonHandler buttonHandler;
-  WebHandler webHandler;
+  //WebHandler webHandler;
   ConfigManager configManager;
 };
 
