@@ -9,6 +9,7 @@
 #include <ESP8266mDNS.h>
 #include <IPAddress.h>
 #include "Config.h"
+#include <TZ.h>
 
 class DMPClock;
 
@@ -52,6 +53,7 @@ struct configObject {
   int led_color_mode;
 
   String disp_welcomemsg;
+  String disp_timezone;
   int disp_timeformat;
   int disp_dateformat;
   int disp_separator;
